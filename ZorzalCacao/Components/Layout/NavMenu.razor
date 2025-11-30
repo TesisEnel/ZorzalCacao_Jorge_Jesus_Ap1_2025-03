@@ -1,0 +1,87 @@
+﻿@implements IDisposable
+@inject NavigationManager NavigationManager
+
+<body class="index-page">
+    <header id="header" class="header dark-background d-flex flex-column">
+        <i class="header-toggle d-xl-none bi bi-list"></i>
+
+        <div class="profile-img">
+            <img src="assets/img/my-profile-img.jpg" alt="" class="img-fluid rounded-circle">
+        </div>
+
+        <a href="" class="logo d-flex align-items-center justify-content-center">
+            <h1 class="sitename">ZorzalCacao</h1>
+        </a>
+
+        <nav id="navmenu" class="navmenu">
+            <ul>
+                <li>
+                    <NavLink href="" Match="NavLinkMatch.All">
+                        <i class="bi bi-house navicon"></i>Home
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink href="#services">
+                        <i class="bi bi-hdd-stack navicon"></i> Servicios
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink href="about">
+                        <i class="bi bi-person navicon"></i> Sobre nosotros
+                    </NavLink>
+                </li>
+                <AuthorizeView>
+                    <Authorized>
+                        <li>
+                            <NavLink href="Account/Manage">
+                                <i class="bi bi-person-fill navicon"></i> @context.User.Identity?.Name
+                            </NavLink>
+                        </li>
+                        <li>
+                            <form action="Account/Logout" method="post">
+                                <AntiforgeryToken />
+                                <input type="hidden" name="ReturnUrl" value="@currentUrl" />
+                                <button type="submit" class="nav-link-button">
+                                    <i class="bi bi-arrow-bar-left navicon"></i> Logout
+                                </button>
+                            </form>
+                        </li>
+                    </Authorized>
+                    <NotAuthorized>
+                        <li>
+                            <NavLink href="Account/Register">
+                                <i class="bi bi-person-plus navicon"></i> Register
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink href="Account/Login">
+                                <i class="bi bi-person-badge navicon"></i> Login
+                            </NavLink>
+                        </li>
+                    </NotAuthorized>
+                </AuthorizeView>
+            </ul>
+        </nav>
+    </header>
+</body>
+
+@code {
+    private string? currentUrl;
+
+    protected override void OnInitialized()
+    {
+        currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+        NavigationManager.LocationChanged += OnLocationChanged;
+    }
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        currentUrl = NavigationManager.ToBaseRelativePath(e.Location);
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
+}
