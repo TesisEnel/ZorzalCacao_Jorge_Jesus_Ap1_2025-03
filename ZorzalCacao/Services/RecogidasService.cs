@@ -43,7 +43,7 @@ namespace ZorzalCacao.Services
         {
             await using var contexto = await DbFactory.CreateDbContextAsync();
             return await contexto.Recogidas
-                //.Include(r => r.Productor)
+                .Include(r => r.Productor)
                 .FirstOrDefaultAsync(r => r.RecogidaId == recogidaId);
         }
 
@@ -60,7 +60,7 @@ namespace ZorzalCacao.Services
         {
             await using var contexto = await DbFactory.CreateDbContextAsync();
             return await contexto.Recogidas
-                //.Include(r => r.Productor)
+                .Include(r => r.Productor)
                 .Where(criterio)
                 .AsNoTracking()
                 .ToListAsync();
