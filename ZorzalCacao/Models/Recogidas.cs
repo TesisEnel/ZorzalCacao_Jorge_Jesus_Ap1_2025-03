@@ -26,7 +26,7 @@ public class Recogidas
 
     //productor 
     public string ProductorId { get; set; }
-    public ApplicationUser? Productor { get; set; }
+    public ApplicationUser Productor { get; set; }
 
     //empleado
 }
