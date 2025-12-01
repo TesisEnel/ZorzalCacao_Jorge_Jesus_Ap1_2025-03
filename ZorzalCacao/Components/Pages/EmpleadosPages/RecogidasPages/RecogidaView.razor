@@ -1,0 +1,170 @@
+﻿@page "/Recogida/View/{RecogidaId:int}"
+@inject RecogidasService recogidasService
+@inject NavigationManager navigation
+@rendermode InteractiveServer
+
+<PageTitle>Detalles de Recogida</PageTitle>
+
+@if (recogida != null)
+{
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-10 col-xl-8">
+                <div class="card shadow-lg border-0">
+                    <div class="card-header bg-primary text-white py-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h4 class="mb-1"><i class="bi bi-clipboard-check"></i> Detalles de Recogida</h4>
+                                <small>ID: #@recogida.RecogidaId</small>
+                            </div>
+                            <a href="/Recogida/Index" class="btn btn-light btn-sm bi bi-arrow-left"> Regresar </a>
+                        </div>
+                    </div>
+
+                    <div class="card-body p-4">
+                        <!-- Fecha y Hora -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="info-box p-4 bg-light rounded shadow-sm">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                                            <i class="bi bi-calendar-event text-primary fs-1"></i>
+                                            <div class="mt-2">
+                                                <small class="text-muted d-block">Fecha programada</small>
+                                                <h5 class="mb-0">@recogida.Fecha.ToString("dddd, dd MMMM yyyy")</h5>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 text-center text-md-start">
+                                            <i class="bi bi-clock text-primary fs-1"></i>
+                                            <div class="mt-2">
+                                                <small class="text-muted d-block">Hora programada</small>
+                                                <h5 class="mb-0">@recogida.Fecha.ToString("hh:mm tt")</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Productor -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="detail-card p-4 rounded border-start border-primary border-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="icon-circle bg-primary text-white me-3">
+                                            <i class="bi bi-person-circle fs-3"></i>
+                                        </div>
+                                        <div>
+                                            <small class="text-muted d-block mb-1">Productor</small>
+                                            <h5 class="mb-0">@(recogida.Productor?.UserName ?? "N/A")</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Punto de Encuentro -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="detail-card p-4 rounded border-start border-success border-4">
+                                    <div class="d-flex align-items-start">
+                                        <div class="icon-circle bg-success text-white me-3">
+                                            <i class="bi bi-geo-alt-fill fs-3"></i>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <small class="text-muted d-block mb-1">Punto de Encuentro</small>
+                                            <p class="mb-0 fs-5">@recogida.PuntoEncuentro</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cantidad y Chofer -->
+                        <div class="row mb-4">
+                            <div class="col-md-6 mb-3 mb-md-0">
+                                <div class="detail-card p-4 rounded border-start border-info border-4 h-100">
+                                    <div class="d-flex align-items-center">
+                                        <div class="icon-circle bg-info text-white me-3">
+                                            <i class="bi bi-box-seam fs-3"></i>
+                                        </div>
+                                        <div>
+                                            <small class="text-muted d-block mb-1">Cantidad de Sacos</small>
+                                            <h4 class="mb-0 text-info">@recogida.CantidadSacos</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="detail-card p-4 rounded border-start border-warning border-4 h-100">
+                                    <div class="d-flex align-items-center">
+                                        <div class="icon-circle bg-warning text-dark me-3">
+                                            <i class="bi bi-person-badge fs-3"></i>
+                                        </div>
+                                        <div>
+                                            <small class="text-muted d-block mb-1">Chofer Asignado</small>
+                                            <h5 class="mb-0">@recogida.Chofer</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Certificaciones -->
+                        @if (recogida.CertificacionesProducto != null && recogida.CertificacionesProducto.Any())
+                        {
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="detail-card p-4 rounded border-start border-success border-4">
+                                        <div class="d-flex align-items-start">
+                                            <div class="icon-circle bg-success text-white me-3">
+                                                <i class="bi bi-patch-check-fill fs-3"></i>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <small class="text-muted d-block mb-3">Certificaciones del Producto</small>
+                                                <div class="d-flex flex-wrap gap-2">
+                                                    @foreach (var cert in recogida.CertificacionesProducto)
+                                                    {
+                                                        <span class="badge bg-success fs-6 px-3 py-2">
+                                                            <i class="bi bi-check-circle-fill me-1"></i>@cert
+                                                        </span>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="card-footer bg-white d-flex justify-content-center gap-2">
+                        <a href="/Recogida/Index" class="btn btn-secondary bi bi-arrow-left-circle"> Regresar </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+else
+{
+    <div class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-3">Cargando información...</p>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int RecogidaId { get; set; }
+
+    private Recogidas? recogida;
+
+    protected override async Task OnInitializedAsync()
+    {
+        recogida = await recogidasService.Buscar(RecogidaId);
+    }
+}
