@@ -15,17 +15,29 @@
 
         <nav id="navmenu" class="navmenu">
             <ul>
-                <li>
-                    <NavLink href="/Empleado/Index" Match="NavLinkMatch.All">
-                        <i class="bi bi-house navicon"></i> Actividades
-                    </NavLink>
-                </li>
+                <AuthorizeView Roles="Empleado">
+                    <li>
+                        <NavLink href="/Empleado/Index" Match="NavLinkMatch.All">
+                            <i class="bi bi-house navicon"></i> Actividades
+                        </NavLink>
+                    </li>
+                </AuthorizeView>
 
-                <li>
-                    <NavLink href="/Productor/Index" Match="NavLinkMatch.All">
-                        <i class="bi bi-house navicon"></i> Consultas
-                    </NavLink>
-                </li>
+                <AuthorizeView Roles="Productor">
+                    <li>
+                        <NavLink href="/Productor/Index" Match="NavLinkMatch.All">
+                            <i class="bi bi-house navicon"></i> Consultas
+                        </NavLink>
+                    </li>
+                </AuthorizeView>
+
+                <AuthorizeView Roles="Administrador">
+                    <li>
+                        <NavLink href ="/Administrador/Index" Match="NavLinkMatch.All">
+                            <i class="bi bi-house navicon"></i> Usuarios
+                        </NavLink>
+                    </li>
+                </AuthorizeView>
 
                 <li>
                     <NavLink href="/About">
