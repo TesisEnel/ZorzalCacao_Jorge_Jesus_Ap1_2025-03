@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using ZorzalCacao.Components;
 using ZorzalCacao.Components.Account;
 using ZorzalCacao.Data;
+using ZorzalCacao.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +16,9 @@ builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
 
+//Inyeccion del contexto
 var connectionString = builder.Configuration.GetConnectionString("ConnectionString") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+builder.Services.AddDbContextFactory<ApplicationDbContext>(options => options.UseSqlServer(connectionString), ServiceLifetime.Scoped);
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -40,6 +43,13 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddSignInManager()
 .AddDefaultTokenProviders();
+
+//Inyeccion de los service
+builder.Services.AddScoped<IUserRoleService, UserRoleService>();
+builder.Services.AddScoped<RecogidasService>();
+builder.Services.AddScoped<ControlesCalidadService>();
+builder.Services.AddScoped<PesajesService>();
+builder.Services.AddScoped<FermentacionesService>();
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 
