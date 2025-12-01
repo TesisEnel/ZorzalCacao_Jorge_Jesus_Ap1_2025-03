@@ -1,5 +1,168 @@
-﻿<h3>AdministradorIndex</h3>
+﻿@page "/"
 
-@code {
+<PageTitle>Home - Administrador</PageTitle>
 
-}
+<!-- Stats Title -->
+<div class="container section-title" data-aos="fade-up">
+    <h2 style="font-weight: 700; font-size: 32px; color: #222;">Estadísticas del Sistema</h2>
+    <p style="color: #555; font-size: 16px;">
+        Resumen general de productores y empleados registrados
+    </p>
+</div>
+
+<!-- Stats Section - Solo Productores y Empleados -->
+<section id="stats" class="stats section">
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="row justify-content-center" style="gap: 30px;">
+
+            <!-- Productores -->
+            <div class="col-auto">
+                <div class="stats-item stats-box">
+                    <i class="bi bi-people"></i>
+                    <span data-purecounter-start="0" data-purecounter-end="30" data-purecounter-duration="1" class="purecounter"></span>
+                    <p><strong>Productores</strong></p>
+                    <span class="description">Total registrados en el sistema</span>
+                </div>
+            </div>
+
+            <!-- Empleados -->
+            <div class="col-auto">
+                <div class="stats-item stats-box">
+                    <i class="bi bi-person-badge"></i>
+                    <span data-purecounter-start="0" data-purecounter-end="15" data-purecounter-duration="1" class="purecounter"></span>
+                    <p><strong>Empleados</strong></p>
+                    <span class="description">Equipo activo registrado</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- Servicios - Solo consulta de Productores y Empleados -->
+<section id="services" class="services section">
+
+    <div class="container section-title" data-aos="fade-up">
+        <h2 style="font-weight: 700; font-size: 32px;">Consultas Disponibles</h2>
+        <p style="font-size: 16px; color: #555;">
+            Opciones de gestión habilitadas para el administrador del sistema.
+        </p>
+    </div>
+
+    <div class="container">
+        <div class="row gy-4">
+
+            <!-- Consulta de Productores -->
+            <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="100">
+                <div class="icon flex-shrink-0"><i class="bi bi-people"></i></div>
+                <div>
+                    <h4 class="title"><a href="/productores" class="stretched-link">Consulta de Productores</a></h4>
+                    <p class="description">
+                        Listado completo de productores registrados. Permite buscar, revisar y gestionar información de los productores.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Consulta de Empleados -->
+            <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="200">
+                <div class="icon flex-shrink-0"><i class="bi bi-person-badge"></i></div>
+                <div>
+                    <h4 class="title"><a href="/empleados" class="stretched-link">Consulta de Empleados</a></h4>
+                    <p class="description">
+                        Visualiza los empleados registrados, consulta datos y administra la información del personal.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<footer id="footer" class="footer position-relative light-background">
+    <div class="container">
+        <div class="copyright text-center ">
+            <p>© <span>Copyright</span> <strong class="px-1 sitename">iPortfolio</strong> <span>All Rights Reserved</span></p>
+        </div>
+        <div class="credits">
+            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+            Distributed by <a href="https://themewagon.com">ThemeWagon</a>
+        </div>
+    </div>
+</footer>
+
+<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
+    <i class="bi bi-arrow-up-short"></i>
+</a>
+
+<style>
+    /* Estilos adicionales para las cajas de estadísticas */
+    .stats-box {
+        background: #fff;
+        border: 2px solid #e8e8e8;
+        border-radius: 16px;
+        padding: 25px 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        text-align: center;
+        width: 200px;
+        min-height: 260px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .stats-box:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .stats-box i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            display: block;
+            line-height: 1;
+        }
+
+        .stats-box .purecounter {
+            font-size: 48px;
+            font-weight: 700;
+            color: #050d18;
+            display: block;
+            margin: 10px 0;
+            line-height: 1;
+        }
+
+        .stats-box p {
+            margin: 10px 0 5px 0;
+        }
+
+        .stats-box strong {
+            font-size: 17px;
+            color: #050d18;
+            font-weight: 600;
+            display: block;
+            line-height: 1.3;
+        }
+
+        .stats-box .description {
+            color: #6c757d;
+            font-size: 12px;
+            line-height: 1.4;
+            display: block;
+            margin-top: 8px;
+        }
+
+    @@media (max-width: 768px) {
+        .stats-box {
+            width: 160px;
+            min-height: 220px;
+            padding: 25px 15px;
+        }
+
+        .stats .row {
+            gap: 20px !important;
+        }
+    }
+</style>
+
