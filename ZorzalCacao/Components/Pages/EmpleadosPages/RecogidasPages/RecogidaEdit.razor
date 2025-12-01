@@ -151,15 +151,19 @@ else
 
                 <div class="modal-body">
                     <label class="col-12"> <strong> Recogida Id: </strong> @recogida.RecogidaId</label>
-                    <label class="col-12"> <strong> Recogida Id: </strong> @recogida.Fecha</label>
-                    <label class="col-12"> <strong> Recogida Id: </strong> @recogida.Productor?.UserName</label>
-                    <label class="col-12"> <strong> Recogida Id: </strong> @recogida.RecogidaId</label>
-                    <label class="col-12"> <strong> Recogida Id: </strong> @recogida.RecogidaId</label>
-                    <label class="col-12"> <strong> Recogida Id: </strong> @recogida.RecogidaId</label>
-                    <label class="col-12"> <strong> Recogida Id: </strong> @recogida.RecogidaId</label>
-                    <label class="col-12"> <strong> Recogida Id: </strong> @recogida.RecogidaId</label>
+                    <label class="col-12"> <strong> Fecha: </strong> @recogida.Fecha</label>
+                    <label class="col-12"> <strong> Productor: </strong> @recogida.Productor?.UserName</label>
+                    <label class="col-12"> <strong> Punto de encuentro: </strong> @recogida.PuntoEncuentro</label>
+                    <label class="col-12"> <strong> Certificaciones: </strong> @* @recogida.CertificacionesProducto *@</label>
+                    <label class="col-12"> <strong> Estado de entrega: </strong> @recogida.EstadoEntrega</label>
+                    <label class="col-12"> <strong> Cantidad de sacos: </strong> @recogida.CantidadSacos.ToString("F2")</label>
+                    <label class="col-12"> <strong> Chofer: </strong> @recogida.Chofer</label>
+                    <label class="col-12 text-danger"> Esta seguro que desea eliminar esta recogida? </label>
+                </div>
 
-                    
+                <div class="modal-footer d-flex justify-content-center gap-2">
+                    <button type="button" class="btn btn-danger bi bi-trash" @onclick="EliminarRecogida"> Si, deseo eliminar  </button>
+                    <button type="button" class="btn btn-secondary bi bi-arrow-left-circle" @onclick="() => MostrarModal = false"> Regresar </button>
                 </div>
             </div>
         </div>
@@ -187,6 +191,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        recogida = await recogidasService.Buscar(RecogidaId);
         var productores = await UserRoleService.GetUsersByRoleAsync("Productor");
         ListaProductores = productores.ToList();
     }
