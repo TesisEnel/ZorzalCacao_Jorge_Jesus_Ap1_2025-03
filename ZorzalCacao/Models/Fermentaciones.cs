@@ -7,8 +7,12 @@ public class Fermentaciones
 {
     [Key]
     public int FermentacionId { get; set; }
+
+    [Range(70, 95, ErrorMessage = "Temperatura no valida")]
     public double Temperatura { get; set; }
     public string Observaciones { get; set; }
+
+    [Required(ErrorMessage = "Fecha requerida")]
     public DateTime Fecha { get; set; } = DateTime.Now;
     public int RecogidaId { get; set; }
     public Recogidas Recogida { get; set; }
