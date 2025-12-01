@@ -9,4 +9,5 @@ public class Pesajes
     public int PesajeId { get; set; }
     [Required(ErrorMessage = "La fecha es requerida")]
     public DateTime Fecha { get; set; } = DateTime.Now;
+    public ICollection<PesajesDetalles> PesajesDetalle { get; set; } = new List<PesajesDetalles>();     
 }
