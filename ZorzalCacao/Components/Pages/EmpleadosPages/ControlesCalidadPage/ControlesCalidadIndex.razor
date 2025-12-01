@@ -1,0 +1,144 @@
+﻿@page "/ControlesCalidad/Index"
+@inject ControlesCalidadService controlesService
+@inject NavigationManager nav
+@rendermode InteractiveServer
+
+<PageTitle> Consulta controles de calidad </PageTitle>
+
+<div class="container">
+    <div class="card shadow-lg">
+
+        <!-- Encabezado -->
+        <div class="card-header">
+            <h5 class="text-center">
+                <strong> Consulte controles de calidad </strong>
+            </h5>
+
+            <div class="d-flex justify-content-end">
+                <a class="btn btn-info bi bi-plus-square" href="/ControlesCalidad/Create">
+                    Nuevo control
+                </a>
+            </div>
+        </div>
+
+        <div class="card-body">
+
+            <!-- Filtros -->
+            <div class="row align-items-center">
+                <div class="col-12 col-md-6 mb-3">
+                    <label class="col-form-label"><strong> Filtrar por </strong></label>
+
+                    <InputSelect class="form-select" @bind-Value="Filtro">
+                        <option value="" disabled selected>Seleccione una opción</option>
+                        <option value="ControlId">Control Id</option>
+                        <option value="GradosBrix">Grados Brix</option>
+                        <option value="Decision">Decisión</option>
+                        <option value="EmpleadoId">Empleado</option>
+                        <option value="RecogidaId">Recogida</option>
+                    </InputSelect>
+                </div>
+
+                <div class="col-12 col-md-6 mb-3">
+                    <label class="col-form-label"><strong> Búsqueda </strong></label>
+                    <div class="input-group">
+                        <input class="form-control" @bind="ValorFiltro" placeholder="Buscar..." />
+                        <button class="btn btn-outline-info bi bi-search" @onclick="Buscar" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabla -->
+            <div class="table-responsive">
+                <table class="table table-dark table-striped table-hover text-center">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Control Id</th>
+                            <th>Grados Brix</th>
+                            <th>Observaciones</th>
+                            <th>Decisión</th>
+                            <th>Recogida Id</th>
+                            <th>Empleado</th>
+                            <th>Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ListaControles == null || ListaControles.Count == 0)
+                        {
+                            <tr>
+                                <td colspan="7" class="text-center text-muted py-4">
+                                    No se han encontrado controles de calidad.
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (var c in ListaControles)
+                            {
+                                <tr>
+                                    <td>@c.ControlId</td>
+                                    <td>@c.GradosBrix</td>
+                                    <td>@c.Observaciones</td>
+                                    <td>@c.Decision</td>
+                                    <td>@c.RecogidaId</td>
+                                    <td>@(c.Empleado?.UserName ?? "N/A")</td>
+
+                                    <td>
+                                        <a class="btn btn-sm btn-outline-primary bi bi-eye"
+                                           href="/ControlesCalidad/View/@c.ControlId"></a>
+
+                                        <a class="btn btn-sm btn-outline-info bi bi-pencil-square"
+                                           href="/ControlesCalidad/Edit/@c.ControlId"></a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="card-footer">
+            <label class="col-12"><strong>Total controles:</strong> @(ListaControles?.Count ?? 0)</label>
+        </div>
+    </div>
+</div>
+
+@code {
+    public string Filtro { get; set; } = string.Empty;
+    public string ValorFiltro { get; set; } = string.Empty;
+
+    public List<ControlesCalidad> ListaControles { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Buscar();
+    }
+
+    public async Task Buscar()
+    {
+        var lista = await controlesService.Listar(c => true);
+
+        // Filtrado
+        if (!string.IsNullOrWhiteSpace(ValorFiltro))
+        {
+            if (Filtro == "ControlId" && int.TryParse(ValorFiltro, out int id))
+                lista = lista.Where(c => c.ControlId == id).ToList();
+
+            else if (Filtro == "GradosBrix" && double.TryParse(ValorFiltro, out double brix))
+                lista = lista.Where(c => c.GradosBrix == brix).ToList();
+
+            else if (Filtro == "Decision")
+                lista = lista.Where(c => c.Decision.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            else if (Filtro == "EmpleadoId")
+                lista = lista.Where(c => c.EmpleadoId.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            else if (Filtro == "RecogidaId" && int.TryParse(ValorFiltro, out int rid))
+                lista = lista.Where(c => c.RecogidaId == rid).ToList();
+        }
+
+        ListaControles = lista;
+    }
+}
+
