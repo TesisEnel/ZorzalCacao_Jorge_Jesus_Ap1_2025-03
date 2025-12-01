@@ -1,0 +1,227 @@
+﻿@page "/Recogida/Edit/{RecogidaId:int}"
+@inject RecogidasService recogidasService
+@inject IUserRoleService UserRoleService
+@inject NavigationManager navigation
+@rendermode InteractiveServer
+
+<PageTitle> Editar Recogida</PageTitle>
+
+@if(recogida != null)
+{
+    <div class="container mt-3">
+        <div class="card shadow-lg">
+            <div class="card-header">
+                <h5 class="card-title text-center"> <strong> Editar recogida </strong></h5>
+            </div>
+
+            <EditForm Model="recogida" OnValidSubmit="GuardarRecogida">
+                <DataAnnotationsValidator />
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 col-md-6 mb-3">
+                            <label class="col-form-label"> <strong> Fecha </strong></label>
+                            <InputDate class="form-control" @bind-Value="recogida.Fecha" />
+                            <ValidationMessage For="() => recogida.Fecha" />
+                        </div>
+
+                        <div class="col-12 col-md-6 mb-3">
+                            <label class="col-form-label"> <strong> Productor </strong></label>
+                            <InputSelect class="form-select" @bind-Value="recogida.ProductorId">
+                                <option value="" selected disabled> Seleccione un productor </option>
+
+                                @foreach (var productor in ListaProductores)
+                                {
+                                    <option value="@productor.Id"> @productor.UserName </option>
+                                }
+                            </InputSelect>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-md-6 mb-3">
+                            <label class="col-form-label"> <strong> Punto de encuentro </strong></label>
+                            <InputTextArea class="form-control" @bind-Value="recogida.PuntoEncuentro" />
+                            <ValidationMessage For="() => recogida.PuntoEncuentro" />
+                        </div>
+
+                        <div class="col-12 col-md-6 mb-3">
+                            <label class="col-form-label"> <strong> Cantidad de sacos </strong></label>
+                            <InputNumber class="form-control" @bind-Value="recogida.CantidadSacos" />
+                            <ValidationMessage For="() => recogida.CantidadSacos" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-md-6 mb-3">
+                            <label class="col-form-label"> <strong> Chofer </strong></label>
+                            <InputText class="form-control" @bind-Value="recogida.Chofer" />
+                            <ValidationMessage For="() => recogida.Chofer" />
+                        </div>
+
+                        <div class="col-12 col-md-6 mb-3">
+                            <label class="col-form-label"><strong>Certificaciones del producto</strong></label>
+
+                            <!-- Primera fila de checkboxes -->
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="form-check">
+                                        <InputCheckbox class="form-check-input" id="certNOP"
+                                                       @bind-Value="certNOP"
+                                                       @onchange="@(() => ActualizarCertificacion(certNOP, "NOP"))" />
+                                        <label class="form-check-label" for="certNOP">NOP</label>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-check">
+                                        <InputCheckbox class="form-check-input" id="certBF"
+                                                       @bind-Value="certBF"
+                                                       @onchange="@(() => ActualizarCertificacion(certBF, "BF"))" />
+                                        <label class="form-check-label" for="certBF">BF</label>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-check">
+                                        <InputCheckbox class="form-check-input" id="certEU"
+                                                       @bind-Value="certEU"
+                                                       @onchange="@(() => ActualizarCertificacion(certEU, "EU"))" />
+                                        <label class="form-check-label" for="certEU">EU</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Segunda fila de checkboxes -->
+                            <div class="row mt-2">
+                                <div class="col-4">
+                                    <div class="form-check">
+                                        <InputCheckbox class="form-check-input" id="certWFT"
+                                                       @bind-Value="certWFT"
+                                                       @onchange="@(() => ActualizarCertificacion(certWFT, "WFT"))" />
+                                        <label class="form-check-label" for="certWFT">WFT</label>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-check">
+                                        <InputCheckbox class="form-check-input" id="certConv"
+                                                       @bind-Value="certConv"
+                                                       @onchange="@(() => ActualizarCertificacion(certConv, "CONVENCIONAL"))" />
+                                        <label class="form-check-label" for="certConv">CONVENCIONAL</label>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-check">
+                                        <InputCheckbox class="form-check-input" id="certOtras"
+                                                       @bind-Value="certOtras"
+                                                       @onchange="@(() => ActualizarCertificacion(certOtras, "OTRAS"))" />
+                                        <label class="form-check-label" for="certOtras">OTRAS</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer gap-2 bg-white d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary bi bi-save"> Guardar </button>
+                    <button type="button" class="btn btn-danger bi bi-trash" @onclick="() => MostrarModal = true">  Eliminar </button>
+                    <a class="btn btn-secondary bi bi-arrow-left-circle" href="/Recogida/Index"> Cancelar </a>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+}
+
+else
+{
+    <div class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-3">Cargando información...</p>
+    </div>
+}
+
+@if (MostrarModal)
+{
+    <div class="modal d-block" role="dialog" tabindex="-1" style="background:rgba(0,0,0,0.5)">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title mx-auto"> <strong> Eliminar recogida </strong></h5>
+                </div>
+
+                <div class="modal-body">
+                    <label class="col-12"> <strong> Recogida Id: </strong> @recogida.RecogidaId</label>
+                    <label class="col-12"> <strong> Recogida Id: </strong> @recogida.Fecha</label>
+                    <label class="col-12"> <strong> Recogida Id: </strong> @recogida.Productor?.UserName</label>
+                    <label class="col-12"> <strong> Recogida Id: </strong> @recogida.RecogidaId</label>
+                    <label class="col-12"> <strong> Recogida Id: </strong> @recogida.RecogidaId</label>
+                    <label class="col-12"> <strong> Recogida Id: </strong> @recogida.RecogidaId</label>
+                    <label class="col-12"> <strong> Recogida Id: </strong> @recogida.RecogidaId</label>
+                    <label class="col-12"> <strong> Recogida Id: </strong> @recogida.RecogidaId</label>
+
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@code {
+    [Parameter]
+    public int RecogidaId { get; set; }
+
+    public Recogidas? recogida { get; set; }
+
+    private bool MostrarModal { get; set; } = false;
+
+    private List<ApplicationUser> ListaProductores = new();
+
+    // Variables para cada checkbox
+    private bool certNOP = false;
+    private bool certBF = false;
+    private bool certEU = false;
+    private bool certWFT = false;
+    private bool certConv = false;
+    private bool certOtras = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var productores = await UserRoleService.GetUsersByRoleAsync("Productor");
+        ListaProductores = productores.ToList();
+    }
+
+    private void ActualizarCertificacion(bool isChecked, string certificacion)
+    {
+        if (recogida != null)
+        {
+            if (isChecked)
+            {
+                if (!recogida.CertificacionesProducto.Contains(certificacion))
+                {
+                    recogida.CertificacionesProducto.Add(certificacion);
+                }
+            }
+            else
+            {
+                recogida.CertificacionesProducto.Remove(certificacion);
+            }
+        }
+    }
+
+    public async Task GuardarRecogida()
+    {
+        if (recogida != null && await recogidasService.Guardar(recogida))
+        {
+            navigation.NavigateTo("/Recogida/Index");
+        }
+    }
+
+    public async Task EliminarRecogida()
+    {
+        if (await recogidasService.Eliminar(RecogidaId))
+        {
+            navigation.NavigateTo("/Recogida/Index");
+        }
+    }
+}

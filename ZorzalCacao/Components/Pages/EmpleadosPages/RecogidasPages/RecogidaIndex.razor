@@ -1,0 +1,170 @@
+﻿@page "/Recogida/Index"
+@inject RecogidasService recogidasService
+@rendermode InteractiveServer
+
+<PageTitle> Consulta recogidas </PageTitle>
+
+<div class="container">
+    <div class="card shadow-lg">
+        <div class="card-header">
+            <h5 class="text-center"> <strong> Consulte recogidas </strong></h5>
+
+            <div class="d-flex justify-content-end">
+                <a class="btn btn-info bi bi-plus-square" href="/Recogida/Create"> Solicitar recogida </a>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-12 col-md-6 mb-3">
+                    <label class="col-form-label"> <strong> Desde </strong></label>
+                    <InputDate class="form-control" @bind-Value="Desde" />
+                </div>
+
+                <div class="col-12 col-md-6 mb-3">
+                    <label class="col-form-label"> <strong> Hasta </strong></label>
+                    <InputDate class="form-control" @bind-Value="Hasta" />
+                </div>
+            </div>
+
+            <div class="row align-items-center">
+                <div class="col-12 col-md-6 mb-3">
+                    <label class="col-form-label"> <strong> Filtrar por </strong></label>
+                    <InputSelect class="form-control" @bind-Value="Filtro">
+                        <option value="" selected disabled> Seleccione una opcion </option>
+                        <option value="RecogidaId"> Recogida Id </option>
+                        <option value="Productor"> Productor </option>
+                        <option value="PuntoEncuentro"> Punto de encuentro </option>
+                        <option value="CertificacionesProducto"> Certificaciones </option>
+                        <option value="EstadoEntrega"> Estado entrega </option>
+                        <option value="CantidadSacos"> Cantidad de sacos  </option>
+                        <option value="Chofer"> Chofer </option>
+                    </InputSelect>
+                </div>
+
+                <div class="col-12 col-md-6 mb-3">
+                    <label class="col-form-label"> <strong> Busqueda </strong></label>
+                    <div class="input-group">
+                        <input class="form-control" @bind="ValorFiltro" placeholder="Buscar" />
+                        <button class="btn btn-outline-info bi bi-search" @onclick="Buscar" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-dark table-striped table-hover text-center">
+                    <thead class="table-light">
+                        <tr>
+                            <th> Recogida Id </th>
+                            <th> Fecha </th>
+                            <th> Productor </th>
+                            <th> Punto de encuentro </th>
+                            <th> Certificaciones </th>
+                            <th> Estado de entrega </th>
+                            <th> Cantidad de sacos </th>
+                            <th> Chofer </th>
+                            <th> Opciones </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ListaRecogidas == null || ListaRecogidas.Count == 0)
+                        {
+                            <tr>
+                                <td colspan="9" class="text-center text-muted py-4">
+                                    No se han encontrado recogidas
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (var recogida in ListaRecogidas)
+                            {
+                                <tr>
+                                    <td> @recogida.RecogidaId</td>
+                                    <td> @recogida.Fecha</td>
+                                    <td> @(recogida.Productor?.UserName ?? "N/A")</td>
+                                    <td> @recogida.PuntoEncuentro</td>
+                                    <td> @(recogida.CertificacionesProducto != null && recogida.CertificacionesProducto.Any() ? string.Join(", ", recogida.CertificacionesProducto) : "N/A") </td>
+                                    <td> @recogida.EstadoEntrega</td>
+                                    <td> @recogida.CantidadSacos</td>
+                                    <td> @recogida.Chofer</td>
+                                    <td>
+                                        <a class="btn btn-sm btn-outline-primary bi bi-eye" href="/Recogida/View/@recogida.RecogidaId"/>
+                                        <a class="btn btn-sm btn-outline-info bi bi-pencil-square" href="/Recogida/Edit/@recogida.RecogidaId" />
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card-footer">
+            <label class="col-12"> <strong> Conteo recogidas: </strong> @(ListaRecogidas?.Count ?? 0) </label>
+            <label class="col-12"> <strong> Total sacos: </strong> @(ListaRecogidas?.Sum(r => r.CantidadSacos).ToString("F2") ?? "0.00") </label>
+        </div>
+    </div>
+</div>
+
+@code {
+    public string Filtro { get; set; } = string.Empty;
+
+    public string ValorFiltro { get; set; } = string.Empty;
+
+    public DateTime? Desde { get; set; }
+
+    public DateTime? Hasta { get; set; }
+
+    public List<Recogidas> ListaRecogidas { get; set; } = new List<Recogidas>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Buscar();
+    }
+
+    public async Task Buscar()
+    {
+        // IMPORTANTE: Asegúrate de incluir el Productor en la consulta
+        var lista = await recogidasService.Listar(R => true);
+
+        if (Desde.HasValue && Hasta.HasValue)
+        {
+            lista = lista.Where(r => r.Fecha >= Desde && r.Fecha <= Hasta).ToList();
+        }
+
+        if (!string.IsNullOrEmpty(ValorFiltro))
+        {
+            if (Filtro == nameof(Recogidas.RecogidaId) && int.TryParse(ValorFiltro, out int id))
+            {
+                lista = lista.Where(r => r.RecogidaId == id).ToList();
+            }
+            else if (Filtro == nameof(Recogidas.CantidadSacos) && double.TryParse(ValorFiltro, out double cantidad))
+            {
+                lista = lista.Where(r => r.CantidadSacos == cantidad).ToList();
+            }
+            else if (Filtro == nameof(Recogidas.Productor))
+            {
+                lista = lista.Where(r => r.Productor != null && r.Productor.UserName.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+            else if (Filtro == nameof(Recogidas.PuntoEncuentro))
+            {
+                lista = lista.Where(r => r.PuntoEncuentro.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+            else if (Filtro == nameof(Recogidas.EstadoEntrega))
+            {
+                lista = lista.Where(r => r.EstadoEntrega.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+            else if (Filtro == nameof(Recogidas.CertificacionesProducto))
+            {
+                lista = lista.Where(r => r.CertificacionesProducto != null &&
+                    r.CertificacionesProducto.Any(c => c.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase))).ToList();
+            }
+            else if (Filtro == nameof(Recogidas.Chofer))
+            {
+                lista = lista.Where(r => r.Chofer.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+        }
+        ListaRecogidas = lista;
+    }
+}
