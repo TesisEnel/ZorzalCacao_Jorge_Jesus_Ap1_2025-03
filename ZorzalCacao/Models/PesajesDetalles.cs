@@ -18,6 +18,4 @@ public class PesajesDetalles
 
     [ForeignKey(nameof(SacoId))]
     public virtual Sacos Saco { get; set; }
-    public string EmpleadoId { get; set; }
-    public ApplicationUser Empleado { get; set; }
 }
