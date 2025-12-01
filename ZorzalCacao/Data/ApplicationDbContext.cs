@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 using System.Reflection.Emit;
 using ZorzalCacao.Models;
 
@@ -19,6 +20,16 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        builder.Entity<Remociones>(entity =>
+        {
+            entity.HasData(
+                new(){RemocionId = 1, NumeroRemocion = 1,},
+                new() { RemocionId = 2, NumeroRemocion = 2, },
+                new() { RemocionId = 3, NumeroRemocion = 3, },
+                new() { RemocionId = 4, NumeroRemocion = 4, }
+            );
+        });
 
         // Relación entre Recogida y ApplicationUser (Productor)
         builder.Entity<Recogidas>()
