@@ -9,10 +9,10 @@
 <div class="container mt-3">
     <div class="card shadow-lg">
         <div class="card-header">
-            <h5 class="card-title text-center"> Consulte sus fermentaciones </h5>
+            <h5 class="card-title text-center"> <strong> Consulte sus fermentaciones </strong> </h5>
 
             <div class="d-flex justify-content-end">
-                <a class="btn btn-info bi bi-plus-square"> Crear fermentacion </a>
+                <a class="btn btn-info bi bi-plus-square" href="/Fermentacion/Create"> Crear fermentacion </a>
             </div>
         </div>
 
@@ -33,7 +33,10 @@
                 <div class="col-12 col-md-6 mb-3">
                     <label class="col-form-label"> <strong> Filtrar por </strong></label>
                     <InputSelect class="form-select" @bind-Value="Filtro">
-                        
+                        <option value = "" disabled selected> Seleccione una opcion </option>
+                        <option value="FermentacionId"> Fermentacion Id </option>
+                        <option value="Temperatura"> Temperatura  </option>
+                        <option value="Observaciones"> Observaciones </option>
                     </InputSelect>
                 </div>
 
@@ -45,6 +48,61 @@
                     </div>
                 </div>
             </div>
+
+            <div class="table-responsive">
+                <table class="table table-dark table-striped table-hover text-center">
+                    <thead class="table-light">
+                        <tr>
+                            <th> Fermentación Id </th>
+                            <th> Fecha </th>
+                            <th> Temperatura </th>
+                            <th> Observaciones </th>
+                            <th> Ultima remocion </th>
+                            <th> Cantidad Removida Total </th>
+                            <th> Promedio de Temperatura en Remociones </th>
+                            <th> Opciones </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ListaFermentaciones == null || ListaFermentaciones.Count == 0)
+                        {
+                            <tr>
+                                <td colspan="8" class="text-center text-muted py-4">
+                                    No se han encontrado registros de fermentación
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (var fermentacion in ListaFermentaciones)
+                            {
+                                var detalles = fermentacion.FermentacionesDetalle ?? new List<FermentacionesDetalles>();
+                                var promedioTemperatura = detalles.Any() ? detalles.Average(d => d.Temperatura) : 0;
+                                var cantidadTotal = detalles.Sum(d => d.Cantidad);
+                                
+                                <tr>
+                                    <td> @fermentacion.FermentacionId</td>
+                                    <td> @fermentacion.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td> @fermentacion.Temperatura°F </td>
+                                    <td> @fermentacion.Observaciones</td>
+                                    <td> @fermentacion.FermentacionesDetalle.Count</td>
+                                    <td> @cantidadTotal</td>
+                                    <td> @promedioTemperatura.ToString("F2")°F</td>
+                                    <td>
+                                        <a class="btn btn-sm btn-outline-primary bi bi-eye" href="/Fermentacion/View/@fermentacion.FermentacionId" />
+                                        <a class="btn btn-sm btn-outline-info bi bi-pencil-square" href="/Fermentacion/Edit/@fermentacion.FermentacionId" />
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card-footer">
+            <label class="col-12"> <strong> Conteo fermentaciones: </strong> @ListaFermentaciones.Count </label>
+            <label class="col-12"> <strong> Cantidad total: </strong> @ListaFermentaciones.Sum(f => f.FermentacionesDetalle.Sum(t => t.Cantidad)).ToString("F2")</label>
         </div>
     </div>
 </div>
@@ -58,7 +116,7 @@
 
     public DateTime? Hasta { get; set; }
 
-    public List<Fermentaciones> ListaFermentaciones = new List<Fermentaciones>();
+    public List<Fermentaciones> ListaFermentaciones = new ();
 
     protected override async Task OnInitializedAsync ()
     {
