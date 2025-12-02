@@ -79,7 +79,7 @@
                             {
                                 <tr>
                                     <td> @recogida.RecogidaId</td>
-                                    <td> @recogida.Fecha</td>
+                                    <td> @recogida.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
                                     <td> @(recogida.Productor?.UserName ?? "N/A")</td>
                                     <td> @recogida.PuntoEncuentro</td>
                                     <td> @(recogida.CertificacionesProducto != null && recogida.CertificacionesProducto.Any() ? string.Join(", ", recogida.CertificacionesProducto) : "N/A") </td>
