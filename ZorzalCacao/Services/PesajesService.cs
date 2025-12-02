@@ -53,7 +53,7 @@ public class PesajesService(IDbContextFactory<ApplicationDbContext> DbFactory)
         return await contexto.SaveChangesAsync() > 0;
     }
 
-    public async Task<bool> Modificar(Pesajes pesaje)
+    private async Task<bool> Modificar(Pesajes pesaje)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
 

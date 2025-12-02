@@ -19,20 +19,20 @@ public class RecogidasService(IDbContextFactory<ApplicationDbContext> DbFactory)
         }
     }
 
-    public async Task<bool> Existe(int recogidaId)
+    private async Task<bool> Existe(int recogidaId)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.Recogidas.AnyAsync(r => r.RecogidaId == recogidaId);
     }
 
-    public async Task<bool> Insertar(Recogidas recogida)
+    private async Task<bool> Insertar(Recogidas recogida)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         contexto.Recogidas.Add(recogida);
         return await contexto.SaveChangesAsync() > 0;
     }
 
-    public async Task<bool> Modificar(Recogidas recogida)
+    private async Task<bool> Modificar(Recogidas recogida)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         contexto.Update(recogida);
