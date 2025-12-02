@@ -1,0 +1,114 @@
+﻿@page "/ControlesCalidad/Create"
+@inject AuthenticationStateProvider AuthStateProvider
+@inject ControlesCalidadService controlesService
+@inject RecogidasService recogidasService
+@inject IUserRoleService userRoleService
+@inject NavigationManager navigation
+@rendermode InteractiveServer
+
+<PageTitle> Registrar control de calidad </PageTitle>
+
+<div class="container mt-3">
+    <div class="card shadow-lg">
+        <div class="card-header">
+            <h5 class="card-title text-center">
+                <strong> Registrar control de calidad </strong>
+            </h5>
+        </div>
+
+        <EditForm Model="control" OnValidSubmit="GuardarControl">
+            <DataAnnotationsValidator />
+
+            <div class="card-body">
+
+                <div class="row">
+                    <!-- Grados Brix -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label"> <strong> Grados Brix </strong></label>
+                        <InputNumber class="form-control" @bind-Value="control.GradosBrix" />
+                        <ValidationMessage For="() => control.GradosBrix" />
+                    </div>
+
+                    <!-- Decisión -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label"><strong>Decisión</strong></label>
+                        <InputSelect class="form-select" @bind-Value="control.Decision"reado>
+                            <option value="" disabled selected>Seleccione una decisión</option>
+                            <option value="Aprobado">Aprobado</option>
+                            <option value="Rechazado">Rechazado</option>
+                        </InputSelect>
+                        <ValidationMessage For="() => control.Decision" />
+                    </div>
+                    <!--Recogida-->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label"><strong>Recogida</strong></label>
+                        <InputSelect class="form-select" @bind-Value="control.RecogidaId">
+                            <option value="0" disabled selected>Seleccione una recogida</option>
+                            @foreach (var r in ListaRecogidas)
+                            {
+                                <option value="@r.RecogidaId">@r.Fecha.ToShortDateString()</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="() => control.RecogidaId" />
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <!-- Observaciones -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label"> <strong> Observaciones </strong></label>
+                        <InputTextArea class="form-control" @bind-Value="control.Observaciones" />
+                    </div>
+                </div>
+
+                <div class="row">
+
+                </div>
+            </div>
+
+            <div class="card-footer gap-2 bg-white d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary bi bi-save"> Guardar </button>
+                <a class="btn btn-secondary bi bi-arrow-left-circle" href="/ControlesCalidad/Index"> Regresar </a>
+            </div>
+
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    public ControlesCalidad control { get; set; } = new ControlesCalidad();
+
+    private List<Recogidas> ListaRecogidas = new();
+    private List<ApplicationUser> ListaEmpleados = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaRecogidas = await recogidasService.Listar(r => true);
+
+        var empleados = await userRoleService.GetUsersByRoleAsync("Empleado");
+        ListaEmpleados = empleados.ToList();
+    }
+
+    public async Task GuardarControl()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        control.EmpleadoId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrEmpty(control.EmpleadoId))
+            throw new Exception("No se pudo obtener el EmpleadoId logueado.");
+
+        if (control.RecogidaId == 0)
+            throw new Exception("Debe seleccionar una recogida válida.");
+
+        if (await controlesService.Guardar(control))
+        {
+            navigation.NavigateTo("/ControlesCalidad/Index");
+        }
+    }
+
+}
+
+
