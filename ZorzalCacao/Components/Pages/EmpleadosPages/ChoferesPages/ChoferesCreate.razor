@@ -1,0 +1,156 @@
+﻿@page "/Choferes/Create"
+@inject ChoferesService choferesService
+@inject NavigationManager navigation
+@rendermode InteractiveServer
+
+<PageTitle>Registrar Chofer</PageTitle>
+
+<div class="container mt-3">
+    <div class="card shadow-lg">
+
+        <!-- Encabezado -->
+        <div class="card-header bg-primary text-white text-center">
+            <h5 class="mb-0">
+                <strong>Registrar Chofer</strong>
+            </h5>
+        </div>
+
+        <EditForm Model="chofer" OnValidSubmit="GuardarChofer">
+            <DataAnnotationsValidator />
+
+            <div class="card-body">
+
+                @if (!string.IsNullOrEmpty(mensajeError))
+                {
+                    <div class="alert alert-danger">
+                        @mensajeError
+                    </div>
+                }
+
+                @if (guardado)
+                {
+                    <div class="alert alert-success">
+                        Chofer registrado correctamente.
+                    </div>
+                }
+
+                <div class="row">
+
+                    <!-- Nombre -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label">
+                            <strong>Nombre</strong>
+                        </label>
+                        <InputText class="form-control" @bind-Value="chofer.Nombre" />
+                        <ValidationMessage For="() => chofer.Nombre" />
+                    </div>
+
+                    <!-- Apellido -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label">
+                            <strong>Apellido</strong>
+                        </label>
+                        <InputText class="form-control" @bind-Value="chofer.Apellido" />
+                        <ValidationMessage For="() => chofer.Apellido" />
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <!-- Cédula -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label">
+                            <strong>Cédula</strong>
+                        </label>
+                        <InputText class="form-control" @bind-Value="chofer.Cedula" />
+                        <ValidationMessage For="() => chofer.Cedula" />
+                    </div>
+
+                    <!-- Teléfono -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label">
+                            <strong>Teléfono</strong>
+                        </label>
+                        <InputText class="form-control" @bind-Value="chofer.Telefono" />
+                        <ValidationMessage For="() => chofer.Telefono" />
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <!-- Licencia -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label">
+                            <strong>Licencia</strong>
+                        </label>
+                        <InputText class="form-control" @bind-Value="chofer.Licencia" />
+                        <ValidationMessage For="() => chofer.Licencia" />
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Footer -->
+            <div class="card-footer bg-white d-flex justify-content-center gap-2">
+
+                <button type="submit"
+                        class="btn btn-primary bi bi-save"
+                        disabled="@cargando">
+                    @(cargando ? " Guardando..." : " Guardar")
+                </button>
+
+                <a class="btn btn-secondary bi bi-arrow-left-circle"
+                   href="/Choferes/Index">
+                    Regresar
+                </a>
+
+            </div>
+
+        </EditForm>
+    </div>
+</div>
+
+@code {
+
+    public Choferes chofer { get; set; } = new();
+
+    private bool cargando = false;
+    private bool guardado = false;
+    private string mensajeError = string.Empty;
+
+    public async Task GuardarChofer()
+    {
+        mensajeError = string.Empty;
+        guardado = false;
+        cargando = true;
+
+        try
+        {
+            bool ok = await choferesService.Guardar(chofer);
+
+            if (ok)
+            {
+                guardado = true;
+                await Task.Delay(800);
+                navigation.NavigateTo("/Choferes/Index");
+            }
+            else
+            {
+                mensajeError = "No se pudo registrar el chofer.";
+            }
+        }
+        catch (Exception ex)
+        {
+            mensajeError = ex.Message;
+        }
+        finally
+        {
+            cargando = false;
+        }
+    }
+}
+
+
