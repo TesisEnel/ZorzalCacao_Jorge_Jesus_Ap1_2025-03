@@ -1,0 +1,170 @@
+﻿@page "/Choferes/Index"
+@inject ChoferesService choferesService
+@inject NavigationManager nav
+@rendermode InteractiveServer
+
+<PageTitle> Consulta de Choferes </PageTitle>
+
+<div class="container">
+    <div class="card shadow-lg">
+
+        <!-- Encabezado -->
+        <div class="card-header">
+            <h5 class="text-center">
+                <strong> Consulta de Choferes </strong>
+            </h5>
+
+            <div class="d-flex justify-content-end">
+                <a class="btn btn-info bi bi-plus-square" href="/Choferes/Create">
+                    Nuevo Chofer
+                </a>
+            </div>
+        </div>
+
+        <div class="card-body">
+
+            <!-- Filtros -->
+            <div class="row align-items-center">
+                <div class="col-12 col-md-6 mb-3">
+                    <label class="col-form-label"><strong> Filtrar por </strong></label>
+
+                    <InputSelect class="form-select" @bind-Value="Filtro">
+                        <option value="">Seleccione una opción</option>
+                        <option value="ChoferId">Chofer Id</option>
+                        <option value="Nombre">Nombre</option>
+                        <option value="Apellido">Apellido</option>
+                        <option value="Cedula">Cédula</option>
+                        <option value="Telefono">Teléfono</option>
+                        <option value="Licencia">Licencia</option>
+                    </InputSelect>
+                </div>
+
+                <div class="col-12 col-md-6 mb-3">
+                    <label class="col-form-label"><strong> Búsqueda </strong></label>
+                    <div class="input-group">
+                        <input class="form-control" @bind="ValorFiltro" placeholder="Buscar..." />
+                        <button class="btn btn-outline-info bi bi-search" @onclick="Buscar"></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabla -->
+            <div class="table-responsive">
+                <table class="table table-dark table-striped table-hover text-center">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Chofer Id</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Cédula</th>
+                            <th>Teléfono</th>
+                            <th>Licencia</th>
+                            <th>Vehículos</th>
+                            <th>Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ListaChoferes == null || ListaChoferes.Count == 0)
+                        {
+                            <tr>
+                                <td colspan="8" class="text-center text-muted py-4">
+                                    No se han encontrado choferes.
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (var c in ListaChoferes)
+                            {
+                                <tr>
+                                    <td>@c.ChoferId</td>
+                                    <td>@c.Nombre</td>
+                                    <td>@c.Apellido</td>
+                                    <td>@c.Cedula</td>
+                                    <td>@c.Telefono</td>
+                                    <td>@c.Licencia</td>
+
+                                    <!-- ✅ CONTEO DE VEHÍCULOS SEGURO -->
+                                    <td>
+                                        @if (c.Vehiculos != null && c.Vehiculos.Any())
+                                        {
+                                            @foreach (var v in c.Vehiculos)
+                                            {
+                                                <div class="badge bg-info text-dark mb-1">
+                                                    @v.Marca @v.Modelo - @v.Placa
+                                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Sin vehículo</span>
+                                        }
+                                    </td>
+
+
+                                    <td>
+                                        <a class="btn btn-sm btn-outline-primary bi bi-eye"
+                                           href="/Choferes/View/@c.ChoferId"></a>
+
+                                        <a class="btn btn-sm btn-outline-info bi bi-pencil-square"
+                                           href="/Choferes/Edit/@c.ChoferId"></a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="card-footer">
+            <label class="col-12">
+                <strong>Total choferes:</strong> @(ListaChoferes?.Count ?? 0)
+            </label>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    public string Filtro { get; set; } = string.Empty;
+    public string ValorFiltro { get; set; } = string.Empty;
+
+    public List<Choferes> ListaChoferes { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Buscar();
+    }
+
+    public async Task Buscar()
+    {
+        var lista = await choferesService.Listar(c => true);
+
+        // ✅ FILTRADO DINÁMICO SEGURO
+        if (!string.IsNullOrWhiteSpace(ValorFiltro))
+        {
+            if (Filtro == "ChoferId" && int.TryParse(ValorFiltro, out int id))
+                lista = lista.Where(c => c.ChoferId == id).ToList();
+
+            else if (Filtro == "Nombre")
+                lista = lista.Where(c => c.Nombre.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            else if (Filtro == "Apellido")
+                lista = lista.Where(c => c.Apellido.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            else if (Filtro == "Cedula")
+                lista = lista.Where(c => c.Cedula.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            else if (Filtro == "Telefono")
+                lista = lista.Where(c => c.Telefono.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            else if (Filtro == "Licencia")
+                lista = lista.Where(c => c.Licencia.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
+        ListaChoferes = lista;
+    }
+}
+
