@@ -2,6 +2,151 @@
 @inject PesajesService pesajeService
 @rendermode InteractiveServer
 
-@code {
+<div class="container mt-3">
+    <div class="card shadow-lg">
+        <div class="card-header">
+            <h5 class="card-title text-center"> <strong> Consulta pesajes </strong></h5>
 
+            <div class="d-flex justify-content-end">
+                <a class="btn btn-info bi bi-plus-square" href="/Pesaje/Create"> Crear pesaje </a>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-12 col-md-6 mb-3">
+                    <label class="col-form-label"> <strong> Desde </strong></label>
+                    <InputDate class="form-control" @bind-Value="Desde" />
+                </div>
+
+                <div class="col-12 col-md-6 mb-3">
+                    <label class="col-form-label"> <strong> Hasta </strong></label>
+                    <InputDate class="form-control" @bind-Value="Hasta" />
+                </div>
+            </div>
+
+            <div class="row align-items-center">
+                <div class="col-12 col-md-6 mb-3">
+                    <label class="col-form-label"> <strong> Filtrar por </strong></label>
+                    <InputSelect class="form-select" @bind-Value="Filtro">
+                        <option value="" disabled selected> Seleccione una opcion </option>
+                        <option value = "PesajeId"> Pesaje Id</option>
+                        <option value="CantidadTotal"> Cantidad </option>
+                    </InputSelect>
+                </div>
+
+                <div class="col-12 col-md-6 mb-3">
+                    <label class="col-form-label"> <strong> Busqueda </strong></label>
+                    <div class="input-group">
+                        <input class="form-control" @bind="ValorFiltro" placeholder="Buscar" />
+                        <button class="btn btn-outline-info bi bi-search" @onclick="Buscar" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-dark table-striped table-hover text-center">
+                    <thead class="table-light">
+                        <tr>
+                            <th> Pesaje Id </th>
+                            <th> Fecha </th>
+                            <th> Empleado </th>
+                            <th> Cantidad Total </th>
+                            <th> Peso Total </th>
+                            <th> Opciones </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ListaPesajes == null || ListaPesajes.Count == 0)
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-4">
+                                    No se han encontrado registros de pesaje
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (var pesaje in ListaPesajes)
+                            {
+                                var detalles = pesaje.PesajesDetalle ?? new List<PesajesDetalles>();
+
+                                var cantidadTotal = detalles.Sum(d => d.Cantidad);
+                                var pesoTotal = detalles.Sum(d => d.Peso);
+
+                                <tr>
+                                    <td>@pesaje.PesajeId</td>
+                                    <td>@pesaje.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td>@pesaje.Empleado?.UserName</td>
+                                    <td>@cantidadTotal.ToString("F2")</td>
+                                    <td>@(pesoTotal * cantidadTotal) </td>
+                                    <td>
+                                        <a class="btn btn-sm btn-outline-primary bi bi-eye"
+                                           href="/Pesaje/View/@pesaje.PesajeId"></a>
+
+                                        <a class="btn btn-sm btn-outline-info bi bi-pencil-square"
+                                           href="/Pesaje/Edit/@pesaje.PesajeId"></a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card-footer">
+            <label class="col-12"> <strong> Conteo pesajes: </strong> @ListaPesajes.Count</label>
+            <label class="col-12"> <strong> Cantidad de sacos: </strong> @ListaPesajes.Sum(a => a.PesajesDetalle.Sum(f => f.Cantidad)).ToString("F2")</label>
+            <label> <strong> Peso total </strong>  @ListaPesajes.Sum(a => a.PesajesDetalle.Sum(f => f.Cantidad * f.Peso)).ToString("F2") </label>
+        </div>
+    </div>
+</div>
+
+@code {
+    public string Filtro { get; set; } = null!;
+
+    public string ValorFiltro { get; set; } = string.Empty;
+
+    public DateTime? Desde { get; set; }
+
+    public DateTime? Hasta { get; set; }
+
+    public List<Pesajes> ListaPesajes = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Buscar();
+    }
+
+    public async Task Buscar()
+    {
+        var lista = await pesajeService.Listar(p => true);
+        var listaConTotales = lista.Select(p => new
+        {
+            Pesaje = p,
+            CantidadTotal = p.PesajesDetalle.Sum(d => d.Cantidad)
+        }).ToList();
+
+        if (Desde.HasValue && Hasta.HasValue)
+        {
+            lista = lista.Where(f => f.Fecha >= Desde && f.Fecha <= Hasta).ToList();
+        }
+
+        if (!string.IsNullOrEmpty(ValorFiltro))
+        {
+            if (Filtro == nameof(Pesajes.PesajeId) && int.TryParse(ValorFiltro, out int id))
+            {
+                lista = lista.Where(p => p.PesajeId == id).ToList();
+            }
+
+            else if (Filtro == "CantidadTotal" && double.TryParse(ValorFiltro, out double cantidadFiltro))
+            {
+                listaConTotales = listaConTotales
+                .Where(x => x.CantidadTotal == cantidadFiltro)
+                .ToList();
+            }
+        }
+        ListaPesajes = lista;
+    }
 }
