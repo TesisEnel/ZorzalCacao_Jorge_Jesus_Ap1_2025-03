@@ -16,6 +16,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Remociones> Remociones { get; set; }
     public DbSet<FermentacionesDetalles> FermentacionesDetalles { get; set; }
     public DbSet<Sacos> Sacos { get; set; }
+    public DbSet<Vehiculo> Vehiculos { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
