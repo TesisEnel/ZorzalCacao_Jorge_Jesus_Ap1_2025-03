@@ -141,7 +141,11 @@
 
             else if (Filtro == nameof(Fermentaciones.Temperatura) && double.TryParse(ValorFiltro, out double temp))
             {
-                
+                lista = lista.Where(f => f.Temperatura == temp).ToList();
+            }
+            else if (Filtro == nameof(Fermentaciones.Observaciones))
+            {
+                lista = lista.Where(f => f.Observaciones.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
             }
         }
             
