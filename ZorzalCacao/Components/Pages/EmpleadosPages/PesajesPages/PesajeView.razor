@@ -1,5 +1,9 @@
-﻿<h3>PesajeView</h3>
+﻿@page "/Pesaje/View/{PesajeId:int}"
+@inject PesajesService pesajeService
+@rendermode InteractiveServer
 
 @code {
+    [Parameter]
+    public int PesajeId { get; set; }
 
 }
