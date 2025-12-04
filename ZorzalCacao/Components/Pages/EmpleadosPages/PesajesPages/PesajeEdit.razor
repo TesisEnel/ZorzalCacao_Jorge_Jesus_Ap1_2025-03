@@ -168,14 +168,6 @@ else
 
     public async Task GuardarPesaje()
     {
-        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
-        Pesaje.EmpleadoId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-        if (string.IsNullOrEmpty(Pesaje.EmpleadoId))
-            throw new Exception("No se pudo obtener el EmpleadoId logueado.");
-
         if (await pesajeService.Guardar(Pesaje))
         {
             navigationManager.NavigateTo("/Pesaje/Index");
