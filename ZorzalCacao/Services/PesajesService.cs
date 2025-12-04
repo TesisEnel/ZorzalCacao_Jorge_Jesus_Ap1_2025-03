@@ -122,7 +122,7 @@ public class PesajesService(IDbContextFactory<ApplicationDbContext> DbFactory)
             .ToListAsync();
     }
 
-    public async Task<List<Sacos>> ListarUnidades(Expression<Func<Sacos, bool>> criterio)
+    public async Task<List<Sacos>> ListarSacos (Expression<Func<Sacos, bool>> criterio)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.Sacos
