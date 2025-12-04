@@ -43,6 +43,7 @@
                                     <th> Cantidad </th>
                                     <th> Peso (kg) </th>
                                     <th> Peso Total (kg) </th>
+                                    <th> Quintales </th>
                                     <th> Opciones </th>
                                 </tr>
                             </thead>
@@ -53,6 +54,7 @@
                                         <td> @detalle.Cantidad</td>
                                         <td> @detalle.Peso.ToString("F2")</td>
                                         <td> @((detalle.Cantidad * detalle.Peso).ToString("F2"))</td>
+                                        <td> @(((detalle.Cantidad * detalle.Peso) / 125).ToString("F2")) </td>
                                         <td>
                                             <button type="button" class="btn btn-outline-danger bi bi-trash" @onclick="() => RemoverDetalle(detalle)">
                                                 Remover
@@ -108,7 +110,7 @@ else
 
                 <div class="modal-body">
                     @{
-                        var detalles = Pesaje?.PesajesDetalle ?? new List<PesajesDetalles>();
+                        var detalles = Pesaje.PesajesDetalle ?? new List<PesajesDetalles>();
 
                         var cantidadTotal = detalles.Sum(d => d.Cantidad);
                         var pesoTotal = detalles.Sum(d => d.Peso);
@@ -116,9 +118,9 @@ else
                     }
 
                     <label class="col-12"> <strong> Datos del Pesaje </strong></label>
-                    <label class="col-12"> <strong> ID: </strong> @Pesaje?.PesajeId </label>
-                    <label class="col-12"> <strong> Fecha: </strong> @Pesaje?.Fecha.ToString("dd/MM/yyyy HH:mm") </label>
-                    <label class="col-12"> <strong> Empleado: </strong> @Pesaje?.Empleado?.UserName </label>
+                    <label class="col-12"> <strong> ID: </strong> @Pesaje.PesajeId </label>
+                    <label class="col-12"> <strong> Fecha: </strong> @Pesaje.Fecha.ToShortDateString() </label>
+                    <label class="col-12"> <strong> Empleado: </strong> @Pesaje.Empleado?.UserName </label>
                     <label class="col-12"> <strong> Cantidad Total: </strong> @cantidadTotal.ToString("F2") </label>
                     <label class="col-12"> <strong> Peso Total: </strong> @(pesoTotal* cantidadTotal) </label>
                     <label class="col-12"> <strong> Quintales: </strong> @quintales.ToString("F2") </label>
@@ -150,7 +152,7 @@ else
     [Parameter]
     public int PesajeId { get; set; }
 
-    public Pesajes Pesaje { get; set; } = new Pesajes();
+    public Pesajes? Pesaje { get; set; }
 
     public List<Sacos> ListaSacos { get; set; } = new List<Sacos>();
 
@@ -163,6 +165,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        //Pesaje = await pesajeService.Buscar(PesajeId);
         ListaSacos = await pesajeService.ListarSacos(p => true);
     }
 
