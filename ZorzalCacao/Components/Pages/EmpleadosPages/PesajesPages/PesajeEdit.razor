@@ -94,6 +94,56 @@ else
     </div>
 }
 
+@if(MostrarModal)
+{
+    <div class="modal d-block" role="dialog" tabindex="-1" style="background: rgba(0,0,0,0.5)">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title mx-auto">
+                        <strong> Confirmar Eliminación </strong>
+                    </h5>
+                </div>
+
+                <div class="modal-body">
+                    @{
+                        var detalles = Pesaje?.PesajesDetalle ?? new List<PesajesDetalles>();
+
+                        var cantidadTotal = detalles.Sum(d => d.Cantidad);
+                        var pesoTotal = detalles.Sum(d => d.Peso);
+                        var quintales = detalles.Sum(d => d.Cantidad * d.Peso) / 125;
+                    }
+
+                    <label class="col-12"> <strong> Datos del Pesaje </strong></label>
+                    <label class="col-12"> <strong> ID: </strong> @Pesaje?.PesajeId </label>
+                    <label class="col-12"> <strong> Fecha: </strong> @Pesaje?.Fecha.ToString("dd/MM/yyyy HH:mm") </label>
+                    <label class="col-12"> <strong> Empleado: </strong> @Pesaje?.Empleado?.UserName </label>
+                    <label class="col-12"> <strong> Cantidad Total: </strong> @cantidadTotal.ToString("F2") </label>
+                    <label class="col-12"> <strong> Peso Total: </strong> @(pesoTotal* cantidadTotal) </label>
+                    <label class="col-12"> <strong> Quintales: </strong> @quintales.ToString("F2") </label>
+
+                    <label class="text-danger mt-3">
+                        ¿Está seguro que desea eliminar este pesaje?
+                    </label>
+                </div>
+
+                <div class="modal-footer gap-2 bg-white d-flex justify-content-center">
+                    <button type="button" class="btn btn-danger bi bi-trash"
+                            @onclick="EliminarPesaje">
+                        Sí, eliminar
+                    </button>
+
+                    <button type="button" class="btn btn-secondary bi bi-arrow-left"
+                            @onclick="() => MostrarModal = false">
+                        Regresar
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
 
 
 @code {
@@ -101,6 +151,7 @@ else
     public int PesajeId { get; set; }
 
     public Pesajes Pesaje { get; set; } = new Pesajes();
+
     public List<Sacos> ListaSacos { get; set; } = new List<Sacos>();
 
     public bool MostrarModal { get; set; } = false;
@@ -125,13 +176,15 @@ else
         if (string.IsNullOrEmpty(Pesaje.EmpleadoId))
             throw new Exception("No se pudo obtener el EmpleadoId logueado.");
 
-        // Asignar la fecha actual automáticamente si no se ha seleccionado
-        if (Pesaje.Fecha == default(DateTime))
-        {
-            Pesaje.Fecha = DateTime.Now;
-        }
-
         if (await pesajeService.Guardar(Pesaje))
+        {
+            navigationManager.NavigateTo("/Pesaje/Index");
+        }
+    }
+
+    public async Task EliminarPesaje()
+    {
+        if (await pesajeService.Eliminar(PesajeId))
         {
             navigationManager.NavigateTo("/Pesaje/Index");
         }
