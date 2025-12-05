@@ -18,6 +18,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Sacos> Sacos { get; set; }
     public DbSet<Vehiculo> Vehiculos { get; set; }
     public DbSet<Choferes> Choferes { get; set; }
+    public DbSet<EventosClimaticos> EventosClimaticos { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
