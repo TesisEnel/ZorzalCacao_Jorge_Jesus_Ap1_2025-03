@@ -73,8 +73,10 @@
                             @foreach (var pesaje in ListaPesajes)
                             {
                                 var detalles = pesaje.PesajesDetalle ?? new List<PesajesDetalles>();
+
                                 var cantidadTotal = detalles.Sum(d => d.Cantidad);
                                 var pesoTotal = detalles.Sum(d => d.Peso);
+
 
                                 <tr>
                                     <td>@pesaje.PesajeId</td>
