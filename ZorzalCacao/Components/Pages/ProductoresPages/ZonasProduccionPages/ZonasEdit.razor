@@ -6,63 +6,50 @@
 
 <PageTitle> Editar zona de producción </PageTitle>
 
-@if (zona != null)
-{
-    <div class="container mt-3">
-        <div class="card shadow-lg">
-            <div class="card-header">
-                <h5 class="card-title text-center">
-                    <strong> Editar Zona </strong>
-                </h5>
-            </div>
+<div class="container mt-3">
+    <div class="card shadow-lg">
+        <div class="card-header">
+            <h5 class="card-title text-center">
+                <strong> Editar Zona </strong>
+            </h5>
+        </div>
 
-            <EditForm Model="zona" OnValidSubmit="GuardarZona">
-                <DataAnnotationsValidator />
+        <EditForm Model="zona" OnValidSubmit="GuardarZona">
+            <DataAnnotationsValidator />
 
-                <div class="card-body">
-                    <div class="row">
-                        <!-- Nombre -->
-                        <div class="col-12 col-md-6 mb-3">
-                            <label class="col-form-label"><strong>Nombre de la zona</strong></label>
-                            <InputText class="form-control" @bind-Value="zona.Nombre" />
-                            <ValidationMessage For="() => zona.Nombre" />
-                        </div>
+            <div class="card-body">
+                <div class="row">
+                    <!-- Nombre -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label"><strong>Nombre de la zona</strong></label>
+                        <InputText class="form-control" @bind-Value="zona.Nombre" />
+                        <ValidationMessage For="() => zona.Nombre" />
+                    </div>
 
-                        <!-- Provincia -->
-                        <div class="col-12 col-md-6 mb-3">
-                            <label class="col-form-label"><strong>Provincia</strong></label>
-                            <InputText class="form-control" @bind-Value="zona.Provincia" />
-                            <ValidationMessage For="() => zona.Provincia" />
-                        </div>
+                    <!-- Provincia -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label"><strong>Provincia</strong></label>
+                        <InputText class="form-control" @bind-Value="zona.Provincia" />
+                        <ValidationMessage For="() => zona.Provincia" />
+                    </div>
 
-                        <!-- Distancia -->
-                        <div class="col-12 col-md-6 mb-3">
-                            <label class="col-form-label"><strong>Distancia (km)</strong></label>
-                            <InputNumber class="form-control" @bind-Value="zona.Distancia" />
-                            <ValidationMessage For="() => zona.Distancia" />
-                        </div>
+                    <!-- Distancia -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label"><strong>Distancia (km)</strong></label>
+                        <InputNumber class="form-control" @bind-Value="zona.Distancia" />
+                        <ValidationMessage For="() => zona.Distancia" />
                     </div>
                 </div>
+            </div>
 
-                <div class="card-footer gap-2 bg-white d-flex justify-content-center">
-                    <button type="submit" class="btn btn-primary bi bi-save"> Guardar </button>
-                    <button type="button" class="btn btn-danger bi bi-trash" @onclick="() => MostrarModal = true"> Eliminar </button>
-                    <a class="btn btn-secondary bi bi-arrow-left-circle" href="/ZonasProduccion/Index"> Regresar </a>
-                </div>
-            </EditForm>
-        </div>
+            <div class="card-footer gap-2 bg-white d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary bi bi-save"> Guardar </button>
+                <button type="button" class="btn btn-danger bi bi-trash" @onclick="() => MostrarModal = true"> Eliminar </button>
+                <a class="btn btn-secondary bi bi-arrow-left-circle" href="/Zonas/Index"> Regresar </a>
+            </div>
+        </EditForm>
     </div>
-}
-
-else
-{
-    <div class="text-center py-5">
-        <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Cargando...</span>
-        </div>
-        <p class="mt-3">Cargando información...</p>
-    </div>
-}
+</div>
 
 @if (MostrarModal)
 {
@@ -79,7 +66,6 @@ else
                 <div class="modal-body">
                     <label class="col-12"> <strong> Zona Id: </strong> @zona.ZonaId</label>
                     <label class="col-12"> <strong> Nombre de la zona: </strong> @zona.Nombre</label>
-                    <label class="col-12"> <strong> Productor: </strong> @zona.Productor?.UserName</label>
                     <label class="col-12"> <strong> Provincia: </strong> @zona.Provincia</label>
                     <label class="col-12"> <strong> Distancia (Km): </strong> @zona.Distancia.ToString("F2")</label>
 
@@ -108,7 +94,7 @@ else
     [Parameter]
     public int ZonaId { get; set; }
 
-    public ZonasProduccion? zona { get; set; }
+    public ZonasProduccion? zona { get; set; } = new();
 
     private bool MostrarModal { get; set; } = false;
 
