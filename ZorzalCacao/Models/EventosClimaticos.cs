@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using ZorzalCacao.Data;
 
 namespace ZorzalCacao.Models
 {
@@ -18,6 +19,7 @@ namespace ZorzalCacao.Models
         [Required(ErrorMessage = "La intensidad es requerida")]
         public string Intensidad { get; set; } // leve, moderada, fuerte
         public string Observaciones { get; set; }
-
+        public string EmpleadoId { get; set; }
+        public ApplicationUser Empleado { get; set; }
     }
 }
