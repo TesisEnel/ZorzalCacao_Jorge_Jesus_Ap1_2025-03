@@ -54,7 +54,6 @@ builder.Services.AddScoped<VehiculosService>();
 builder.Services.AddScoped<ChoferesService>();
 builder.Services.AddScoped<EventosClimaticosService>();
 builder.Services.AddScoped<ZonasProduccionService>();
-
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 
 var app = builder.Build();
