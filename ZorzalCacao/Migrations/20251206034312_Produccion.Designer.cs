@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ZorzalCacao.Data;
 
@@ -11,9 +12,11 @@ using ZorzalCacao.Data;
 namespace ZorzalCacao.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251206034312_Produccion")]
+    partial class Produccion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -286,44 +289,6 @@ namespace ZorzalCacao.Migrations
                     b.HasIndex("RecogidaId");
 
                     b.ToTable("Controles");
-                });
-
-            modelBuilder.Entity("ZorzalCacao.Models.EventosClimaticos", b =>
-                {
-                    b.Property<int>("EventoClimaticoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EventoClimaticoId"));
-
-                    b.Property<string>("EmpleadoId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("Fecha")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Intensidad")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Observaciones")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TipoEvento")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Zona")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("EventoClimaticoId");
-
-                    b.HasIndex("EmpleadoId");
-
-                    b.ToTable("EventosClimaticos");
                 });
 
             modelBuilder.Entity("ZorzalCacao.Models.Fermentaciones", b =>
@@ -627,9 +592,6 @@ namespace ZorzalCacao.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Referencia")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("ZonaId");
 
                     b.HasIndex("ProductorId");
@@ -705,17 +667,6 @@ namespace ZorzalCacao.Migrations
                     b.Navigation("Empleado");
 
                     b.Navigation("Recogida");
-                });
-
-            modelBuilder.Entity("ZorzalCacao.Models.EventosClimaticos", b =>
-                {
-                    b.HasOne("ZorzalCacao.Data.ApplicationUser", "Empleado")
-                        .WithMany()
-                        .HasForeignKey("EmpleadoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Empleado");
                 });
 
             modelBuilder.Entity("ZorzalCacao.Models.Fermentaciones", b =>

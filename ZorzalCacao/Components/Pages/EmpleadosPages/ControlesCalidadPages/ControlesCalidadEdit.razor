@@ -26,17 +26,6 @@
                             <InputNumber class="form-control" @bind-Value="control.GradosBrix" />
                             <ValidationMessage For="() => control.GradosBrix" />
                         </div>
-
-                        <!-- Decisión -->
-                        <div class="col-12 col-md-6 mb-3">
-                            <label class="col-form-label"><strong>Decisión</strong></label>
-                            <InputSelect class="form-select" @bind-Value="control.Decision">
-                                <option value="" disabled>Seleccione una decisión</option>
-                                <option value="Aprobado">Aprobado</option>
-                                <option value="Rechazado">Rechazado</option>
-                            </InputSelect>
-                            <ValidationMessage For="() => control.Decision" />
-                        </div>
                     </div>
 
                     <div class="row">
@@ -53,28 +42,12 @@
                                 <option value="" disabled>Seleccione una recogida</option>
                                 @foreach (var r in ListaRecogidas)
                                 {
-                                    <option value="@r.RecogidaId"> @($"#{r.RecogidaId} - {r.PuntoEncuentro}") </option>
+                                    <option value="@r.RecogidaId"> @($"#{r.Fecha.ToShortDateString()} - {r.PuntoEncuentro}") </option>
                                 }
                             </InputSelect>
                             <ValidationMessage For="() => control.RecogidaId" />
                         </div>
                     </div>
-
-                    <div class="row">
-                        <!-- Empleado -->
-                        <div class="col-12 col-md-6 mb-3">
-                            <label class="col-form-label"><strong>Empleado</strong></label>
-                            <InputSelect class="form-select" @bind-Value="control.EmpleadoId">
-                                <option value="" disabled>Seleccione un empleado</option>
-                                @foreach (var emp in ListaEmpleados)
-                                {
-                                    <option value="@emp.Id">@emp.UserName</option>
-                                }
-                            </InputSelect>
-                            <ValidationMessage For="() => control.EmpleadoId" />
-                        </div>
-                    </div>
-
                 </div>
 
                 <div class="card-footer gap-2 bg-white d-flex justify-content-center">
@@ -82,7 +55,6 @@
                     <button type="button" class="btn btn-danger bi bi-trash" @onclick="() => MostrarModal = true"> Eliminar </button>
                     <a class="btn btn-secondary bi bi-arrow-left-circle" href="/ControlesCalidad/Index"> Cancelar </a>
                 </div>
-
             </EditForm>
         </div>
     </div>
@@ -131,7 +103,7 @@ else
     [Parameter]
     public int ControlId { get; set; }
 
-    public ControlesCalidad? control { get; set; }
+    public ControlesCalidad? control { get; set; } = new();
 
     private bool MostrarModal = false;
 
@@ -150,6 +122,8 @@ else
 
     public async Task GuardarControl()
     {
+        control.Decision = control.GradosBrix >= 14 ? "Aprobado" : "Rechazado";
+
         if (control != null && await controlesService.Guardar(control))
         {
             navigation.NavigateTo("/ControlesCalidad/Index");

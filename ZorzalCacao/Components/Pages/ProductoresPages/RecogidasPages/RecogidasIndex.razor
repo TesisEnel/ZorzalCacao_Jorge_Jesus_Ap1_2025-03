@@ -1,5 +1,4 @@
 ﻿@page "/RecogidaP/Index"
-@using System.Security.Claims
 @inject RecogidasService recogidasService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @rendermode InteractiveServer
@@ -31,7 +30,6 @@
                     <InputSelect class="form-select" @bind-Value="Filtro">
                         <option value="" selected disabled> Seleccione una opcion </option>
                         <option value="RecogidaId"> Recogida Id </option>
-                        <option value="Productor"> Productor </option>
                         <option value="PuntoEncuentro"> Punto de encuentro </option>
                         <option value="CertificacionesProducto"> Certificaciones </option>
                         <option value="EstadoEntrega"> Estado entrega </option>
@@ -55,7 +53,6 @@
                         <tr>
                             <th> Recogida Id </th>
                             <th> Fecha </th>
-                            <th> Productor </th>
                             <th> Punto de encuentro </th>
                             <th> Certificaciones </th>
                             <th> Estado de entrega </th>
@@ -80,7 +77,6 @@
                                 <tr>
                                     <td> @recogida.RecogidaId</td>
                                     <td> @recogida.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
-                                    <td> @(recogida.Productor?.UserName ?? "N/A")</td>
                                     <td> @recogida.PuntoEncuentro</td>
                                     <td> @(recogida.CertificacionesProducto != null && recogida.CertificacionesProducto.Any() ? string.Join(", ", recogida.CertificacionesProducto) : "N/A") </td>
                                     <td> @recogida.EstadoEntrega</td>
@@ -162,11 +158,6 @@
             else if (Filtro == nameof(Recogidas.CantidadSacos) && double.TryParse(ValorFiltro, out double cantidad))
             {
                 lista = lista.Where(r => r.CantidadSacos == cantidad).ToList();
-            }
-            else if (Filtro == nameof(Recogidas.Productor))
-            {
-                lista = lista.Where(r => r.Productor != null &&
-                    r.Productor.UserName.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
             }
             else if (Filtro == nameof(Recogidas.PuntoEncuentro))
             {

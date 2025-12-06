@@ -3,7 +3,7 @@
 @inject NavigationManager navigation
 @rendermode InteractiveServer
 
-<PageTitle>Registrar Chofer</PageTitle>
+<PageTitle>Crear Chofer</PageTitle>
 
 <div class="container mt-3">
     <div class="card shadow-lg">
@@ -11,7 +11,7 @@
         <!-- Encabezado -->
         <div class="card-header bg-primary text-white text-center">
             <h5 class="mb-0">
-                <strong>Registrar Chofer</strong>
+                <strong>Crear Chofer</strong>
             </h5>
         </div>
 
@@ -53,7 +53,6 @@
                         <InputText class="form-control" @bind-Value="chofer.Apellido" />
                         <ValidationMessage For="() => chofer.Apellido" />
                     </div>
-
                 </div>
 
                 <div class="row">
@@ -75,7 +74,6 @@
                         <InputText class="form-control" @bind-Value="chofer.Telefono" />
                         <ValidationMessage For="() => chofer.Telefono" />
                     </div>
-
                 </div>
 
                 <div class="row">
@@ -88,9 +86,7 @@
                         <InputText class="form-control" @bind-Value="chofer.Licencia" />
                         <ValidationMessage For="() => chofer.Licencia" />
                     </div>
-
                 </div>
-
             </div>
 
             <!-- Footer -->
@@ -106,15 +102,12 @@
                    href="/Choferes/Index">
                     Regresar
                 </a>
-
             </div>
-
         </EditForm>
     </div>
 </div>
 
 @code {
-
     public Choferes chofer { get; set; } = new();
 
     private bool cargando = false;

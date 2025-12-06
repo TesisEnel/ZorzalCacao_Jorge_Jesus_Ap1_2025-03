@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel;
-using System.Reflection.Emit;
 using ZorzalCacao.Models;
 
 namespace ZorzalCacao.Data;
@@ -20,6 +18,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Choferes> Choferes { get; set; }
     public DbSet<EventosClimaticos> EventosClimaticos { get; set; }
 
+    public DbSet<ZonasProduccion> ZonasProduccion { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -37,7 +36,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         builder.Entity<Sacos>(entity =>
         {
             entity.HasData(
-                new Sacos{ SacoId = 1, Descripcion = "Saco est·ndar",}
+                new Sacos{ SacoId = 1, Descripcion = "Saco est√°ndar",}
             );
         });
 

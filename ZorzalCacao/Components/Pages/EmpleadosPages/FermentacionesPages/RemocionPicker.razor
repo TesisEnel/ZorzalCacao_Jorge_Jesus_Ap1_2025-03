@@ -105,7 +105,6 @@
 
         var remocionSeleccionada = ListaRemociones.Single(r => r.RemocionId == RemocionId);
         
-
         await OnRemocionSeleccionada.InvokeAsync((remocionSeleccionada, Temperatura, Cantidad, empleadoSeleccionado, Fecha));
     }
 }

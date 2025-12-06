@@ -1,0 +1,126 @@
+﻿@page "/Zonas/Edit/{ZonaId:int}"
+@inject AuthenticationStateProvider AuthStateProvider
+@inject ZonasProduccionService zonasService
+@inject NavigationManager navigation
+@rendermode InteractiveServer
+
+<PageTitle> Editar zona de producción </PageTitle>
+
+<div class="container mt-3">
+    <div class="card shadow-lg">
+        <div class="card-header">
+            <h5 class="card-title text-center">
+                <strong> Editar Zona </strong>
+            </h5>
+        </div>
+
+        <EditForm Model="zona" OnValidSubmit="GuardarZona">
+            <DataAnnotationsValidator />
+
+            <div class="card-body">
+                <div class="row">
+                    <!-- Nombre -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label"><strong>Nombre de la zona</strong></label>
+                        <InputText class="form-control" @bind-Value="zona.Nombre" />
+                        <ValidationMessage For="() => zona.Nombre" />
+                    </div>
+
+                    <!-- Provincia -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label"><strong>Provincia</strong></label>
+                        <InputText class="form-control" @bind-Value="zona.Provincia" />
+                        <ValidationMessage For="() => zona.Provincia" />
+                    </div>
+
+                    <!-- Distancia -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label"><strong>Distancia (km)</strong></label>
+                        <InputNumber class="form-control" @bind-Value="zona.Distancia" />
+                        <ValidationMessage For="() => zona.Distancia" />
+                    </div>
+
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label"><strong>Referencia</strong></label>
+                        <InputTextArea class="form-control" rows ="3" @bind-Value="zona.Referencia" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer gap-2 bg-white d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary bi bi-save"> Guardar </button>
+                <button type="button" class="btn btn-danger bi bi-trash" @onclick="() => MostrarModal = true"> Eliminar </button>
+                <a class="btn btn-secondary bi bi-arrow-left-circle" href="/Zonas/Index"> Regresar </a>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@if (MostrarModal)
+{
+    <div class="modal d-block" role="dialog" tabindex="-1" style="background:rgba(0,0,0,0.5)">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title mx-auto">
+                        <strong> Eliminar zona de producción </strong>
+                    </h5>
+                </div>
+
+                <div class="modal-body">
+                    <label class="col-12"> <strong> Zona Id: </strong> @zona.ZonaId</label>
+                    <label class="col-12"> <strong> Nombre de la zona: </strong> @zona.Nombre</label>
+                    <label class="col-12"> <strong> Provincia: </strong> @zona.Provincia</label>
+                    <label class="col-12"> <strong> Distancia (Km): </strong> @zona.Distancia.ToString("F2")</label>
+
+                    <label class="col-12 text-danger mt-2">
+                        ¿Está seguro que desea eliminar esta zona de producción?
+                    </label>
+                </div>
+
+                <div class="modal-footer d-flex justify-content-center gap-2">
+                    <button type="button" class="btn btn-danger bi bi-trash" @onclick="EliminarZona">
+                        Sí, deseo eliminar
+                    </button>
+
+                    <button type="button" class="btn btn-secondary bi bi-arrow-left-circle"
+                            @onclick="() => MostrarModal = false">
+                        Regresar
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int ZonaId { get; set; }
+
+    public ZonasProduccion? zona { get; set; } = new();
+
+    private bool MostrarModal { get; set; } = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        zona = await zonasService.Buscar(ZonaId);
+    }
+
+    public async Task GuardarZona()
+    {
+        if (zona != null && await zonasService.Guardar(zona))
+        {
+            navigation.NavigateTo("/Zonas/Index");
+        }
+    }
+
+    public async Task EliminarZona()
+    {
+        if (await zonasService.Eliminar(ZonaId))
+        {
+            navigation.NavigateTo("/Zonas/Index");
+        }
+    }
+}

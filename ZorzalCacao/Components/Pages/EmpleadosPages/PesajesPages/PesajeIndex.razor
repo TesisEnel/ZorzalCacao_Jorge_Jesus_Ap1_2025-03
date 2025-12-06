@@ -77,12 +77,13 @@
                                 var cantidadTotal = detalles.Sum(d => d.Cantidad);
                                 var pesoTotal = detalles.Sum(d => d.Peso);
 
+
                                 <tr>
                                     <td>@pesaje.PesajeId</td>
                                     <td>@pesaje.Fecha.ToShortDateString()</td>
                                     <td>@pesaje.Empleado?.UserName</td>
                                     <td>@cantidadTotal.ToString("F2")</td>
-                                    <td>@(pesoTotal * cantidadTotal) </td>
+                                    <td>@(pesoTotal* cantidadTotal) </td>
                                     <td> @((detalles.Sum(d => d.Cantidad * d.Peso) / 125).ToString("F2"))</td>
                                     <td>
                                         <a class="btn btn-sm btn-outline-primary bi bi-eye"

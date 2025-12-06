@@ -1,4 +1,9 @@
 ﻿@page "/Empleado/Index"
+@inject FermentacionesService fermentacionService
+@inject RecogidasService recogidasService
+@inject PesajesService pesajesService
+@inject ChoferesService choferesService
+@inject IUserRoleService UserRoleService
 @rendermode InteractiveServer
 
 @attribute [Authorize(Roles = "Empleado")]
@@ -20,45 +25,49 @@
             <div class="col-auto">
                 <div class="stats-item stats-box">
                     <i class="bi bi-people"></i>
-                    <span data-purecounter-start="0" data-purecounter-end="30" data-purecounter-duration="1" class="purecounter"></span>
+                    <span class="purecounter"> @ListaProductores.Count </span>
                     <p><strong>Productores</strong></p>
                     <span class="description">Nuestros proveedores de cacao de confianza</span>
                 </div>
             </div><!-- End Stats Item -->
-
             <div class="col-auto">
                 <div class="stats-item stats-box">
                     <i class="bi bi-person-badge"></i>
-                    <span data-purecounter-start="0" data-purecounter-end="15" data-purecounter-duration="1" class="purecounter"> 15 </span>
+                    <span class="purecounter"> @ListaEmpleados.Count </span>
                     <p><strong>Empleados</strong></p>
-                    <span class="description">Equipo dedicado</span>
+                    <span class="description">Personal comprometido con nuestras operaciones</span>
                 </div>
             </div><!-- End Stats Item -->
-
-            <div class="col-auto">
-                <div class="stats-item stats-box">
-                    <i class="bi bi-truck"></i>
-                    <span data-purecounter-start="0" data-purecounter-end="10" data-purecounter-duration="1" class="purecounter"></span>
-                    <p><strong>Recogidas Pendientes</strong></p>
-                    <span class="description">En proceso</span>
-                </div>
-            </div><!-- End Stats Item -->
-
-            <div class="col-auto">
-                <div class="stats-item stats-box">
-                    <i class="bi bi-bar-chart"></i>
-                    <span data-purecounter-start="0" data-purecounter-end="20" data-purecounter-duration="1" class="purecounter"></span>
-                    <p><strong>Pesajes</strong></p>
-                    <span class="description">Realizados este mes</span>
-                </div>
-            </div><!-- End Stats Item -->
-
             <div class="col-auto">
                 <div class="stats-item stats-box">
                     <i class="bi bi-hourglass-split"></i>
-                    <span data-purecounter-start="0" data-purecounter-end="8" data-purecounter-duration="1" class="purecounter"></span>
+                    <span class="purecounter"> @ListaPendientes.Count</span>
+                    <p><strong>Recogidas Pendientes</strong></p>
+                    <span class="description">Solicitudes pendientes de procesamient</span>
+                </div>
+            </div><!-- End Stats Item -->
+            <div class="col-auto">
+                <div class="stats-item stats-box">
+                    <i class="bi bi-truck"></i>
+                    <span class="purecounter">@ListaChoferes.Count</span>
+                    <p><strong>Choferes</strong></p>
+                    <span class="description">Conductores disponibles para transporte</span>
+                </div>
+            </div><!-- End Stats Item -->
+            <div class="col-auto">
+                <div class="stats-item stats-box">
+                    <i class="bi bi-bar-chart"></i>
+                    <span class="purecounter">@ListaPesajes.Count</span>
+                    <p><strong>Pesajes</strong></p>
+                    <span class="description">Registros de pesaje realizado</span>
+                </div>
+            </div><!-- End Stats Item -->
+            <div class="col-auto">
+                <div class="stats-item stats-box">
+                    <i class="bi bi-droplet"></i>
+                    <span class="purecounter"> @ListaFermentaciones.Count</span>
                     <p><strong>Fermentaciones</strong></p>
-                    <span class="description">En curso actualmente</span>
+                    <span class="description">Procesos de fermentación registrado</span>
                 </div>
             </div><!-- End Stats Item -->
         </div>
@@ -107,7 +116,7 @@
                 <div class="icon flex-shrink-0"><i class="bi bi-truck"></i></div>
                 <div>
                     <h4 class="title">
-                        <a href="/Vehiculos/Index" class="stretched-link"> Gestión de Vehículos </a>
+                        <a href="/Vehiculos/Index" class="stretched-link"> Vehículos </a>
                     </h4>
                     <p class="description">
                         Registro y control de los vehículos de transporte: marca, modelo, placa, año, tipo y asignación de chofer. Garantiza una logística eficiente y organizada.
@@ -121,7 +130,7 @@
                 </div>
                 <div>
                     <h4 class="title">
-                        <a href="/Choferes/Index" class="stretched-link"> Gestión de Choferes </a>
+                        <a href="/Choferes/Index" class="stretched-link"> Choferes </a>
                     </h4>
                     <p class="description">
                         Registro y control de los choferes del sistema: nombre, apellido, cédula, licencia, teléfono y asignación de vehículos. Garantiza una operación de transporte segura y organizada.
@@ -181,75 +190,32 @@
 <!-- Scroll Top -->
 <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-<style>
-    /* Estilos adicionales para las cajas de estadísticas */
-    .stats-box {
-        background: #fff;
-        border: 2px solid #e8e8e8;
-        border-radius: 16px;
-        padding: 25px 20px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        transition: all 0.3s ease;
-        text-align: center;
-        width: 200px;
-        min-height: 260px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
+@code{
+    public List<ApplicationUser> ListaProductores = new List<ApplicationUser>();
+
+    public List<ApplicationUser> ListaEmpleados = new List<ApplicationUser>();
+
+    public List<Recogidas> ListaPendientes = new List<Recogidas>();
+
+    public List<Choferes> ListaChoferes = new List<Choferes>();
+
+    public List<Pesajes> ListaPesajes = new List<Pesajes>();
+
+    public List<Fermentaciones> ListaFermentaciones = new List<Fermentaciones>();
+
+    protected override async Task OnInitializedAsync ()
+    {
+        //Listado de productores y empleados
+        var productores = await UserRoleService.GetUsersByRoleAsync("Productor"); 
+        ListaProductores = productores.ToList(); 
+        
+        var empleados = await UserRoleService.GetUsersByRoleAsync("Empleado"); 
+        ListaEmpleados = empleados.ToList();
+
+        //Listado de actividades 
+        ListaPendientes = await recogidasService.Listar(r => r.EstadoEntrega == "Pendiente");
+        ListaChoferes = await choferesService.Listar(c => true);
+        ListaPesajes = await pesajesService.Listar(p => true);
+        ListaFermentaciones = await fermentacionService.Listar(f => true);
     }
-
-        .stats-box:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-        }
-
-        .stats-box i {
-            font-size: 48px;
-            margin-bottom: 15px;
-            display: block;
-            line-height: 1;
-        }
-
-        .stats-box .purecounter {
-            font-size: 48px;
-            font-weight: 700;
-            color: #050d18;
-            display: block;
-            margin: 10px 0;
-            line-height: 1;
-        }
-
-        .stats-box p {
-            margin: 10px 0 5px 0;
-        }
-
-        .stats-box strong {
-            font-size: 17px;
-            color: #050d18;
-            font-weight: 600;
-            display: block;
-            line-height: 1.3;
-        }
-
-        .stats-box .description {
-            color: #6c757d;
-            font-size: 12px;
-            line-height: 1.4;
-            display: block;
-            margin-top: 8px;
-        }
-
-    /* Responsive para dispositivos móviles */
-    @@media (max-width: 768px) {
-        .stats-box {
-            width: 160px;
-            min-height: 220px;
-            padding: 25px 15px;
-        }
-
-        .stats .row {
-            gap: 20px !important;
-        }
-    }
-</style>
+}
