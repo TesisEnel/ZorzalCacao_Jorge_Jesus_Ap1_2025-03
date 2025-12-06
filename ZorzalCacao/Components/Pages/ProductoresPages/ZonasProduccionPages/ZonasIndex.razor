@@ -56,7 +56,7 @@
                             <th> Nombre </th>
                             <th> Provincia </th>
                             <th> Distancia (km) </th>
-                            <th> Productor </th>
+                            <th> Referencia </th>
                             <th> Opciones </th>
                         </tr>
                     </thead>
@@ -78,12 +78,13 @@
                                     <td>@zona.Nombre</td>
                                     <td>@zona.Provincia</td>
                                     <td>@zona.Distancia</td>
-                                    <td>@zona.Productor?.UserName ?? "N/A"</td>
+                                    <td>@zona.Referencia</td>
+
                                     <td>
                                         <a class="btn btn-sm btn-outline-primary bi bi-eye"
                                            href="/Zonas/View/@zona.ZonaId"></a>
 
-                                        <a class="btn btn-sm btn-outline-warning bi bi-pencil-square ms-2"
+                                        <a class="btn btn-sm btn-outline-info bi bi-pencil-square ms-2"
                                            href="/Zonas/Edit/@zona.ZonaId"></a>
                                     </td>
                                 </tr>
