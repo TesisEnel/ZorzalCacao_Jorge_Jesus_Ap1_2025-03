@@ -16,6 +16,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Sacos> Sacos { get; set; }
     public DbSet<Vehiculo> Vehiculos { get; set; }
     public DbSet<Choferes> Choferes { get; set; }
+    public DbSet<EventosClimaticos> EventosClimaticos { get; set; }
+
     public DbSet<ZonasProduccion> ZonasProduccion { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -34,7 +36,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         builder.Entity<Sacos>(entity =>
         {
             entity.HasData(
-                new Sacos{ SacoId = 1, Descripcion = "Saco est·ndar",}
+                new Sacos{ SacoId = 1, Descripcion = "Saco est√°ndar",}
             );
         });
 

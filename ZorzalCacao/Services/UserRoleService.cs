@@ -8,6 +8,7 @@ public interface IUserRoleService
     Task<List<ApplicationUser>> GetUsersByRoleAsync(string roleName);
     Task<List<ApplicationUser>> GetProductoresAsync();
     Task<List<ApplicationUser>> GetEmpleadosAsync();
+    Task<ApplicationUser?> GetUserByIdAsync(string userId);
 }
 
 public class UserRoleService : IUserRoleService
@@ -42,5 +43,10 @@ public class UserRoleService : IUserRoleService
     {
         return await GetUsersByRoleAsync("Empleado");
     }
+    public async Task<ApplicationUser?> GetUserByIdAsync(string userId)
+    {
+        return await _userManager.FindByIdAsync(userId);
+    }
+
 }
 
