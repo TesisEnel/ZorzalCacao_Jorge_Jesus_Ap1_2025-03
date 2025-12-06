@@ -72,18 +72,13 @@
                         {
                             @foreach (var pesaje in ListaPesajes)
                             {
-                                var detalles = pesaje.PesajesDetalle ?? new List<PesajesDetalles>();
-
-                                var cantidadTotal = detalles.Sum(d => d.Cantidad);
-                                var pesoTotal = detalles.Sum(d => d.Peso);
-
                                 <tr>
                                     <td>@pesaje.PesajeId</td>
                                     <td>@pesaje.Fecha.ToShortDateString()</td>
                                     <td>@pesaje.Empleado?.UserName</td>
-                                    <td>@cantidadTotal.ToString("F2")</td>
-                                    <td>@(pesoTotal * cantidadTotal) </td>
-                                    <td> @((detalles.Sum(d => d.Cantidad * d.Peso) / 125).ToString("F2"))</td>
+                                    <td> @pesaje.PesajesDetalle.Sum(a => a.Cantidad).ToString("F2")</td>
+                                    <td> @pesaje.PesajesDetalle.Sum(a => a.Cantidad * a.Peso) </td>
+                                    <td>@((pesaje.PesajesDetalle.Sum(a => a.Cantidad * a.Peso) / 125).ToString("F2"))</td>
                                     <td>
                                         <a class="btn btn-sm btn-outline-primary bi bi-eye"
                                            href="/Pesaje/View/@pesaje.PesajeId"></a>
