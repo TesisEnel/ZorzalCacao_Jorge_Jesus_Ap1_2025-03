@@ -105,21 +105,14 @@ else
                 </div>
 
                 <div class="modal-body">
-                    @{
-                        var detalles = Pesaje.PesajesDetalle ?? new List<PesajesDetalles>();
-
-                        var cantidadTotal = detalles.Sum(d => d.Cantidad);
-                        var pesoTotal = detalles.Sum(d => d.Peso);
-                        var quintales = detalles.Sum(d => d.Cantidad * d.Peso) / 125;
-                    }
 
                     <label class="col-12"> <strong> Datos del Pesaje </strong></label>
                     <label class="col-12"> <strong> ID: </strong> @Pesaje.PesajeId </label>
                     <label class="col-12"> <strong> Fecha: </strong> @Pesaje.Fecha.ToShortDateString() </label>
                     <label class="col-12"> <strong> Empleado: </strong> @Pesaje.Empleado?.UserName </label>
-                    <label class="col-12"> <strong> Cantidad Total: </strong> @cantidadTotal.ToString("F2") </label>
+                    <label class="col-12"> <strong> Cantidad Total: </strong> @Pesaje.PesajesDetalle.Sum(a => a.Cantidad).ToString("F2") </label>
                     <label class="col-12"> <strong> Peso Total: </strong> @Pesaje.PesajesDetalle.Sum(d => d.Cantidad * d.Peso).ToString("F2") kg </label>
-                    <label class="col-12"> <strong> Quintales: </strong> @quintales.ToString("F2") </label>
+                    <label class="col-12"> <strong> Quintales: </strong> @((Pesaje.PesajesDetalle.Sum(a => a.Cantidad * a.Peso) / 125).ToString("F2"))</label>
 
                     <label class="text-danger mt-3">
                         ¿Está seguro que desea eliminar este pesaje?
