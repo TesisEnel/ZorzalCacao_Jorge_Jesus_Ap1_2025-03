@@ -27,52 +27,47 @@
                     <i class="bi bi-people"></i>
                     <span class="purecounter"> @ListaProductores.Count </span>
                     <p><strong>Productores</strong></p>
-                    <span class="description">Colaboradores que suministran nuestro cacao</span>
+                    <span class="description">Nuestros proveedores de cacao de confianza</span>
                 </div>
             </div><!-- End Stats Item -->
-
             <div class="col-auto">
                 <div class="stats-item stats-box">
                     <i class="bi bi-person-badge"></i>
                     <span class="purecounter"> @ListaEmpleados.Count </span>
                     <p><strong>Empleados</strong></p>
-                    <span class="description">Personal comprometido con nuestras operaciones</span>
+                    <span class="description">Equipo dedicado</span>
                 </div>
             </div><!-- End Stats Item -->
-
             <div class="col-auto">
                 <div class="stats-item stats-box">
                     <i class="bi bi-hourglass-split"></i>
                     <span class="purecounter"> @ListaPendientes.Count</span>
                     <p><strong>Recogidas Pendientes</strong></p>
-                    <span class="description">Solicitudes pendientes de procesamiento</span>
+                    <span class="description">En proceso</span>
                 </div>
             </div><!-- End Stats Item -->
-
             <div class="col-auto">
                 <div class="stats-item stats-box">
                     <i class="bi bi-truck"></i>
                     <span class="purecounter">@ListaChoferes.Count</span>
                     <p><strong>Choferes</strong></p>
-                    <span class="description">Conductores disponibles para transporte</span>
+                    <span class="description">Conductores activos</span>
                 </div>
             </div><!-- End Stats Item -->
-
             <div class="col-auto">
                 <div class="stats-item stats-box">
                     <i class="bi bi-bar-chart"></i>
                     <span class="purecounter">@ListaPesajes.Count</span>
                     <p><strong>Pesajes</strong></p>
-                    <span class="description">Registros de pesaje realizados</span>
+                    <span class="description">Realizados este mes</span>
                 </div>
             </div><!-- End Stats Item -->
-
             <div class="col-auto">
                 <div class="stats-item stats-box">
                     <i class="bi bi-droplet"></i>
                     <span class="purecounter"> @ListaFermentaciones.Count</span>
                     <p><strong>Fermentaciones</strong></p>
-                    <span class="description">Procesos de fermentación registrados</span>
+                    <span class="description">En curso actualmente</span>
                 </div>
             </div><!-- End Stats Item -->
         </div>
@@ -196,8 +191,11 @@
     protected override async Task OnInitializedAsync ()
     {
         //Listado de productores y empleados
-        ListaProductores = await UserRoleService.GetUsersByRoleAsync("Productor");
-        ListaEmpleados = await UserRoleService.GetUsersByRoleAsync("Empleado");
+        var productores = await UserRoleService.GetUsersByRoleAsync("Productor"); 
+        ListaProductores = productores.ToList(); 
+        
+        var empleados = await UserRoleService.GetUsersByRoleAsync("Empleado"); 
+        ListaEmpleados = empleados.ToList();
 
         //Listado de actividades 
         ListaPendientes = await recogidasService.Listar(r => r.EstadoEntrega == "Pendiente");
