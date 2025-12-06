@@ -1,5 +1,10 @@
 ﻿@page "/Productor/Index"
+@inject RecogidasService recogidaService
+@inject ZonasProduccionService zonaService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
 @rendermode InteractiveServer
+
 
 @attribute [Authorize(Roles = "Productor")]
 
@@ -107,5 +112,39 @@
 </a>
 
 @code {
+    public List<Recogidas> ListaPendientes = new List<Recogidas>();
+
+    public List<Recogidas> ListaCompletadas = new List<Recogidas>();
+
+    public List<ZonasProduccion> ListaZonas = new List<ZonasProduccion>();
+
+    private string? userId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaPendientes = await recogidaService.Listar(r => r.EstadoEntrega == "Pendiente");
+        ListaCompletadas = await recogidaService.Listar(r => r.EstadoEntrega == "Entregada");
+
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity?.IsAuthenticated == true)
+        {
+            userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (!string.IsNullOrEmpty(userId))
+            {
+                ListaZonas = await zonaService.Listar(z => z.ProductorId == userId);
+            }
+            else
+            {
+                ListaZonas = new List<ZonasProduccion>();
+            }
+        }
+        else
+        {
+            ListaZonas = new List<ZonasProduccion>();
+        }
+    }
 
 }
