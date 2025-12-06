@@ -42,7 +42,7 @@
                                 <option value="" disabled>Seleccione una recogida</option>
                                 @foreach (var r in ListaRecogidas)
                                 {
-                                    <option value="@r.RecogidaId"> @($"#{r.RecogidaId} - {r.PuntoEncuentro}") </option>
+                                    <option value="@r.RecogidaId"> @($"#{r.Fecha.ToShortDateString()} - {r.PuntoEncuentro}") </option>
                                 }
                             </InputSelect>
                             <ValidationMessage For="() => control.RecogidaId" />
