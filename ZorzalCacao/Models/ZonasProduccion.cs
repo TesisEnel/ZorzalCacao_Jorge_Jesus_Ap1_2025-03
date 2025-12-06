@@ -15,6 +15,7 @@ public class ZonasProduccion
 
     [Range(0.01, double.MaxValue, ErrorMessage = "Distancia no valida")]
     public double Distancia { get; set; }
+    public string? Referencia { get; set; }
     public string ProductorId { get; set; }
     public ApplicationUser Productor { get; set; }
 }
