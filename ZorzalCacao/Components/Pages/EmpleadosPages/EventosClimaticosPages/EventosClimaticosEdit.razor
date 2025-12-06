@@ -1,0 +1,181 @@
+﻿@page "/EventosClimaticos/Edit/{EventoClimaticoId:int}"
+@inject EventosClimaticosService eventosService
+@inject IUserRoleService userRoleService
+@inject NavigationManager navigation
+@rendermode InteractiveServer
+
+<PageTitle>Editar Evento Climático</PageTitle>
+
+@if (evento != null)
+{
+    <div class="container mt-3">
+        <div class="card shadow-lg">
+            <div class="card-header">
+                <h5 class="card-title text-center"><strong>Editar Evento Climático</strong></h5>
+            </div>
+
+            <EditForm Model="evento" OnValidSubmit="GuardarEvento">
+                <DataAnnotationsValidator />
+
+                <div class="card-body">
+
+                    <div class="row">
+
+                        <!-- Fecha -->
+                        <div class="col-12 col-md-6 mb-3">
+                            <label class="col-form-label"><strong>Fecha</strong></label>
+                            <InputDate class="form-control" @bind-Value="evento.Fecha" />
+                            <ValidationMessage For="() => evento.Fecha" />
+                        </div>
+
+                        <!-- Zona -->
+                        <div class="col-12 col-md-6 mb-3">
+                            <label class="col-form-label"><strong>Zona</strong></label>
+                            <InputText class="form-control" @bind-Value="evento.Zona" />
+                            <ValidationMessage For="() => evento.Zona" />
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <!-- Tipo Evento -->
+                        <div class="col-12 col-md-6 mb-3">
+                            <label class="col-form-label"><strong>Tipo de Evento</strong></label>
+                            <InputSelect class="form-select" @bind-Value="evento.TipoEvento">
+                                <option value="" disabled>Seleccione un tipo</option>
+                                <option value="Lluvia">Lluvia</option>
+                                <option value="Sequía">Sequía</option>
+                                <option value="Tormenta">Tormenta</option>
+                                <option value="Viento">Viento</option>
+                            </InputSelect>
+                            <ValidationMessage For="() => evento.TipoEvento" />
+                        </div>
+
+                        <!-- Intensidad -->
+                        <div class="col-12 col-md-6 mb-3">
+                            <label class="col-form-label"><strong>Intensidad</strong></label>
+                            <InputSelect class="form-select" @bind-Value="evento.Intensidad">
+                                <option value="" disabled>Seleccione intensidad</option>
+                                <option value="Leve">Leve</option>
+                                <option value="Moderada">Moderada</option>
+                                <option value="Fuerte">Fuerte</option>
+                            </InputSelect>
+                            <ValidationMessage For="() => evento.Intensidad" />
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <!-- Observaciones -->
+                        <div class="col-12 col-md-6 mb-3">
+                            <label class="col-form-label"><strong>Observaciones</strong></label>
+                            <InputTextArea class="form-control" @bind-Value="evento.Observaciones" />
+                        </div>
+
+                        <!-- Empleado -->
+                        <div class="col-12 col-md-6 mb-3">
+                            <label class="col-form-label"><strong>Empleado</strong></label>
+                            <InputSelect class="form-select" @bind-Value="evento.EmpleadoId">
+                                <option value="" disabled>Seleccione un empleado</option>
+                                @foreach (var emp in ListaEmpleados)
+                                {
+                                    <option value="@emp.Id">@emp.UserName</option>
+                                }
+                            </InputSelect>
+                            <ValidationMessage For="() => evento.EmpleadoId" />
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="card-footer gap-2 bg-white d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary bi bi-save"> Guardar </button>
+                    <button type="button" class="btn btn-danger bi bi-trash" @onclick="() => MostrarModal = true"> Eliminar </button>
+                    <a class="btn btn-secondary bi bi-arrow-left-circle" href="/EventosClimaticos/Index"> Cancelar </a>
+                </div>
+
+            </EditForm>
+        </div>
+    </div>
+}
+else
+{
+    <div class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-3">Cargando información...</p>
+    </div>
+}
+
+@if (MostrarModal)
+{
+    <div class="modal d-block" role="dialog" tabindex="-1" style="background:rgba(0,0,0,0.5)">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title mx-auto"><strong>Eliminar Evento Climático</strong></h5>
+                </div>
+
+                <div class="modal-body">
+                    <label class="col-12"><strong>ID:</strong> @evento.EventoClimaticoId</label>
+                    <label class="col-12"><strong>Fecha:</strong> @evento.Fecha.ToShortDateString()</label>
+                    <label class="col-12"><strong>Zona:</strong> @evento.Zona</label>
+                    <label class="col-12"><strong>Tipo:</strong> @evento.TipoEvento</label>
+                    <label class="col-12"><strong>Intensidad:</strong> @evento.Intensidad</label>
+                    <label class="col-12"><strong>Empleado:</strong> @evento.EmpleadoId</label>
+
+                    <label class="col-12 text-danger mt-3">¿Está seguro que desea eliminar este registro?</label>
+                </div>
+
+                <div class="modal-footer d-flex justify-content-center gap-2">
+                    <button type="button" class="btn btn-danger bi bi-trash" @onclick="EliminarEvento"> Sí, eliminar </button>
+                    <button type="button" class="btn btn-secondary bi bi-arrow-left-circle" @onclick="() => MostrarModal = false"> Cancelar </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public int EventoClimaticoId { get; set; }
+
+    public EventosClimaticos? evento { get; set; }
+
+    private bool MostrarModal = false;
+
+    private List<ApplicationUser> ListaEmpleados = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        evento = await eventosService.Buscar(EventoClimaticoId);
+
+        var empleados = await userRoleService.GetUsersByRoleAsync("Empleado");
+        ListaEmpleados = empleados.ToList();
+    }
+
+    public async Task GuardarEvento()
+    {
+        if (evento != null && await eventosService.Guardar(evento))
+        {
+            navigation.NavigateTo("/EventosClimaticos/Index");
+        }
+    }
+
+    public async Task EliminarEvento()
+    {
+        if (await eventosService.Eliminar(EventoClimaticoId))
+        {
+            navigation.NavigateTo("/EventosClimaticos/Index");
+        }
+    }
+}
+
+
