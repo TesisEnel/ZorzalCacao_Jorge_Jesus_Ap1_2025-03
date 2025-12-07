@@ -11,6 +11,8 @@ public class ControlesCalidad
     public double GradosBrix { get; set; }
     public string Observaciones { get; set; } = string.Empty;
     public string Decision { get; set; } = null!;
+
+    [Required(ErrorMessage = "Por favor, seleccione una recogida")]
     public int RecogidaId { get; set; }
     public Recogidas Recogida { get; set; }
     public string EmpleadoId { get; set; }

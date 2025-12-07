@@ -15,8 +15,12 @@ public class Fermentaciones
 
     [Required(ErrorMessage = "Fecha requerida")]
     public DateTime Fecha { get; set; } = DateTime.Now;
+
+    [Required(ErrorMessage = "Por favor, seleccione una recogida")]
     public int RecogidaId { get; set; }
     public Recogidas Recogida { get; set; }
+
+    [Required(ErrorMessage = "Por favor, seleccione un empleado")]
     public string EmpleadoId { get; set; }
     public ApplicationUser Empleado { get; set; }
     public ICollection<FermentacionesDetalles> FermentacionesDetalle { get; set; } = new List<FermentacionesDetalles>();
