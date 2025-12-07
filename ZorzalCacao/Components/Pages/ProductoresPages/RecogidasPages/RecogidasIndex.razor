@@ -82,7 +82,7 @@
                                     <td> @recogida.PuntoEncuentro</td>
                                     <td> @(recogida.CertificacionProducto != null && recogida.CertificacionProducto.Any() ? string.Join(", ", recogida.CertificacionProducto) : "N/A") </td>
                                     <td> @recogida.EstadoEntrega</td>
-                                    <td> @recogida.CantidadSacos</td>
+                                    <td> @recogida.CantidadSacos.ToString("F2")</td>
                                     <td> @recogida.Chofer?.Nombre</td>
                                     <td>
                                         <a class="btn btn-sm btn-outline-primary bi bi-eye" href="/RecogidaP/View/@recogida.RecogidaId" />
