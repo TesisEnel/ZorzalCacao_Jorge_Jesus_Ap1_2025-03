@@ -4,6 +4,8 @@
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
+@attribute [Authorize(Roles = "Empleado")]
+
 <PageTitle> Editar Pesaje </PageTitle>
 
 <div class="container mt-3">

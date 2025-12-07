@@ -4,6 +4,8 @@
 @inject NavigationManager navigation
 @rendermode InteractiveServer
 
+@attribute [Authorize(Roles = "Empleado")]
+
 <PageTitle>Detalles del Evento Climático</PageTitle>
 
 <div class="container mt-4">

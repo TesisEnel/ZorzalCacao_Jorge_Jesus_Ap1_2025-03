@@ -2,6 +2,8 @@
 @inject PesajesService pesajeService
 @rendermode InteractiveServer
 
+@attribute [Authorize(Roles = "Empleado")]
+
 <PageTitle> Consulta pesajes </PageTitle>
 
 <div class="container mt-3">

@@ -5,6 +5,8 @@
 @inject NavigationManager navigation
 @rendermode InteractiveServer
 
+@attribute [Authorize(Roles = "Empleado")]
+
 <PageTitle> Editar Control de Calidad </PageTitle>
 
 <div class="container mt-3">

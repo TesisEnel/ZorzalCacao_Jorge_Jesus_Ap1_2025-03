@@ -5,6 +5,8 @@
 @inject IUserRoleService UserRoleService
 @rendermode InteractiveServer
 
+@attribute [Authorize(Roles = "Empleado")]
+
 <PageTitle> Editar Recogida</PageTitle>
 
 <div class="container mt-3">

@@ -3,6 +3,8 @@
 @inject NavigationManager navigation
 @rendermode InteractiveServer
 
+@attribute [Authorize(Roles = "Empleado")]
+
 <PageTitle>Crear Chofer</PageTitle>
 
 <div class="container mt-3">

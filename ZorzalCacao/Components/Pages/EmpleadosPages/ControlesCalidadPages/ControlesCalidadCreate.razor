@@ -6,6 +6,8 @@
 @inject IUserRoleService userRoleService
 @rendermode InteractiveServer
 
+@attribute [Authorize(Roles = "Empleado")]
+
 <PageTitle> Crear control de calidad </PageTitle>
 
 <div class="container mt-3">

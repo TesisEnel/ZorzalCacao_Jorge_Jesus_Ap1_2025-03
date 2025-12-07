@@ -3,6 +3,8 @@
 @inject NavigationManager nav
 @rendermode InteractiveServer
 
+@attribute [Authorize(Roles = "Empleado")]
+
 <PageTitle> Consulta de vehículos </PageTitle>
 
 <div class="container">
