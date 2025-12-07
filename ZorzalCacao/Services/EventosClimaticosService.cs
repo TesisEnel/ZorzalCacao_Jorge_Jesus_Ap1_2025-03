@@ -44,6 +44,7 @@ namespace ZorzalCacao.Services
         {
             await using var contexto = await DbFactory.CreateDbContextAsync();
             return await contexto.EventosClimaticos
+                .Include(e=> e.Empleado)
                 .FirstOrDefaultAsync(e => e.EventoClimaticoId == eventoId);
         }
 
@@ -60,6 +61,7 @@ namespace ZorzalCacao.Services
         {
             await using var contexto = await DbFactory.CreateDbContextAsync();
             return await contexto.EventosClimaticos
+                .Include(e=> e.Empleado)
                 .Where(criterio)
                 .AsNoTracking()
                 .ToListAsync();
