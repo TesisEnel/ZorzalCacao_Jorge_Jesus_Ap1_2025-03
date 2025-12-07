@@ -9,204 +9,190 @@
 
 @attribute [Authorize(Roles = "Empleado")]
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Menu empleados</PageTitle>
 
-@if (isLoading)
-{
-    <div class="text-center my-5">
-        <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Cargando...</span>
+<!-- Stats Title -->
+<div class="container section-title">
+    <h2 style="font-weight: 700; font-size: 32px; color: #222;">Nuestras Estadísticas</h2>
+    <p style="color: #555; font-size: 16px;">
+        Un resumen general de nuestras operaciones y desempeño
+    </p>
+</div>
+
+<!-- Stats Section -->
+<section id="stats" class="stats section">
+    <div class="container">
+        <div class="row justify-content-center" style="gap: 30px;">
+            <div class="col-auto">
+                <div class="stats-item stats-box">
+                    <i class="bi bi-people"></i>
+                    <span class="purecounter"> @ListaProductores.Count </span>
+                    <p><strong>Productores</strong></p>
+                    <span class="description">Nuestros proveedores de cacao de confianza</span>
+                </div>
+            </div><!-- End Stats Item -->
+            <div class="col-auto">
+                <div class="stats-item stats-box">
+                    <i class="bi bi-person-badge"></i>
+                    <span class="purecounter"> @ListaEmpleados.Count </span>
+                    <p><strong>Empleados</strong></p>
+                    <span class="description">Personal comprometido con nuestras operaciones</span>
+                </div>
+            </div><!-- End Stats Item -->
+            <div class="col-auto">
+                <div class="stats-item stats-box">
+                    <i class="bi bi-hourglass-split"></i>
+                    <span class="purecounter"> @ListaPendientes.Count</span>
+                    <p><strong>Recogidas Pendientes</strong></p>
+                    <span class="description">Solicitudes pendientes de procesamient</span>
+                </div>
+            </div><!-- End Stats Item -->
+            <div class="col-auto">
+                <div class="stats-item stats-box">
+                    <i class="bi bi-truck"></i>
+                    <span class="purecounter">@ListaChoferes.Count</span>
+                    <p><strong>Choferes</strong></p>
+                    <span class="description">Conductores disponibles para transporte</span>
+                </div>
+            </div><!-- End Stats Item -->
+            <div class="col-auto">
+                <div class="stats-item stats-box">
+                    <i class="bi bi-bar-chart"></i>
+                    <span class="purecounter">@ListaPesajes.Count</span>
+                    <p><strong>Pesajes</strong></p>
+                    <span class="description">Registros de pesaje realizado</span>
+                </div>
+            </div><!-- End Stats Item -->
+            <div class="col-auto">
+                <div class="stats-item stats-box">
+                    <i class="bi bi-droplet"></i>
+                    <span class="purecounter"> @ListaFermentaciones.Count</span>
+                    <p><strong>Fermentaciones</strong></p>
+                    <span class="description">Procesos de fermentación registrado</span>
+                </div>
+            </div><!-- End Stats Item -->
         </div>
-        <p class="mt-2">Cargando menu...</p>
     </div>
-}
+</section><!-- /Stats Section -->
 
-else
-{
-    <!-- Stats Title -->
+<!-- Services Section -->
+<section id="servicesP" class="services section">
+
     <div class="container section-title">
-        <h2 style="font-weight: 700; font-size: 32px; color: #222;">Nuestras Estadísticas</h2>
-        <p style="color: #555; font-size: 16px;">
-            Un resumen general de nuestras operaciones y desempeño
+        <h2 style="font-weight: 700; font-size: 32px;">Servicios</h2>
+        <p style="font-size: 16px; color: #555;">
+            Ofrecemos un conjunto de servicios diseñados para optimizar cada etapa del proceso del cacao,
+            desde su recolección inicial hasta el control de calidad y la fermentación final. Nuestro
+            enfoque se basa en la eficiencia, la trazabilidad y el manejo responsable del producto para
+            garantizar resultados consistentes y de alta calidad.
         </p>
     </div>
 
-    <!-- Stats Section -->
-    <section id="stats" class="stats section">
-        <div class="container">
-            <div class="row justify-content-center" style="gap: 30px;">
-                <div class="col-auto">
-                    <div class="stats-item stats-box">
-                        <i class="bi bi-people"></i>
-                        <span class="purecounter"> @ListaProductores.Count </span>
-                        <p><strong>Productores</strong></p>
-                        <span class="description">Nuestros proveedores de cacao de confianza</span>
-                    </div>
-                </div><!-- End Stats Item -->
-                <div class="col-auto">
-                    <div class="stats-item stats-box">
-                        <i class="bi bi-person-badge"></i>
-                        <span class="purecounter"> @ListaEmpleados.Count </span>
-                        <p><strong>Empleados</strong></p>
-                        <span class="description">Personal comprometido con nuestras operaciones</span>
-                    </div>
-                </div><!-- End Stats Item -->
-                <div class="col-auto">
-                    <div class="stats-item stats-box">
-                        <i class="bi bi-hourglass-split"></i>
-                        <span class="purecounter"> @ListaPendientes.Count</span>
-                        <p><strong>Recogidas Pendientes</strong></p>
-                        <span class="description">Solicitudes pendientes de procesamient</span>
-                    </div>
-                </div><!-- End Stats Item -->
-                <div class="col-auto">
-                    <div class="stats-item stats-box">
-                        <i class="bi bi-truck"></i>
-                        <span class="purecounter">@ListaChoferes.Count</span>
-                        <p><strong>Choferes</strong></p>
-                        <span class="description">Conductores disponibles para transporte</span>
-                    </div>
-                </div><!-- End Stats Item -->
-                <div class="col-auto">
-                    <div class="stats-item stats-box">
-                        <i class="bi bi-bar-chart"></i>
-                        <span class="purecounter">@ListaPesajes.Count</span>
-                        <p><strong>Pesajes</strong></p>
-                        <span class="description">Registros de pesaje realizado</span>
-                    </div>
-                </div><!-- End Stats Item -->
-                <div class="col-auto">
-                    <div class="stats-item stats-box">
-                        <i class="bi bi-droplet"></i>
-                        <span class="purecounter"> @ListaFermentaciones.Count</span>
-                        <p><strong>Fermentaciones</strong></p>
-                        <span class="description">Procesos de fermentación registrado</span>
-                    </div>
-                </div><!-- End Stats Item -->
-            </div>
-        </div>
-    </section><!-- /Stats Section -->
 
-    <!-- Services Section -->
-    <section id="servicesP" class="services section">
+    <div class="container">
+        <div class="row gy-4">
 
-        <div class="container section-title">
-            <h2 style="font-weight: 700; font-size: 32px;">Servicios</h2>
-            <p style="font-size: 16px; color: #555;">
-                Ofrecemos un conjunto de servicios diseñados para optimizar cada etapa del proceso del cacao,
-                desde su recolección inicial hasta el control de calidad y la fermentación final. Nuestro
-                enfoque se basa en la eficiencia, la trazabilidad y el manejo responsable del producto para
-                garantizar resultados consistentes y de alta calidad.
-            </p>
-        </div>
-
-
-        <div class="container">
-            <div class="row gy-4">
-
-                <div class="col-lg-4 col-md-6 service-item d-flex">
-                    <div class="icon flex-shrink-0"><i class="bi bi-briefcase"></i></div>
-                    <div>
-                        <h4 class="title"><a href="/Recogida/Index" class="stretched-link"> Recogidas </a></h4>
-                        <p class="description">
-                            Gestión completa de las recogidas de cacao desde las fincas. Registra productores, cantidades solicitadas, estados de ruta y entrega eficiente.
-                        </p>
-                    </div>
+            <div class="col-lg-4 col-md-6 service-item d-flex">
+                <div class="icon flex-shrink-0"><i class="bi bi-briefcase"></i></div>
+                <div>
+                    <h4 class="title"><a href="/Recogida/Index" class="stretched-link"> Recogidas </a></h4>
+                    <p class="description">
+                        Gestión completa de las recogidas de cacao desde las fincas. Registra productores, cantidades solicitadas, estados de ruta y entrega eficiente.
+                    </p>
                 </div>
-                <!-- End Service Item -->
-
-                <div class="col-lg-4 col-md-6 service-item d-flex">
-                    <div class="icon flex-shrink-0"><i class="bi bi-card-checklist"></i></div>
-                    <div>
-                        <h4 class="title"><a href="/ControlesCalidad/Index" class="stretched-link"> Control de calidad </a></h4>
-                        <p class="description">
-                            Evaluación detallada del cacao recibido: humedad, fermentación, impurezas y estándares internacionales. Asegura la calidad Premium del producto.
-                        </p>
-                    </div>
-                </div><!-- End Service Item -->
-
-                <div class="col-lg-4 col-md-6 service-item d-flex">
-                    <div class="icon flex-shrink-0"><i class="bi bi-truck"></i></div>
-                    <div>
-                        <h4 class="title">
-                            <a href="/Vehiculos/Index" class="stretched-link"> Vehículos </a>
-                        </h4>
-                        <p class="description">
-                            Registro y control de los vehículos de transporte: marca, modelo, placa, año, tipo y asignación de chofer. Garantiza una logística eficiente y organizada.
-                        </p>
-                    </div>
-                </div><!-- End Service Item -->
-
-                <div class="col-lg-4 col-md-6 service-item d-flex">
-                    <div class="icon flex-shrink-0">
-                        <i class="bi bi-person-badge"></i>
-                    </div>
-                    <div>
-                        <h4 class="title">
-                            <a href="/Choferes/Index" class="stretched-link"> Choferes </a>
-                        </h4>
-                        <p class="description">
-                            Registro y control de los choferes del sistema: nombre, apellido, cédula, licencia, teléfono y asignación de vehículos. Garantiza una operación de transporte segura y organizada.
-                        </p>
-                    </div>
-                </div><!-- End Service Item -->
-
-                <div class="col-lg-4 col-md-6 service-item d-flex">
-                    <div class="icon flex-shrink-0">
-                        <i class="bi bi-cloud-lightning"></i>
-                    </div>
-                    <div>
-                        <h4 class="title">
-                            <a href="/EventosClimaticos/Index" class="stretched-link"> Gestión de Eventos Climáticos </a>
-                        </h4>
-                        <p class="description">
-                            Registro y control de eventos climáticos que afectan la producción, incluyendo fecha, zona, tipo de evento, intensidad y notas del empleado responsable. Facilita la toma de decisiones y análisis histórico.
-                        </p>
-                    </div>
-                </div><!-- End Service Item -->
-
-
-                <div class="col-lg-4 col-md-6 service-item d-flex">
-                    <div class="icon flex-shrink-0"><i class="bi bi-bar-chart"></i></div>
-                    <div>
-                        <h4 class="title"><a href="/Pesaje/Index" class="stretched-link"> Pesajes </a></h4>
-                        <p class="description">
-                            Registro preciso del peso del cacao entregado. Controla kilogramos por productor, lotes generados y conversiones automáticas a quintales.
-                        </p>
-                    </div>
-                </div><!-- End Service Item -->
-
-                <div class="col-lg-4 col-md-6 service-item d-flex">
-                    <div class="icon flex-shrink-0"><i class="bi bi-brightness-high"></i></div>
-                    <div>
-                        <h4 class="title"><a href="/Fermentacion/Index" class="stretched-link"> Fermentación </a></h4>
-                        <p class="description">
-                            Controla todas las fases de fermentación: día por día, cambios de caja, temperatura, tiempos y estado final para garantizar un cacao de alta calidad.
-                        </p>
-                    </div>
-                </div><!-- End Service Item -->
             </div>
+            <!-- End Service Item -->
+
+            <div class="col-lg-4 col-md-6 service-item d-flex">
+                <div class="icon flex-shrink-0"><i class="bi bi-card-checklist"></i></div>
+                <div>
+                    <h4 class="title"><a href="/ControlesCalidad/Index" class="stretched-link"> Control de calidad </a></h4>
+                    <p class="description">
+                        Evaluación detallada del cacao recibido: humedad, fermentación, impurezas y estándares internacionales. Asegura la calidad Premium del producto.
+                    </p>
+                </div>
+            </div><!-- End Service Item -->
+
+            <div class="col-lg-4 col-md-6 service-item d-flex">
+                <div class="icon flex-shrink-0"><i class="bi bi-truck"></i></div>
+                <div>
+                    <h4 class="title">
+                        <a href="/Vehiculos/Index" class="stretched-link"> Vehículos </a>
+                    </h4>
+                    <p class="description">
+                        Registro y control de los vehículos de transporte: marca, modelo, placa, año, tipo y asignación de chofer. Garantiza una logística eficiente y organizada.
+                    </p>
+                </div>
+            </div><!-- End Service Item -->
+
+            <div class="col-lg-4 col-md-6 service-item d-flex">
+                <div class="icon flex-shrink-0">
+                    <i class="bi bi-person-badge"></i>
+                </div>
+                <div>
+                    <h4 class="title">
+                        <a href="/Choferes/Index" class="stretched-link"> Choferes </a>
+                    </h4>
+                    <p class="description">
+                        Registro y control de los choferes del sistema: nombre, apellido, cédula, licencia, teléfono y asignación de vehículos. Garantiza una operación de transporte segura y organizada.
+                    </p>
+                </div>
+            </div><!-- End Service Item -->
+
+            <div class="col-lg-4 col-md-6 service-item d-flex">
+                <div class="icon flex-shrink-0">
+                    <i class="bi bi-cloud-lightning"></i>
+                </div>
+                <div>
+                    <h4 class="title">
+                        <a href="/EventosClimaticos/Index" class="stretched-link"> Gestión de Eventos Climáticos </a>
+                    </h4>
+                    <p class="description">
+                        Registro y control de eventos climáticos que afectan la producción, incluyendo fecha, zona, tipo de evento, intensidad y notas del empleado responsable. Facilita la toma de decisiones y análisis histórico.
+                    </p>
+                </div>
+            </div><!-- End Service Item -->
+
+
+            <div class="col-lg-4 col-md-6 service-item d-flex">
+                <div class="icon flex-shrink-0"><i class="bi bi-bar-chart"></i></div>
+                <div>
+                    <h4 class="title"><a href="/Pesaje/Index" class="stretched-link"> Pesajes </a></h4>
+                    <p class="description">
+                        Registro preciso del peso del cacao entregado. Controla kilogramos por productor, lotes generados y conversiones automáticas a quintales.
+                    </p>
+                </div>
+            </div><!-- End Service Item -->
+
+            <div class="col-lg-4 col-md-6 service-item d-flex">
+                <div class="icon flex-shrink-0"><i class="bi bi-brightness-high"></i></div>
+                <div>
+                    <h4 class="title"><a href="/Fermentacion/Index" class="stretched-link"> Fermentación </a></h4>
+                    <p class="description">
+                        Controla todas las fases de fermentación: día por día, cambios de caja, temperatura, tiempos y estado final para garantizar un cacao de alta calidad.
+                    </p>
+                </div>
+            </div><!-- End Service Item -->
         </div>
-    </section><!-- /Services Section -->
+    </div>
+</section><!-- /Services Section -->
 
-    <footer id="footer" class="footer position-relative light-background">
-        <div class="container">
-            <div class="copyright text-center ">
-                <p>© <span>Copyright</span> <strong class="px-1 sitename">iPortfolio</strong> <span>All Rights Reserved</span></p>
-            </div>
-            <div class="credits">
-                Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> Distributed by <a href="https://themewagon.com">ThemeWagon</a>
-            </div>
+<footer id="footer" class="footer position-relative light-background">
+    <div class="container">
+        <div class="copyright text-center ">
+            <p>© <span>Copyright</span> <strong class="px-1 sitename">iPortfolio</strong> <span>All Rights Reserved</span></p>
         </div>
-    </footer>
+        <div class="credits">
+            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> Distributed by <a href="https://themewagon.com">ThemeWagon</a>
+        </div>
+    </div>
+</footer>
 
-    <!-- Scroll Top -->
-    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-}
+<!-- Scroll Top -->
+<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
 
 @code{
-    private bool isLoading = true;
-
     public List<ApplicationUser> ListaProductores = new List<ApplicationUser>();
 
     public List<ApplicationUser> ListaEmpleados = new List<ApplicationUser>();
@@ -233,8 +219,5 @@ else
         ListaChoferes = await choferesService.Listar(c => true);
         ListaPesajes = await pesajesService.Listar(p => true);
         ListaFermentaciones = await fermentacionService.Listar(f => true);
-
-        isLoading = false;
-        StateHasChanged();
     }
 }
