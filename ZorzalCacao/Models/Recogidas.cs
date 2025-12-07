@@ -21,8 +21,9 @@ public class Recogidas
     [Range(0.01, double.MaxValue, ErrorMessage = "Cantidad de sacos no valida")]
     public double CantidadSacos { get; set; }
 
-    [Required(ErrorMessage = "Chofer requerido")]
-    public string Chofer { get; set; } = null!;
+    [Range(1, int.MaxValue, ErrorMessage = "Por favor, seleccione un chofer")]
+    public int ChoferId { get; set; }
+    public Choferes Chofer { get; set; }
 
     [Required(ErrorMessage ="Por favor, seleccione un productor")]
     public string ProductorId { get; set; }
