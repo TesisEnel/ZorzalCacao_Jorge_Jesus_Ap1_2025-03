@@ -1,4 +1,5 @@
 ﻿@page "/Administrador/Index"
+@inject IUserRoleService UserRoleService
 @rendermode InteractiveServer
 
 @attribute [Authorize(Roles = "Administrador")]
@@ -22,7 +23,7 @@
             <div class="col-auto">
                 <div class="stats-item stats-box">
                     <i class="bi bi-people"></i>
-                    <span data-purecounter-start="0" data-purecounter-end="30" data-purecounter-duration="1" class="purecounter"></span>
+                    <span class="purecounter"> @ListaProductores.Count</span>
                     <p><strong>Productores</strong></p>
                     <span class="description">Total registrados en el sistema</span>
                 </div>
@@ -32,12 +33,11 @@
             <div class="col-auto">
                 <div class="stats-item stats-box">
                     <i class="bi bi-person-badge"></i>
-                    <span data-purecounter-start="0" data-purecounter-end="15" data-purecounter-duration="1" class="purecounter"></span>
+                    <span class="purecounter"> @ListaEmpleados.Count </span>
                     <p><strong>Empleados</strong></p>
                     <span class="description">Equipo activo registrado</span>
                 </div>
             </div>
-
         </div>
     </div>
 </section>
@@ -96,3 +96,20 @@
 <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
     <i class="bi bi-arrow-up-short"></i>
 </a>
+
+@code 
+{
+    public List<ApplicationUser> ListaProductores = new List<ApplicationUser>();
+
+    public List<ApplicationUser> ListaEmpleados = new List<ApplicationUser>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        //Listado de productores y empleados
+        var productores = await UserRoleService.GetUsersByRoleAsync("Productor");
+        ListaProductores = productores.ToList();
+
+        var empleados = await UserRoleService.GetUsersByRoleAsync("Empleado");
+        ListaEmpleados = empleados.ToList();
+    }
+}
