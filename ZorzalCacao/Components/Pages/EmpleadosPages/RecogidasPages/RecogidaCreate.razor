@@ -1,7 +1,8 @@
 ﻿@page "/Recogida/Create"
-@inject IUserRoleService UserRoleService
+@inject AuthenticationStateProvider AuthStateProvider
 @inject RecogidasService recogidasService
 @inject NavigationManager navigation
+@inject IUserRoleService UserRoleService
 @rendermode InteractiveServer
 
 <PageTitle> Solicitar recogida </PageTitle>
@@ -163,6 +164,16 @@
 
     public async Task GuardarRecogida()
     {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        recogida.EmpleadoId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrEmpty(recogida.EmpleadoId))
+        {
+            throw new Exception("No se pudo obtener el EmpleadoId logueado.");
+        }
+
         if (await recogidasService.Guardar(recogida))
         {
             navigation.NavigateTo("/Recogida/Index");
