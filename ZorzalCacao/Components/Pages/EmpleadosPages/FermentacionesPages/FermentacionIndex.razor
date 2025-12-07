@@ -55,7 +55,7 @@
                         <tr>
                             <th> Fermentación Id </th>
                             <th> Fecha </th>
-                            <th> Temperatura </th>
+                            <th> Temperatura °F </th>
                             <th> Observaciones </th>
                             <th> Ultima remocion </th>
                             <th> Cantidad Removida Total </th>
@@ -76,18 +76,18 @@
                         {
                             @foreach (var fermentacion in ListaFermentaciones)
                             {
-                                var detalles = fermentacion.FermentacionesDetalle ?? new List<FermentacionesDetalles>();
-                                var promedioTemperatura = detalles.Any() ? detalles.Average(d => d.Temperatura) : 0;
-                                var cantidadTotal = detalles.Sum(d => d.Cantidad);
-                                
                                 <tr>
                                     <td> @fermentacion.FermentacionId</td>
                                     <td> @fermentacion.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
-                                    <td> @fermentacion.Temperatura°F </td>
+                                    <td> @fermentacion.Temperatura </td>
                                     <td> @fermentacion.Observaciones</td>
                                     <td> @fermentacion.FermentacionesDetalle.Count</td>
-                                    <td> @cantidadTotal</td>
-                                    <td> @promedioTemperatura.ToString("F2")°F</td>
+                                    <td> @fermentacion.FermentacionesDetalle.Sum(f=> f.Cantidad).ToString("F2")</td>
+                                    <td>
+                                        @(fermentacion.FermentacionesDetalle.Any()
+                                                                        ? fermentacion.FermentacionesDetalle.Average(d => d.Temperatura).ToString("F2")
+                                                                        : "0")
+                                    </td>
                                     <td>
                                         <a class="btn btn-sm btn-outline-primary bi bi-eye" href="/Fermentacion/View/@fermentacion.FermentacionId" />
                                         <a class="btn btn-sm btn-outline-info bi bi-pencil-square" href="/Fermentacion/Edit/@fermentacion.FermentacionId" />

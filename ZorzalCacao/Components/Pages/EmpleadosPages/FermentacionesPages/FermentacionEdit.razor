@@ -151,20 +151,18 @@ else
                 </div>
 
                 <div class="modal-body">
-                    @{
-                        var detalles = Fermentacion?.FermentacionesDetalle ?? new List<FermentacionesDetalles>();
-                        var promedioTemperatura = detalles.Any() ? detalles.Average(d => d.Temperatura) : 0;
-                        var cantidadTotal = detalles.Sum(d => d.Cantidad);
-                    }
-
                     <label class="col-12"> <strong> Datos de Fermentación </strong></label>
                     <label class="col-12"> <strong> ID: </strong> @Fermentacion?.FermentacionId</label>
                     <label class="col-12"> <strong> Fecha: </strong> @Fermentacion?.Fecha.ToString("dd/MM/yyyy HH:mm")</label>
                     <label class="col-12"> <strong> Temperatura Inicial: </strong> @Fermentacion?.Temperatura°F </label>
                     <label class="col-12"><strong> Observaciones: </strong> @Fermentacion?.Observaciones </label>
-                    <label class="col-12"> <strong> Cantidad de Detalles: </strong> @detalles.Count </label>
-                    <label class="col-12"> <strong> Cantidad Total (Sum): </strong> @cantidadTotal </label>
-                    <label class="col-12"> <strong> Promedio Temperatura: </strong> @promedioTemperatura.ToString("F2")°F </label>
+                    <label class="col-12"> <strong> Cantidad de Detalles: </strong> @Fermentacion.FermentacionesDetalle.Count </label>
+                    <label class="col-12"> <strong> Cantidad Total (Sum): </strong> @Fermentacion.FermentacionesDetalle.Sum(f => f.Cantidad).ToString("F2") </label>
+                    <label class="col-12">
+                        <strong> Promedio Temperatura: </strong> @(Fermentacion.FermentacionesDetalle.Any()
+                                            ? Fermentacion.FermentacionesDetalle.Average(d => d.Temperatura).ToString("F2")
+                                            : "0")°F
+                    </label>
                     <label class="text-danger mt-3"> ¿Está seguro que desea eliminar esta fermentación?</label>
                 </div>
 
