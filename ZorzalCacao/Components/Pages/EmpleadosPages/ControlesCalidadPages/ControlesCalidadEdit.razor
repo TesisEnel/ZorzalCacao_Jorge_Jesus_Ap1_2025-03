@@ -54,7 +54,7 @@
             <div class="card-footer gap-2 bg-white d-flex justify-content-center">
                 <button type="submit" class="btn btn-primary bi bi-save"> Guardar </button>
                 <button type="button" class="btn btn-danger bi bi-trash" @onclick="() => MostrarModal = true"> Eliminar </button>
-                <a class="btn btn-secondary bi bi-arrow-left-circle" href="/ControlesCalidad/Index"> Cancelar </a>
+                <a class="btn btn-secondary bi bi-arrow-left-circle" href="/ControlesCalidad/Index"> Regresar </a>
             </div>
         </EditForm>
     </div>
@@ -72,9 +72,9 @@
 
                 <div class="modal-body">
                     <label class="col-12"><strong>Control Id:</strong> @control.ControlId</label>
-                    <label class="col-12"><strong>Grados Brix:</strong> @control.GradosBrix</label>
+                    <label class="col-12"><strong>Grados Brix:</strong> @control.GradosBrix.ToString("F2")</label>
                     <label class="col-12"><strong>Decisión:</strong> @control.Decision</label>
-                    <label class="col-12"><strong>Recogida:</strong> @control.RecogidaId</label>
+                    <label class="col-12"><strong>Recogida:</strong> @control.Recogida?.Fecha.ToShortDateString() - @control.Recogida?.PuntoEncuentro</label>
                     <label class="col-12"><strong>Empleado:</strong> @control.Empleado?.UserName</label>
 
                     <label class="col-12 text-danger mt-3">¿Está seguro que desea eliminar este registro?</label>
@@ -82,7 +82,7 @@
 
                 <div class="modal-footer d-flex justify-content-center gap-2">
                     <button type="button" class="btn btn-danger bi bi-trash" @onclick="EliminarControl"> Sí, eliminar </button>
-                    <button type="button" class="btn btn-secondary bi bi-arrow-left-circle" @onclick="() => MostrarModal = false"> Cancelar </button>
+                    <button type="button" class="btn btn-secondary bi bi-arrow-left-circle" @onclick="() => MostrarModal = false"> Regresar </button>
                 </div>
 
             </div>
