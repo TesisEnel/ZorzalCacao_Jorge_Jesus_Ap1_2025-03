@@ -27,6 +27,11 @@
                 </div>
             </div>
 
+            @if(mensajeError != null)
+            {
+                <div class="alert alert-danger"> @mensajeError </div>
+            }
+
             <div class="border border-success p-3 mt-3">
                 <h5> Detalle de Pesaje </h5>
                 <PesajePicker SacoId="detalleSeleccionado.SacoId"
@@ -83,6 +88,8 @@
     public Pesajes Pesaje { get; set; } = new Pesajes();
     public List<Sacos> ListaSacos { get; set; } = new List<Sacos>();
 
+    private string? mensajeError { get; set; }
+
     public PesajesDetalles detalleSeleccionado { get; set; } = new PesajesDetalles()
     {
         SacoId = 1
@@ -99,6 +106,12 @@
         var user = authState.User;
 
         Pesaje.EmpleadoId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        @if (Pesaje.PesajesDetalle.Count == 0)
+        {
+            mensajeError = "Por favor, realice por lo menos 1 pesaje";
+            return;
+        }
 
         if (string.IsNullOrEmpty(Pesaje.EmpleadoId))
         {
