@@ -42,9 +42,13 @@
     </div>
 </div>
 
-@if(mensajeError != null)
+@if (mensajeError != null)
 {
-    <div class="alert alert-danger"> @mensajeError</div>
+    <div class="alert alert-danger">@mensajeError</div>
+}
+else if (mensajeExito != null)
+{
+    <div class="alert alert-success">@mensajeExito</div>
 }
 
 @code {
@@ -74,7 +78,10 @@
 
     [Parameter]
     public EventCallback<(Remociones remocion, double temperatura, double cantidad, ApplicationUser empleado, DateTime fecha)> OnRemocionSeleccionada { get; set; }
+
     public string? mensajeError { get; set; }
+
+    public string? mensajeExito { get; set; } 
 
     private bool EstaRemocionDeshabilitada(Remociones remocion)
     {
@@ -89,6 +96,7 @@
     public async Task TriggerSelection()
     {
         mensajeError = null;
+        mensajeExito = null;
 
         if (RemocionId == 0)
         {
@@ -116,6 +124,11 @@
         {
             mensajeError = "Empleado no encontrado";
             return;
+        }
+
+        if (CantidadEnDetalle + 1 >= ListaRemociones.Count)
+        {
+            mensajeExito = "¡Se han completado todas las remociones exitosamente!";
         }
 
         var remocionSeleccionada = ListaRemociones.Single(r => r.RemocionId == RemocionId);
