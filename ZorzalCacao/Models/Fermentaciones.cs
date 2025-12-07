@@ -15,8 +15,6 @@ public class Fermentaciones
 
     [Required(ErrorMessage = "Fecha requerida")]
     public DateTime Fecha { get; set; } = DateTime.Now;
-
-    [Required(ErrorMessage = "Por favor, seleccione una recogida")]
     public int RecogidaId { get; set; }
     public Recogidas Recogida { get; set; }
 
