@@ -11,7 +11,7 @@
 <div class="container mt-3">
     <div class="card shadow-lg">
         <div class="card-header">
-            <h5 class="card-title text-center"><strong>Editar Evento Climático</strong></h5>
+            <h5 class="card-title text-center"><strong>Editar evento climático</strong></h5>
         </div>
 
         <EditForm Model="evento" OnValidSubmit="GuardarEvento">
@@ -69,32 +69,17 @@
                 <div class="row">
 
                     <!-- Observaciones -->
-                    <div class="col-12 col-md-6 mb-3">
+                    <div class="col-12 col-md-12 mb-3">
                         <label class="col-form-label"><strong>Observaciones</strong></label>
                         <InputTextArea class="form-control" @bind-Value="evento.Observaciones" />
                     </div>
-
-                    <!-- Empleado -->
-                    <div class="col-12 col-md-6 mb-3">
-                        <label class="col-form-label"><strong>Empleado</strong></label>
-                        <InputSelect class="form-select" @bind-Value="evento.EmpleadoId">
-                            <option value="" disabled>Seleccione un empleado</option>
-                            @foreach (var emp in ListaEmpleados)
-                            {
-                                <option value="@emp.Id">@emp.UserName</option>
-                            }
-                        </InputSelect>
-                        <ValidationMessage For="() => evento.EmpleadoId" />
-                    </div>
-
                 </div>
-
             </div>
 
             <div class="card-footer gap-2 bg-white d-flex justify-content-center">
                 <button type="submit" class="btn btn-primary bi bi-save"> Guardar </button>
                 <button type="button" class="btn btn-danger bi bi-trash" @onclick="() => MostrarModal = true"> Eliminar </button>
-                <a class="btn btn-secondary bi bi-arrow-left-circle" href="/EventosClimaticos/Index"> Cancelar </a>
+                <a class="btn btn-secondary bi bi-arrow-left-circle" href="/EventosClimaticos/Index"> Regresar </a>
             </div>
 
         </EditForm>
@@ -118,14 +103,14 @@
                     <label class="col-12"><strong>Zona:</strong> @evento.Zona</label>
                     <label class="col-12"><strong>Tipo:</strong> @evento.TipoEvento</label>
                     <label class="col-12"><strong>Intensidad:</strong> @evento.Intensidad</label>
-                    <label class="col-12"><strong>Empleado:</strong> @evento.EmpleadoId</label>
+                    <label class="col-12"><strong>Empleado:</strong> @evento.Empleado?.UserName</label>
 
                     <label class="col-12 text-danger mt-3">¿Está seguro que desea eliminar este registro?</label>
                 </div>
 
                 <div class="modal-footer d-flex justify-content-center gap-2">
                     <button type="button" class="btn btn-danger bi bi-trash" @onclick="EliminarEvento"> Sí, eliminar </button>
-                    <button type="button" class="btn btn-secondary bi bi-arrow-left-circle" @onclick="() => MostrarModal = false"> Cancelar </button>
+                    <button type="button" class="btn btn-secondary bi bi-arrow-left-circle" @onclick="() => MostrarModal = false"> Regresar </button>
                 </div>
             </div>
         </div>
