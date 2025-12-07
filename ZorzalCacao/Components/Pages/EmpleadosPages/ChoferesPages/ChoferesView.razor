@@ -18,7 +18,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <h4 class="mb-1">
-                                <i class="bi bi-person-badge"></i> Detalles del Chofer
+                                <i class="bi bi-truck-front-fill"></i> Detalles del Chofer
                             </h4>
                             <small>ID: #@chofer.ChoferId</small>
                         </div>
@@ -35,7 +35,13 @@
                     <div class="row mb-4">
                         <div class="col-12">
                             <div class="detail-card p-4 rounded border-start border-primary border-4">
-                                <strong>Nombre:</strong> @chofer.Nombre
+                                <div class="d-flex align-items-start">
+                                    <i class="bi bi-person-fill fs-3 text-primary me-3"></i>
+                                    <div>
+                                        <small class="text-muted">Nombre</small>
+                                        <p class="mb-0 fs-5">@chofer.Nombre</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -44,7 +50,13 @@
                     <div class="row mb-4">
                         <div class="col-12">
                             <div class="detail-card p-4 rounded border-start border-dark border-4">
-                                <strong>Apellido:</strong> @chofer.Apellido
+                                <div class="d-flex align-items-start">
+                                    <i class="bi bi-person-vcard-fill fs-3 text-dark me-3"></i>
+                                    <div>
+                                        <small class="text-muted">Apellido</small>
+                                        <p class="mb-0 fs-5">@chofer.Apellido</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -53,7 +65,13 @@
                     <div class="row mb-4">
                         <div class="col-12">
                             <div class="detail-card p-4 rounded border-start border-secondary border-4">
-                                <strong>Cédula:</strong> @chofer.Cedula
+                                <div class="d-flex align-items-start">
+                                    <i class="bi bi-credit-card-2-front-fill fs-3 text-secondary me-3"></i>
+                                    <div>
+                                        <small class="text-muted">Cédula</small>
+                                        <p class="mb-0 fs-5">@chofer.Cedula</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -62,7 +80,13 @@
                     <div class="row mb-4">
                         <div class="col-12">
                             <div class="detail-card p-4 rounded border-start border-success border-4">
-                                <strong>Teléfono:</strong> @chofer.Telefono
+                                <div class="d-flex align-items-start">
+                                    <i class="bi bi-telephone-fill fs-3 text-success me-3"></i>
+                                    <div>
+                                        <small class="text-muted">Teléfono</small>
+                                        <p class="mb-0 fs-5">@chofer.Telefono</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -71,11 +95,16 @@
                     <div class="row mb-4">
                         <div class="col-12">
                             <div class="detail-card p-4 rounded border-start border-warning border-4">
-                                <strong>Licencia:</strong> @chofer.Licencia
+                                <div class="d-flex align-items-start">
+                                    <i class="bi bi-card-checklist fs-3 text-warning me-3"></i>
+                                    <div>
+                                        <small class="text-muted">Licencia</small>
+                                        <p class="mb-0 fs-5">@chofer.Licencia</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-
                     <!-- ================= VEHÍCULOS ASIGNADOS ================= -->
                     <div class="row mt-5">
                         <div class="col-12">
