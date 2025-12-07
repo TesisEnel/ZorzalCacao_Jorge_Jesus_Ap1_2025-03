@@ -21,8 +21,6 @@ namespace ZorzalCacao.Models
 
         [Required(ErrorMessage = "La licencia es obligatoria")]
         public string Licencia { get; set; } = string.Empty;
-
-
         public ICollection<Vehiculo> Vehiculos { get; set; } = new List<Vehiculo>();
     }
 }
