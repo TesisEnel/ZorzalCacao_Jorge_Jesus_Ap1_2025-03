@@ -1,0 +1,144 @@
+﻿@page "/ListaEmpleados/Edit/{UserId}"
+@inject IUserRoleService userRoleService
+@inject ApplicationDbContext context
+@inject NavigationManager navigation
+@rendermode InteractiveServer
+
+<PageTitle>Editar Empleado</PageTitle>
+
+@if (user != null)
+{
+    <div class="container mt-3">
+        <div class="card shadow-lg">
+            <div class="card-header">
+                <h5 class="card-title text-center"><strong>Editar Empleado</strong></h5>
+            </div>
+
+            <EditForm Model="userEdit" OnValidSubmit="GuardarCambios">
+                <DataAnnotationsValidator />
+
+                <div class="card-body">
+                    <div class="row">
+                        <!-- ID -->
+                        <div class="col-12 col-md-6 mb-3">
+                            <label><strong>ID</strong></label>
+                            <input class="form-control" value="@user.Id" disabled />
+                        </div>
+
+                        <!-- Usuario -->
+                        <div class="col-12 col-md-6 mb-3">
+                            <label><strong>Usuario</strong></label>
+                            <InputText class="form-control" @bind-Value="userEdit.UserName" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- Email -->
+                        <div class="col-12 col-md-6 mb-3">
+                            <label><strong>Email</strong></label>
+                            <InputText class="form-control" @bind-Value="userEdit.Email" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer d-flex justify-content-center gap-2 bg-white">
+                    <button class="btn btn-primary bi bi-save" type="submit"> Guardar </button>
+                    <button class="btn btn-danger bi bi-trash" type="button" @onclick="() => MostrarModal = true"> Eliminar </button>
+                    <a class="btn btn-secondary bi bi-arrow-left-circle" href="/ListaEmpleados/Index"> Cancelar </a>
+                </div>
+
+            </EditForm>
+        </div>
+    </div>
+}
+else
+{
+    <div class="text-center py-5">
+        <div class="spinner-border text-primary"></div>
+        <p>Cargando información...</p>
+    </div>
+}
+
+@if (MostrarModal)
+{
+    <div class="modal d-block" style="background: rgba(0,0,0,0.5)">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title mx-auto"><strong>Eliminar Empleado</strong></h5>
+                </div>
+
+                <div class="modal-body">
+                    <label><strong>ID:</strong> @user?.Id</label><br />
+                    <label><strong>Usuario:</strong> @user?.UserName</label><br />
+                    <label><strong>Email:</strong> @user?.Email</label>
+
+                    <p class="text-danger mt-3">¿Seguro que desea eliminar esta cuenta?</p>
+                </div>
+
+                <div class="modal-footer d-flex justify-content-center gap-2">
+                    <button class="btn btn-danger bi bi-trash" @onclick="EliminarEmpleado"> Sí, eliminar </button>
+                    <button class="btn btn-secondary bi bi-arrow-left-circle" @onclick="() => MostrarModal = false"> Cancelar </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+
+    [Parameter] public string? UserId { get; set; }
+
+    public ApplicationUser? user { get; set; }
+
+    // Modelo editable
+    public ApplicationUser userEdit { get; set; } = new();
+
+    private bool MostrarModal = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (UserId != null)
+        {
+            user = await userRoleService.GetUserByIdAsync(UserId);
+
+            if (user != null)
+            {
+                // Clonar datos al modelo editable
+                userEdit = new ApplicationUser
+                {
+                    UserName = user.UserName,
+                    Email = user.Email
+                };
+            }
+        }
+    }
+
+    public async Task GuardarCambios()
+    {
+        if (user != null)
+        {
+            user.UserName = userEdit.UserName;
+            user.Email = userEdit.Email;
+
+            context.Users.Update(user);
+            await context.SaveChangesAsync();
+
+            navigation.NavigateTo("/ListaEmpleados/Index");
+        }
+    }
+
+    public async Task EliminarEmpleado()
+    {
+        if (user != null)
+        {
+            context.Users.Remove(user);
+            await context.SaveChangesAsync();
+
+            navigation.NavigateTo("/ListaEmpleados/Index");
+        }
+    }
+}
+
