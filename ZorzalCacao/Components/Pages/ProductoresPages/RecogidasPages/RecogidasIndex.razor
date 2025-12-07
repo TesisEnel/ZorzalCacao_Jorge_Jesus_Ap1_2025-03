@@ -53,7 +53,6 @@
                         <tr>
                             <th> Recogida Id </th>
                             <th> Fecha </th>
-                            <th> Empleado </th>
                             <th> Punto de encuentro </th>
                             <th> Certificaciones </th>
                             <th> Estado de entrega </th>
@@ -78,7 +77,6 @@
                                 <tr>
                                     <td> @recogida.RecogidaId</td>
                                     <td> @recogida.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
-                                    <td> @recogida.Empleado?.UserName</td>
                                     <td> @recogida.PuntoEncuentro</td>
                                     <td> @(recogida.CertificacionesProducto != null && recogida.CertificacionesProducto.Any() ? string.Join(", ", recogida.CertificacionesProducto) : "N/A") </td>
                                     <td> @recogida.EstadoEntrega</td>

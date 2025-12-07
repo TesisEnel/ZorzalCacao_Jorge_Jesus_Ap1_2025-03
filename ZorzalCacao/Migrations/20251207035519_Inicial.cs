@@ -259,18 +259,11 @@ namespace ZorzalCacao.Migrations
                     EstadoEntrega = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CantidadSacos = table.Column<double>(type: "float", nullable: false),
                     Chofer = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProductorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    EmpleadoId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    ProductorId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Recogidas", x => x.RecogidaId);
-                    table.ForeignKey(
-                        name: "FK_Recogidas_AspNetUsers_EmpleadoId",
-                        column: x => x.EmpleadoId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Recogidas_AspNetUsers_ProductorId",
                         column: x => x.ProductorId,
@@ -558,11 +551,6 @@ namespace ZorzalCacao.Migrations
                 name: "IX_PesajesDetalles_SacoId",
                 table: "PesajesDetalles",
                 column: "SacoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Recogidas_EmpleadoId",
-                table: "Recogidas",
-                column: "EmpleadoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Recogidas_ProductorId",

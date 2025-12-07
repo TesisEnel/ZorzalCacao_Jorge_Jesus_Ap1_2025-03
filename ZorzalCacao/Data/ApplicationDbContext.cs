@@ -41,15 +41,9 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         });
 
         builder.Entity<Recogidas>()
-       .HasOne(r => r.Productor)
-       .WithMany()
-       .HasForeignKey(r => r.ProductorId)
-       .OnDelete(DeleteBehavior.Restrict); 
-
-        builder.Entity<Recogidas>()
-            .HasOne(r => r.Empleado)
+            .HasOne(r => r.Productor)
             .WithMany()
-            .HasForeignKey(r => r.EmpleadoId)
+            .HasForeignKey(r => r.ProductorId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.Entity<Vehiculo>()

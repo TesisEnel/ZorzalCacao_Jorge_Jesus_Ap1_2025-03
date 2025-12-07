@@ -43,7 +43,6 @@ public class RecogidasService(IDbContextFactory<ApplicationDbContext> DbFactory)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.Recogidas
-            .Include(e => e.Empleado)
             .Include(r => r.Productor)
             .FirstOrDefaultAsync(r => r.RecogidaId == recogidaId);
     }
@@ -61,7 +60,6 @@ public class RecogidasService(IDbContextFactory<ApplicationDbContext> DbFactory)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.Recogidas
-            .Include(e => e.Empleado)
             .Include(r => r.Productor)
             .Where(criterio)
             .AsNoTracking()

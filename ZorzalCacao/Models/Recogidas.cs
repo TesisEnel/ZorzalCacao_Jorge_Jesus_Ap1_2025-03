@@ -25,6 +25,4 @@ public class Recogidas
     public string Chofer { get; set; } = null!;
     public string ProductorId { get; set; }
     public ApplicationUser Productor { get; set; }
-    public string EmpleadoId { get; set; }
-    public ApplicationUser Empleado { get; set; }
 }

@@ -12,7 +12,7 @@ using ZorzalCacao.Data;
 namespace ZorzalCacao.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251207032104_Inicial")]
+    [Migration("20251207035519_Inicial")]
     partial class Inicial
     {
         /// <inheritdoc />
@@ -471,10 +471,6 @@ namespace ZorzalCacao.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("EmpleadoId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("EstadoEntrega")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -491,8 +487,6 @@ namespace ZorzalCacao.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("RecogidaId");
-
-                    b.HasIndex("EmpleadoId");
 
                     b.HasIndex("ProductorId");
 
@@ -806,19 +800,11 @@ namespace ZorzalCacao.Migrations
 
             modelBuilder.Entity("ZorzalCacao.Models.Recogidas", b =>
                 {
-                    b.HasOne("ZorzalCacao.Data.ApplicationUser", "Empleado")
-                        .WithMany()
-                        .HasForeignKey("EmpleadoId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("ZorzalCacao.Data.ApplicationUser", "Productor")
                         .WithMany()
                         .HasForeignKey("ProductorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Empleado");
 
                     b.Navigation("Productor");
                 });
