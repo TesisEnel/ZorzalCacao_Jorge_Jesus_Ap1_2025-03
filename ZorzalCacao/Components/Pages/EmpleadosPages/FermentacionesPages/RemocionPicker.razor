@@ -50,7 +50,7 @@
     public int RemocionId { get; set; }
 
     [Parameter]
-    public int Cantidad { get; set; }
+    public double Cantidad { get; set; }
 
     [Parameter]
     public string EmpleadoId { get; set; } = null!;
@@ -68,7 +68,7 @@
     public List<ApplicationUser> ListaEmpleados { get; set; } = new();
 
     [Parameter]
-    public EventCallback<(Remociones remocion, double temperatura, int cantidad, ApplicationUser empleado, DateTime fecha)> OnRemocionSeleccionada { get; set; }
+    public EventCallback<(Remociones remocion, double temperatura, double cantidad, ApplicationUser empleado, DateTime fecha)> OnRemocionSeleccionada { get; set; }
     public string? mensajeError { get; set; }
 
     public async Task TriggerSelection()
