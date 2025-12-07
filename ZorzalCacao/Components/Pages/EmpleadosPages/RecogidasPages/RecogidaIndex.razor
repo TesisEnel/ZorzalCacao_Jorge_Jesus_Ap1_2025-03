@@ -86,7 +86,7 @@
                                     <td> @recogida.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
                                     <td> @recogida.Productor?.UserName</td>
                                     <td> @recogida.PuntoEncuentro</td>
-                                    <td> @(recogida.CertificacionProducto != null && recogida.CertificacionProducto.Any() ? string.Join(", ", recogida.CertificacionProducto) : "N/A")
+                                    <td> @(recogida.CertificacionProducto != null && recogida.CertificacionProducto.Any() ? string.Join(", ", recogida.CertificacionProducto) : "N/A")</td>
                                     <td> @recogida.EstadoEntrega</td>
                                     <td> @recogida.CantidadSacos</td>
                                     <td> @recogida.Chofer?.Nombre</td>
