@@ -39,7 +39,7 @@
                     <div class="col-6 col-md-6 mb-3">
                         <label class="col-form-label"> <strong> Responsable </strong></label>
                         <InputSelect class="form-select" @bind-Value="Fermentacion.EmpleadoId"> 
-                            <option value = "" disabled selected> Seleccione una opcion </option>
+                            <option value="" disabled selected>Seleccione un empleado</option>
 
                             @foreach(var empleado in ListaEmpleados)
                             {
@@ -51,7 +51,7 @@
                             <div class="col-12 col-md-12 mt-3">
                                 <label class="col-form-label"> <strong> Recogida </strong> </label>
                                 <InputSelect class="form-select" @bind-Value="Fermentacion.RecogidaId">
-                                    <option value =""> Seleccione una recogida </option>
+                                    <option value="" disabled selected>Seleccione una recogida</option>
                                     @foreach(var recogida in ListaRecogidas)
                                     {
                                         <option value="@recogida.RecogidaId"> @recogida.RecogidaId - @recogida.Fecha.ToString("dd/MM/yyyy HH:mm")</option>
@@ -107,9 +107,7 @@
 
                     <div class="mt-3">
                         <label class="form-label"> <strong> Conteo de Registros: </strong> @Fermentacion.FermentacionesDetalle.Count</label>
-                        <br />
                         <label class="form-label"> <strong> Cantidad Total: </strong> @Fermentacion.FermentacionesDetalle.Sum(d => d.Cantidad)</label>
-                        <br />
                         <label class="form-label"> <strong> Promedio de Temperatura: </strong> @(Fermentacion.FermentacionesDetalle.Any() ? Fermentacion.FermentacionesDetalle.Average(d => d.Temperatura).ToString("F2") : "0.00")°C</label>
                     </div>
                 </div>
