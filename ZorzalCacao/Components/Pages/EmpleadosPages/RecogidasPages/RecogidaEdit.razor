@@ -132,7 +132,7 @@
             <div class="card-footer gap-2 bg-white d-flex justify-content-center">
                 <button type="submit" class="btn btn-primary bi bi-save"> Guardar </button>
                 <button type="button" class="btn btn-danger bi bi-trash" @onclick="() => MostrarModal = true">  Eliminar </button>
-                <a class="btn btn-secondary bi bi-arrow-left-circle" href="/Recogida/Index"> Cancelar </a>
+                <a class="btn btn-secondary bi bi-arrow-left-circle" href="/Recogida/Index"> Regresar </a>
             </div>
         </EditForm>
     </div>
@@ -155,7 +155,7 @@
                     <label class="col-12"> <strong> Certificaciones: </strong> @* @recogida.CertificacionesProducto *@</label>
                     <label class="col-12"> <strong> Estado de entrega: </strong> @recogida.EstadoEntrega</label>
                     <label class="col-12"> <strong> Cantidad de sacos: </strong> @recogida.CantidadSacos.ToString("F2")</label>
-                    <label class="col-12"> <strong> Chofer: </strong> @recogida.Chofer</label>
+                    <label class="col-12"> <strong> Chofer: </strong> @recogida.Chofer?.Nombre</label>
                     <label class="col-12 text-danger"> Esta seguro que desea eliminar esta recogida? </label>
                 </div>
 
