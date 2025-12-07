@@ -39,7 +39,7 @@
                         <div class="col-12 col-md-6 mb-3">
                             <label class="col-form-label"><strong>Recogida</strong></label>
                             <InputSelect class="form-select" @bind-Value="control.RecogidaId">
-                                <option value="" disabled>Seleccione una recogida</option>
+                                <option value="0" disabled>Seleccione una recogida</option>
                                 @foreach (var r in ListaRecogidas)
                                 {
                                     <option value="@r.RecogidaId"> @($"#{r.Fecha.ToShortDateString()} - {r.PuntoEncuentro}") </option>
