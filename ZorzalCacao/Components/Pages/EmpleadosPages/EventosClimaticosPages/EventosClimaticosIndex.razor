@@ -61,6 +61,7 @@
                             <th>Tipo Evento</th>
                             <th>Intensidad</th>
                             <th>Observaciones</th>
+                            <th> Empleado </th>
                             <th>Opciones</th>
                         </tr>
                     </thead>
@@ -84,6 +85,7 @@
                                     <td>@e.TipoEvento</td>
                                     <td>@e.Intensidad</td>
                                     <td>@e.Observaciones</td>
+                                    <td> @e.Empleado?.UserName</td>
 
                                     <td>
                                         <a class="btn btn-sm btn-outline-primary bi bi-eye"

@@ -116,6 +116,23 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- EMPLEADO RESPONSABLE -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="detail-card p-4 rounded border-start border-success border-4">
+                                <div class="d-flex align-items-start">
+                                    <div class="icon-circle bg-success text-white me-3">
+                                        <i class="bi bi-person-badge fs-3"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <small class="text-muted d-block mb-1">Empleado Responsable</small>
+                                        <p class="fs-5 mb-0"> @evento.Empleado?.UserName</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- FOOTER -->
@@ -136,17 +153,8 @@
 
     private EventosClimaticos? evento { get; set; } = new ();
 
-    public string EmpleadoNombre { get; set; } = "N/A";
-
     protected override async Task OnInitializedAsync()
     {
         evento = await eventosService.Buscar(EventoClimaticoId);
-
-        if (evento != null)
-        {
-            // Buscar el nombre del empleado
-            var emp = await userRoleService.GetUserByIdAsync(evento.EmpleadoId);
-            EmpleadoNombre = emp?.UserName ?? "N/A";
-        }
     }
 }
