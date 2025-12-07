@@ -110,33 +110,36 @@
                         </div>
                     </div>
 
-                    <!-- Certificaciones -->
-                    @if (recogida.CertificacionesProducto != null && recogida.CertificacionesProducto.Any())
-                    {
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="detail-card p-4 rounded border-start border-success border-4">
-                                    <div class="d-flex align-items-start">
-                                        <div class="icon-circle bg-success text-white me-3">
-                                            <i class="bi bi-patch-check-fill fs-3"></i>
-                                        </div>
-                                        <div class="flex-grow-1">
-                                            <small class="text-muted d-block mb-3">Certificaciones del Producto</small>
-                                            <div class="d-flex flex-wrap gap-2">
-                                                @foreach (var cert in recogida.CertificacionesProducto)
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="detail-card p-4 rounded border-start border-success border-4">
+                                <div class="d-flex align-items-start">
+                                    <div class="icon-circle bg-success text-white me-3">
+                                        <i class="bi bi-patch-check-fill fs-3"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <small class="text-muted d-block mb-3">Certificaciones del Producto</small>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            @if (!string.IsNullOrWhiteSpace(recogida.CertificacionProducto))
+                                            {
+                                                @foreach (var cert in recogida.CertificacionProducto.Split(',', StringSplitOptions.RemoveEmptyEntries))
                                                 {
                                                     <span class="badge bg-success fs-6 px-3 py-2">
-                                                        <i class="bi bi-check-circle-fill me-1"></i>@cert
+                                                        <i class="bi bi-check-circle-fill me-1"></i>@cert.Trim()
                                                     </span>
                                                 }
-                                            </div>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted fst-italic">Sin certificaciones registradas</span>
+                                            }
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    }
-                </div>
+                    </div>
+                </div> 
 
                 <div class="card-footer bg-white d-flex justify-content-center gap-2">
                     <a href="/Recogida/Index" class="btn btn-secondary bi bi-arrow-left-circle"> Regresar </a>

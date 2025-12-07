@@ -33,7 +33,7 @@
                         <option value="" selected disabled> Seleccione una opcion </option>
                         <option value="RecogidaId"> Recogida Id </option>
                         <option value="PuntoEncuentro"> Punto de encuentro </option>
-                        <option value="CertificacionesProducto"> Certificaciones </option>
+                        <option value="CertificacionProducto"> Certificaciones </option>
                         <option value="EstadoEntrega"> Estado entrega </option>
                         <option value="CantidadSacos"> Cantidad de sacos  </option>
                         <option value="Chofer"> Chofer </option>
@@ -80,10 +80,10 @@
                                     <td> @recogida.RecogidaId</td>
                                     <td> @recogida.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
                                     <td> @recogida.PuntoEncuentro</td>
-                                    <td> @(recogida.CertificacionesProducto != null && recogida.CertificacionesProducto.Any() ? string.Join(", ", recogida.CertificacionesProducto) : "N/A") </td>
+                                    <td> @(recogida.CertificacionProducto != null && recogida.CertificacionProducto.Any() ? string.Join(", ", recogida.CertificacionProducto) : "N/A") </td>
                                     <td> @recogida.EstadoEntrega</td>
                                     <td> @recogida.CantidadSacos</td>
-                                    <td> @recogida.Chofer.Nombre</td>
+                                    <td> @recogida.Chofer?.Nombre</td>
                                     <td>
                                         <a class="btn btn-sm btn-outline-primary bi bi-eye" href="/RecogidaP/View/@recogida.RecogidaId" />
                                     </td>
@@ -169,10 +169,9 @@
             {
                 lista = lista.Where(r => r.EstadoEntrega.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
             }
-            else if (Filtro == nameof(Recogidas.CertificacionesProducto))
+            else if (Filtro == nameof(Recogidas.CertificacionProducto))
             {
-                lista = lista.Where(r => r.CertificacionesProducto != null &&
-                    r.CertificacionesProducto.Any(c => c.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase))).ToList();
+                lista = lista.Where(r => r.CertificacionProducto.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
             }
             else if (Filtro == nameof(Recogidas.Chofer))
             {

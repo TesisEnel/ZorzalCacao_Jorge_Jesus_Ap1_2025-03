@@ -86,7 +86,7 @@
                                     <td> @recogida.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
                                     <td> @recogida.Productor?.UserName</td>
                                     <td> @recogida.PuntoEncuentro</td>
-                                    <td> @(recogida.CertificacionesProducto != null && recogida.CertificacionesProducto.Any() ? string.Join(", ", recogida.CertificacionesProducto) : "N/A") </td>
+                                    <td> @recogida.CertificacionProducto </td>
                                     <td> @recogida.EstadoEntrega</td>
                                     <td> @recogida.CantidadSacos</td>
                                     <td> @recogida.Chofer?.Nombre</td>
@@ -157,10 +157,9 @@
             {
                 lista = lista.Where(r => r.EstadoEntrega.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
             }
-            else if (Filtro == nameof(Recogidas.CertificacionesProducto))
+            else if (Filtro == nameof(Recogidas.CertificacionProducto))
             {
-                lista = lista.Where(r => r.CertificacionesProducto != null &&
-                    r.CertificacionesProducto.Any(c => c.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase))).ToList();
+                lista = lista.Where(r => r.CertificacionProducto.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
             }
             else if (Filtro == nameof(Recogidas.Chofer))
             {

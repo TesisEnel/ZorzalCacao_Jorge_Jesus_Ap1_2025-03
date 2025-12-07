@@ -74,25 +74,19 @@
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-check">
-                                    <InputCheckbox class="form-check-input" id="certNOP"
-                                                    @bind-Value="certNOP"
-                                                    @onchange="@(() => ActualizarCertificacion(certNOP, "NOP"))" />
+                                    <InputCheckbox class="form-check-input" id="certNOP" @bind-Value="certNOP" />
                                     <label class="form-check-label" for="certNOP">NOP</label>
                                 </div>
                             </div>
                             <div class="col-4">
                                 <div class="form-check">
-                                    <InputCheckbox class="form-check-input" id="certBF"
-                                                    @bind-Value="certBF"
-                                                    @onchange="@(() => ActualizarCertificacion(certBF, "BF"))" />
+                                    <InputCheckbox class="form-check-input" id="certBF" @bind-Value="certBF" />
                                     <label class="form-check-label" for="certBF">BF</label>
                                 </div>
                             </div>
                             <div class="col-4">
                                 <div class="form-check">
-                                    <InputCheckbox class="form-check-input" id="certEU"
-                                                    @bind-Value="certEU"
-                                                    @onchange="@(() => ActualizarCertificacion(certEU, "EU"))" />
+                                    <InputCheckbox class="form-check-input" id="certEU" @bind-Value="certEU" />
                                     <label class="form-check-label" for="certEU">EU</label>
                                 </div>
                             </div>
@@ -102,25 +96,19 @@
                         <div class="row mt-2">
                             <div class="col-4">
                                 <div class="form-check">
-                                    <InputCheckbox class="form-check-input" id="certWFT"
-                                                    @bind-Value="certWFT"
-                                                    @onchange="@(() => ActualizarCertificacion(certWFT, "WFT"))" />
+                                    <InputCheckbox class="form-check-input" id="certWFT" @bind-Value="certWFT" />
                                     <label class="form-check-label" for="certWFT">WFT</label>
                                 </div>
                             </div>
                             <div class="col-4">
                                 <div class="form-check">
-                                    <InputCheckbox class="form-check-input" id="certConv"
-                                                    @bind-Value="certConv"
-                                                    @onchange="@(() => ActualizarCertificacion(certConv, "CONVENCIONAL"))" />
+                                    <InputCheckbox class="form-check-input" id="certConv" @bind-Value="certConv" />
                                     <label class="form-check-label" for="certConv">CONVENCIONAL</label>
                                 </div>
                             </div>
                             <div class="col-4">
                                 <div class="form-check">
-                                    <InputCheckbox class="form-check-input" id="certOtras"
-                                                    @bind-Value="certOtras"
-                                                    @onchange="@(() => ActualizarCertificacion(certOtras, "OTRAS"))" />
+                                    <InputCheckbox class="form-check-input" id="certOtras" @bind-Value="certOtras" />
                                     <label class="form-check-label" for="certOtras">OTRAS</label>
                                 </div>
                             </div>
@@ -181,43 +169,133 @@
 
     private List<Choferes> ListaChoferes = new();
 
-    // Variables para cada checkbox
-    private bool certNOP = false;
-    private bool certBF = false;
-    private bool certEU = false;
-    private bool certWFT = false;
-    private bool certConv = false;
-    private bool certOtras = false;
+    private List<string> CertificacionesSeleccionadas = new();
 
+    // Variables para cada checkbox
+    private bool certNOP
+    {
+        get => CertificacionesSeleccionadas.Contains("NOP");
+        set
+        {
+            if (value)
+            {
+                if (!CertificacionesSeleccionadas.Contains("NOP"))
+                    CertificacionesSeleccionadas.Add("NOP");
+            }
+            else
+            {
+                CertificacionesSeleccionadas.Remove("NOP");
+            }
+        }
+    }
+
+    private bool certBF
+    {
+        get => CertificacionesSeleccionadas.Contains("BF");
+        set
+        {
+            if (value)
+            {
+                if (!CertificacionesSeleccionadas.Contains("BF"))
+                    CertificacionesSeleccionadas.Add("BF");
+            }
+            else
+            {
+                CertificacionesSeleccionadas.Remove("BF");
+            }
+        }
+    }
+
+    private bool certEU
+    {
+        get => CertificacionesSeleccionadas.Contains("EU");
+        set
+        {
+            if (value)
+            {
+                if (!CertificacionesSeleccionadas.Contains("EU"))
+                    CertificacionesSeleccionadas.Add("EU");
+            }
+            else
+            {
+                CertificacionesSeleccionadas.Remove("EU");
+            }
+        }
+    }
+
+    private bool certWFT
+    {
+        get => CertificacionesSeleccionadas.Contains("WFT");
+        set
+        {
+            if (value)
+            {
+                if (!CertificacionesSeleccionadas.Contains("WFT"))
+                    CertificacionesSeleccionadas.Add("WFT");
+            }
+            else
+            {
+                CertificacionesSeleccionadas.Remove("WFT");
+            }
+        }
+    }
+
+    private bool certConv
+    {
+        get => CertificacionesSeleccionadas.Contains("CONVENCIONAL");
+        set
+        {
+            if (value)
+            {
+                if (!CertificacionesSeleccionadas.Contains("CONVENCIONAL"))
+                    CertificacionesSeleccionadas.Add("CONVENCIONAL");
+            }
+            else
+            {
+                CertificacionesSeleccionadas.Remove("CONVENCIONAL");
+            }
+        }
+    }
+
+    private bool certOtras
+    {
+        get => CertificacionesSeleccionadas.Contains("OTRAS");
+        set
+        {
+            if (value)
+            {
+                if (!CertificacionesSeleccionadas.Contains("OTRAS"))
+                    CertificacionesSeleccionadas.Add("OTRAS");
+            }
+            else
+            {
+                CertificacionesSeleccionadas.Remove("OTRAS");
+            }
+        }
+    }
+    
     protected override async Task OnInitializedAsync()
     {
         recogida = await recogidasService.Buscar(RecogidaId);
+
+        if (!string.IsNullOrWhiteSpace(recogida?.CertificacionProducto))
+        {
+            CertificacionesSeleccionadas = recogida.CertificacionProducto
+                .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .Select(c => c.Trim())
+                .ToList();
+        }
+
         var productores = await UserRoleService.GetUsersByRoleAsync("Productor");
         ListaProductores = productores.ToList();
 
         ListaChoferes = await choferesService.Listar(e => true);
     }
 
-    private void ActualizarCertificacion(bool isChecked, string certificacion)
-    {
-        if (recogida != null)
-        {
-            if (isChecked)
-            {
-                if (!recogida.CertificacionesProducto.Contains(certificacion))
-                {
-                    recogida.CertificacionesProducto.Add(certificacion);
-                }
-            }
-            else
-            {
-                recogida.CertificacionesProducto.Remove(certificacion);
-            }
-        }
-    }
-
     public async Task GuardarRecogida()
     {
+        recogida.CertificacionProducto = string.Join(",", CertificacionesSeleccionadas);
+
         if (recogida != null && await recogidasService.Guardar(recogida))
         {
             navigation.NavigateTo("/Recogida/Index");
