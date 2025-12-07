@@ -54,7 +54,7 @@
                                     <td> @((detalle.Cantidad * detalle.Peso).ToString("F2"))</td>
                                     <td> @(((detalle.Cantidad * detalle.Peso) / 125).ToString("F2")) </td>
                                     <td>
-                                        <button type="button" class="btn btn-outline-danger bi bi-trash" @onclick="() => RemoverDetalle(detalle)">
+                                        <button type="button" class="btn btn-outline-dark bi bi-trash" @onclick="() => RemoverDetalle(detalle)">
                                             Remover
                                         </button>
                                     </td>
