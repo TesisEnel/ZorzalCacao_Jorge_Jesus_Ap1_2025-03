@@ -54,7 +54,7 @@
                     <div class="col-12 col-md-6 mb-3">
                         <label class="col-form-label"> <strong> Chofer </strong></label>
                         <InputSelect class="form-select" @bind-Value="recogida.ChoferId">
-                            <option value="0" disabled selected>Seleccione un chofer</option>
+                            <option value="" disabled selected>Seleccione un chofer</option>
 
                             @foreach (var c in ListaChoferes)
                             {
@@ -176,6 +176,7 @@
 
     public async Task GuardarRecogida()
     {
+
         if (await recogidasService.Guardar(recogida))
         {
             navigation.NavigateTo("/Recogida/Index");

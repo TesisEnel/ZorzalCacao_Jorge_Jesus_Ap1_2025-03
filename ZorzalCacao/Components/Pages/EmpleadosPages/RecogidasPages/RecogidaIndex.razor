@@ -87,7 +87,7 @@
                                     <td> @(recogida.CertificacionesProducto != null && recogida.CertificacionesProducto.Any() ? string.Join(", ", recogida.CertificacionesProducto) : "N/A") </td>
                                     <td> @recogida.EstadoEntrega</td>
                                     <td> @recogida.CantidadSacos</td>
-                                    <td> @recogida.Chofer.Nombre</td>
+                                    <td> @recogida.Chofer?.Nombre</td>
                                     <td>
                                         <a class="btn btn-sm btn-outline-primary bi bi-eye" href="/Recogida/View/@recogida.RecogidaId"/>
                                         <a class="btn btn-sm btn-outline-info bi bi-pencil-square" href="/Recogida/Edit/@recogida.RecogidaId" />
