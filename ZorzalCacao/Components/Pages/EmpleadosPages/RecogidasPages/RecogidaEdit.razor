@@ -1,7 +1,8 @@
 ﻿@page "/Recogida/Edit/{RecogidaId:int}"
 @inject RecogidasService recogidasService
-@inject IUserRoleService UserRoleService
+@inject ChoferesService choferesService
 @inject NavigationManager navigation
+@inject IUserRoleService UserRoleService
 @rendermode InteractiveServer
 
 <PageTitle> Editar Recogida</PageTitle>
@@ -55,8 +56,15 @@
                     <div class="row">
                         <div class="col-12 col-md-6 mb-3">
                             <label class="col-form-label"> <strong> Chofer </strong></label>
-                            <InputText class="form-control" @bind-Value="recogida.Chofer" />
-                            <ValidationMessage For="() => recogida.Chofer" />
+                            <InputSelect class="form-select" @bind-Value="recogida.ChoferId">
+                                <option value="0" disabled selected>Seleccione un chofer</option>
+
+                                @foreach (var c in ListaChoferes)
+                                {
+                                    <option value="@c.ChoferId">@c.Nombre</option>
+                                }
+                            </InputSelect>
+                            <ValidationMessage For="() => recogida.ChoferId" />
                         </div>
 
                         <div class="col-12 col-md-6 mb-3">
@@ -182,6 +190,8 @@ else
 
     private List<ApplicationUser> ListaProductores = new();
 
+    private List<Choferes> ListaChoferes = new();
+
     // Variables para cada checkbox
     private bool certNOP = false;
     private bool certBF = false;
@@ -195,6 +205,8 @@ else
         recogida = await recogidasService.Buscar(RecogidaId);
         var productores = await UserRoleService.GetUsersByRoleAsync("Productor");
         ListaProductores = productores.ToList();
+
+        ListaChoferes = await choferesService.Listar(e => true);
     }
 
     private void ActualizarCertificacion(bool isChecked, string certificacion)
