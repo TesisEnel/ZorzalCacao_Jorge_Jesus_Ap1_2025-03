@@ -9,9 +9,9 @@ public class Fermentaciones
     [Key]
     public int FermentacionId { get; set; }
 
-    [Range(70, 95, ErrorMessage = "Temperatura no valida")]
+    [Range(70, 95, ErrorMessage = "Temperatura no válida. Debe estar entre 70°F y 95°F")]
     public double Temperatura { get; set; }
-    public string Observaciones { get; set; }
+    public string Observaciones { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Fecha requerida")]
     public DateTime Fecha { get; set; } = DateTime.Now;
