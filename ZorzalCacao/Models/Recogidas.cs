@@ -23,12 +23,8 @@ public class Recogidas
 
     [Required(ErrorMessage = "Chofer requerido")]
     public string Chofer { get; set; } = null!;
-
-    //productor 
     public string ProductorId { get; set; }
     public ApplicationUser Productor { get; set; }
-
-    //empleado
     public string EmpleadoId { get; set; }
     public ApplicationUser Empleado { get; set; }
 }
