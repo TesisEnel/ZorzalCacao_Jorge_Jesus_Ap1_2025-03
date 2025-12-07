@@ -806,7 +806,7 @@ namespace ZorzalCacao.Migrations
                     b.HasOne("ZorzalCacao.Data.ApplicationUser", "Empleado")
                         .WithMany()
                         .HasForeignKey("EmpleadoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("ZorzalCacao.Data.ApplicationUser", "Productor")
