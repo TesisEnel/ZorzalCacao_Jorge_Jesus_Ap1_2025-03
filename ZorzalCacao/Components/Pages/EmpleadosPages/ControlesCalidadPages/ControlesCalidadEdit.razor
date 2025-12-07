@@ -26,16 +26,9 @@
                             <InputNumber class="form-control" @bind-Value="control.GradosBrix" />
                             <ValidationMessage For="() => control.GradosBrix" />
                         </div>
-                    </div>
 
-                    <div class="row">
-                        <!-- Observaciones -->
-                        <div class="col-12 col-md-6 mb-3">
-                            <label class="col-form-label"><strong>Observaciones</strong></label>
-                            <InputTextArea class="form-control" @bind-Value="control.Observaciones" />
-                        </div>
 
-                        <!-- Recogida -->
+                        <!--Recogida-->
                         <div class="col-12 col-md-6 mb-3">
                             <label class="col-form-label"><strong>Recogida</strong></label>
                             <InputSelect class="form-select" @bind-Value="control.RecogidaId">
@@ -45,7 +38,15 @@
                                     <option value="@r.RecogidaId"> @($"{r.Fecha.ToShortDateString()} - {r.PuntoEncuentro}") </option>
                                 }
                             </InputSelect>
-                            <ValidationMessage For="() => control.RecogidaId"/>
+                            <ValidationMessage For="() => control.RecogidaId" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- Observaciones -->
+                        <div class="col-12 col-md-6 mb-3">
+                            <label class="col-form-label"><strong>Observaciones</strong></label>
+                            <InputTextArea class="form-control" @bind-Value="control.Observaciones" />
                         </div>
                     </div>
                 </div>
