@@ -46,6 +46,7 @@
                                 <option value= "@empleado.Id"> @empleado.UserName</option>
                             }
                         </InputSelect>
+                        <ValidationMessage For="() => Fermentacion.EmpleadoId" />
 
                         <div class="row">
                             <div class="col-12 col-md-12 mt-3">
@@ -57,6 +58,7 @@
                                         <option value="@recogida.RecogidaId"> @recogida.RecogidaId - @recogida.Fecha.ToString("dd/MM/yyyy HH:mm")</option>
                                     }
                                 </InputSelect>
+                                <ValidationMessage For="() => Fermentacion.RecogidaId"/>
                             </div>
                         </div>
                     </div>
