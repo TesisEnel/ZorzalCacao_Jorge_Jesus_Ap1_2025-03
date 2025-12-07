@@ -464,9 +464,8 @@ namespace ZorzalCacao.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Chofer")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("ChoferId")
+                        .HasColumnType("int");
 
                     b.Property<string>("EstadoEntrega")
                         .IsRequired()
@@ -484,6 +483,8 @@ namespace ZorzalCacao.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("RecogidaId");
+
+                    b.HasIndex("ChoferId");
 
                     b.HasIndex("ProductorId");
 
@@ -797,11 +798,17 @@ namespace ZorzalCacao.Migrations
 
             modelBuilder.Entity("ZorzalCacao.Models.Recogidas", b =>
                 {
+                    b.HasOne("ZorzalCacao.Models.Choferes", "Chofer")
+                        .WithMany()
+                        .HasForeignKey("ChoferId");
+
                     b.HasOne("ZorzalCacao.Data.ApplicationUser", "Productor")
                         .WithMany()
                         .HasForeignKey("ProductorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Chofer");
 
                     b.Navigation("Productor");
                 });

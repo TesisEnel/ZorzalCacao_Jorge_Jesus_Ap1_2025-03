@@ -248,31 +248,6 @@ namespace ZorzalCacao.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Recogidas",
-                columns: table => new
-                {
-                    RecogidaId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Fecha = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PuntoEncuentro = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CertificacionesProducto = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EstadoEntrega = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CantidadSacos = table.Column<double>(type: "float", nullable: false),
-                    Chofer = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProductorId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Recogidas", x => x.RecogidaId);
-                    table.ForeignKey(
-                        name: "FK_Recogidas_AspNetUsers_ProductorId",
-                        column: x => x.ProductorId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ZonasProduccion",
                 columns: table => new
                 {
@@ -293,6 +268,36 @@ namespace ZorzalCacao.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Recogidas",
+                columns: table => new
+                {
+                    RecogidaId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Fecha = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PuntoEncuentro = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CertificacionesProducto = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EstadoEntrega = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CantidadSacos = table.Column<double>(type: "float", nullable: false),
+                    ChoferId = table.Column<int>(type: "int", nullable: true),
+                    ProductorId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Recogidas", x => x.RecogidaId);
+                    table.ForeignKey(
+                        name: "FK_Recogidas_AspNetUsers_ProductorId",
+                        column: x => x.ProductorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Recogidas_Choferes_ChoferId",
+                        column: x => x.ChoferId,
+                        principalTable: "Choferes",
+                        principalColumn: "ChoferId");
                 });
 
             migrationBuilder.CreateTable(
@@ -414,7 +419,7 @@ namespace ZorzalCacao.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FermentacionId = table.Column<int>(type: "int", nullable: false),
                     RemocionId = table.Column<int>(type: "int", nullable: false),
-                    Cantidad = table.Column<int>(type: "int", nullable: false),
+                    Cantidad = table.Column<double>(type: "float", nullable: false),
                     Temperatura = table.Column<double>(type: "float", nullable: false),
                     FechaFermentacion = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EmpleadoId = table.Column<string>(type: "nvarchar(450)", nullable: false)
@@ -553,6 +558,11 @@ namespace ZorzalCacao.Migrations
                 column: "SacoId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Recogidas_ChoferId",
+                table: "Recogidas",
+                column: "ChoferId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Recogidas_ProductorId",
                 table: "Recogidas",
                 column: "ProductorId");
@@ -620,13 +630,13 @@ namespace ZorzalCacao.Migrations
                 name: "Sacos");
 
             migrationBuilder.DropTable(
-                name: "Choferes");
-
-            migrationBuilder.DropTable(
                 name: "Recogidas");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Choferes");
         }
     }
 }
