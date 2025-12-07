@@ -51,7 +51,7 @@
                             <div class="col-12 col-md-12 mt-3">
                                 <label class="col-form-label"> <strong> Recogida </strong> </label>
                                 <InputSelect class="form-select" @bind-Value="Fermentacion.RecogidaId">
-                                    <option value = "" disabled selected> Seleccione una recogida </option>
+                                    <option value =""> Seleccione una recogida </option>
                                     @foreach(var recogida in ListaRecogidas)
                                     {
                                         <option value="@recogida.RecogidaId"> @recogida.RecogidaId - @recogida.Fecha.ToString("dd/MM/yyyy HH:mm")</option>
@@ -80,7 +80,7 @@
                                     <th> Remoción </th>
                                     <th> Responsable </th>
                                     <th> Fecha </th>
-                                    <th> Temperatura </th>
+                                    <th> Temperatura °F</th>
                                     <th> Cantidad </th>
                                     <th> Opciones </th>
                                 </tr>
@@ -92,7 +92,7 @@
                                         <td> @ListaRemociones.FirstOrDefault(r => r.RemocionId == detalle.RemocionId)?.NumeroRemocion</td>
                                         <td> @ListaEmpleados.FirstOrDefault(e => e.Id == detalle.EmpleadoId)?.UserName</td>
                                         <td> @detalle.FechaFermentacion.ToString("dd/MM/yyyy HH:mm")</td>
-                                        <td> @detalle.Temperatura.ToString("F2")°C</td>
+                                        <td> @detalle.Temperatura.ToString("F2")</td>
                                         <td> @detalle.Cantidad</td>
                                         <td>
                                             <button type="button" class="btn btn-outline-dark bi bi-trash" @onclick="() => RemoverDetalle(detalle)">
@@ -150,7 +150,7 @@
         }
     }
 
-    private void AgregarDetalle((Remociones remocion, double temperatura, int cantidad, ApplicationUser empleado, DateTime fecha) datos)
+    private void AgregarDetalle((Remociones remocion, double temperatura, double cantidad, ApplicationUser empleado, DateTime fecha) datos)
     {
         var nuevoDetalle = new FermentacionesDetalles
         {

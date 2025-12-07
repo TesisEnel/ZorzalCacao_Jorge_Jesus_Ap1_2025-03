@@ -207,7 +207,7 @@ else
 
     public async Task GuardarFermentacion()
     {
-        if (await fermentacionesServices.Guardar(Fermentacion))
+        if (Fermentacion != null && await fermentacionesServices.Guardar(Fermentacion))
         {
             navigation.NavigateTo("/Fermentacion/Index");
         }
@@ -221,7 +221,7 @@ else
         }
     }
 
-    private void AgregarDetalle((Remociones remocion, double temperatura, int cantidad, ApplicationUser empleado, DateTime fecha) datos)
+    private void AgregarDetalle((Remociones remocion, double temperatura, double cantidad, ApplicationUser empleado, DateTime fecha) datos)
     {
         var nuevoDetalle = new FermentacionesDetalles
         {
