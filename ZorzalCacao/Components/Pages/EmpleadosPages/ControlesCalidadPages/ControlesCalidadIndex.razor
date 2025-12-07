@@ -55,7 +55,7 @@
                     <thead class="table-light">
                         <tr>
                             <th>Control Id</th>
-                            <th>Grados Brix</th>
+                            <th>Grados Brix °Bx</th>
                             <th>Observaciones</th>
                             <th>Decisión</th>
                             <th>Recogida</th>
@@ -78,7 +78,7 @@
                             {
                                 <tr>
                                     <td>@c.ControlId</td>
-                                    <td>@c.GradosBrix °Bx</td>
+                                    <td>@c.GradosBrix</td>
                                     <td>@c.Observaciones</td>
                                     <td>@c.Decision</td>
                                     <td>@c.Recogida?.Fecha.ToShortDateString() - @c.Recogida?.PuntoEncuentro </td>
