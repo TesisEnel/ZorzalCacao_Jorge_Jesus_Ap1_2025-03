@@ -23,6 +23,8 @@ public class Recogidas
 
     [Required(ErrorMessage = "Chofer requerido")]
     public string Chofer { get; set; } = null!;
+
+    [Required(ErrorMessage ="Por favor, seleccione un productor")]
     public string ProductorId { get; set; }
     public ApplicationUser Productor { get; set; }
 }
