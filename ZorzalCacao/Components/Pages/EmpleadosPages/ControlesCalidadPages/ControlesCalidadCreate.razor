@@ -39,7 +39,11 @@
                                 <option value="@r.RecogidaId"> @($"#{r.Fecha.ToShortDateString()} - {r.PuntoEncuentro}") </option>
                             }
                         </InputSelect>
-                        <ValidationMessage For="() => control.RecogidaId" />
+                        
+                        @if(!string.IsNullOrEmpty(MensajeError))
+                        {
+                            <div class="text-danger"> @MensajeError </div>
+                        }
                     </div>
 
                     <div class="col-12 col-md-6 mb-3">
@@ -63,6 +67,8 @@
     private List<Recogidas> ListaRecogidas = new();
     private List<ApplicationUser> ListaEmpleados = new();
 
+    private string MensajeError { get; set; } = string.Empty;
+
     protected override async Task OnInitializedAsync()
     {
         ListaRecogidas = await recogidasService.Listar(r => true);
@@ -73,6 +79,14 @@
 
     public async Task GuardarControl()
     {
+        if (control.RecogidaId == 0)
+        {
+            MensajeError = "Por favor, seleccione una recogida";
+            return;
+        }
+
+        MensajeError = "";
+
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
 
@@ -87,6 +101,7 @@
         {
             throw new Exception("Debe seleccionar una recogida válida.");
         }
+
 
         control.Decision = control.GradosBrix >= 14 ? "Aprobado" : "Rechazado";
 

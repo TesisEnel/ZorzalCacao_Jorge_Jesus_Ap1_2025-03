@@ -45,7 +45,11 @@
                                     <option value="@r.RecogidaId"> @($"#{r.Fecha.ToShortDateString()} - {r.PuntoEncuentro}") </option>
                                 }
                             </InputSelect>
-                            <ValidationMessage For="() => control.RecogidaId" />
+
+                            @if (!string.IsNullOrEmpty(MensajeError))
+                            {
+                                <div class="text-danger"> @MensajeError </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -110,6 +114,8 @@ else
     private List<Recogidas> ListaRecogidas = new();
     private List<ApplicationUser> ListaEmpleados = new();
 
+    private string MensajeError { get; set; } = string.Empty;
+
     protected override async Task OnInitializedAsync()
     {
         control = await controlesService.Buscar(ControlId);
@@ -122,6 +128,14 @@ else
 
     public async Task GuardarControl()
     {
+        if (control.RecogidaId == 0)
+        {
+            MensajeError = "Por favor, seleccione una recogida";
+            return;
+        }
+
+        MensajeError = "";
+
         control.Decision = control.GradosBrix >= 14 ? "Aprobado" : "Rechazado";
 
         if (control != null && await controlesService.Guardar(control))
