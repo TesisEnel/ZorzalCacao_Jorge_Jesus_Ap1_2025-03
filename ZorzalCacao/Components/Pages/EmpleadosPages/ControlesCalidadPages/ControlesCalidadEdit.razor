@@ -115,7 +115,7 @@ else
     {
         control = await controlesService.Buscar(ControlId);
 
-        ListaRecogidas = await recogidasService.Listar(r => true);
+        ListaRecogidas = await recogidasService.Listar(r => r.EstadoEntrega == "Entregada");
 
         var empleados = await userRoleService.GetUsersByRoleAsync("Empleado");
         ListaEmpleados = empleados.ToList();

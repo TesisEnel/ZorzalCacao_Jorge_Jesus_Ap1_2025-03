@@ -198,7 +198,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         Fermentacion = await fermentacionesServices.Buscar(FermentacionId);
-        ListaRecogidas = await recogidasService.Listar(e => true);
+        ListaRecogidas = await recogidasService.Listar(r => r.EstadoEntrega == "Entregada");
         ListaRemociones = await fermentacionesServices.ListarRemociones(f => true);
         var empleados = await UserRoleService.GetUsersByRoleAsync("Empleado");
         ListaEmpleados = empleados.ToList();

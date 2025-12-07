@@ -65,7 +65,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        ListaRecogidas = await recogidasService.Listar(r => true);
+        ListaRecogidas = await recogidasService.Listar(r => r.EstadoEntrega == "Entregada");
 
         var empleados = await userRoleService.GetUsersByRoleAsync("Empleado");
         ListaEmpleados = empleados.ToList();
