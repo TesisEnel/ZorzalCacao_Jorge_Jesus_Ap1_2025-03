@@ -3,6 +3,8 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @rendermode InteractiveServer
 
+@attribute [Authorize(Roles = "Productor")]
+
 <PageTitle> Consulta recogidas </PageTitle>
 
 <div class="container">

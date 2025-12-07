@@ -3,6 +3,8 @@
 @inject ZonasProduccionService zonaService
 @rendermode InteractiveServer
 
+@attribute [Authorize(Roles = "Productor")]
+
 <PageTitle> Consulta Zonas </PageTitle>
 
 <div class="container">

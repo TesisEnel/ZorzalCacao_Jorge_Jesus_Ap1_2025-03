@@ -3,6 +3,8 @@
 @inject NavigationManager navigation
 @rendermode InteractiveServer
 
+@attribute [Authorize(Roles = "Productor")]
+
 <PageTitle>Detalles de Recogida</PageTitle>
 
 @if (recogida != null)
