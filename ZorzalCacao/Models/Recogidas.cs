@@ -13,7 +13,7 @@ public class Recogidas
 
     [Required(ErrorMessage = "Punto de encuentro requerido")]
     public string PuntoEncuentro { get; set; } = null!;
-    public List<string> CertificacionesProducto { get; set; } = new List<string>();
+    public string CertificacionProducto { get; set; } = string.Empty;
     public string EstadoEntrega { get; set; } = "Pendiente";
 
     [Required(ErrorMessage = "Cantidad de sacos requerida")]
