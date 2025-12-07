@@ -5,7 +5,9 @@
             <option value="0" disabled selected> Seleccionar remocion </option>
             @foreach (var remo in ListaRemociones)
             {
-                <option value = "@remo.RemocionId"> @remo.NumeroRemocion (Cantidad removida: @remo.Cantidad.ToString("F2")) </option>
+                <option value="@remo.RemocionId" disabled="@EstaRemocionDeshabilitada(remo)">
+                    @remo.NumeroRemocion (Cantidad removida: @remo.Cantidad.ToString("F2"))
+                </option>
             }
         </InputSelect>
     </div>
@@ -62,6 +64,9 @@
     public DateTime Fecha { get; set; } = DateTime.Now;
 
     [Parameter]
+    public int CantidadEnDetalle { get; set; } = 0;
+
+    [Parameter]
     public List<Remociones> ListaRemociones { get; set; } = new();
 
     [Parameter]
@@ -70,6 +75,16 @@
     [Parameter]
     public EventCallback<(Remociones remocion, double temperatura, double cantidad, ApplicationUser empleado, DateTime fecha)> OnRemocionSeleccionada { get; set; }
     public string? mensajeError { get; set; }
+
+    private bool EstaRemocionDeshabilitada(Remociones remocion)
+    {
+        var indiceRemocion = ListaRemociones
+            .OrderBy(r => r.NumeroRemocion)
+            .ToList()
+            .FindIndex(r => r.RemocionId == remocion.RemocionId);
+
+        return indiceRemocion != CantidadEnDetalle;
+    }
 
     public async Task TriggerSelection()
     {
