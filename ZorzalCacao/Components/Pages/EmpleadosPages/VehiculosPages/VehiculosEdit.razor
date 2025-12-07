@@ -165,7 +165,7 @@ else
     [Parameter]
     public int VehiculoId { get; set; }
 
-    private Vehiculo? vehiculo;
+    private Vehiculo? vehiculo { get; set; } = new();
     private List<Choferes> ListaChoferes = new();
 
     private bool MostrarModal = false;

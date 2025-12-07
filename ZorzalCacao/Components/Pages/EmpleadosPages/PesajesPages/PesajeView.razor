@@ -5,106 +5,41 @@
 
 <PageTitle>Detalles de Pesaje</PageTitle>
 
-@if (pesaje != null)
-{
-    <div class="container mt-4">
-        <div class="row justify-content-center">
-            <div class="col-12 col-lg-10 col-xl-8">
-                <div class="card shadow-lg border-0">
-                    <div class="card-header bg-primary text-white py-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h4 class="mb-1"><i class="bi bi-box-seam"></i> Detalles de Pesaje</h4>
-                                <small>ID: #@pesaje.PesajeId</small>
-                            </div>
-                            <a href="/Pesaje/Index" class="btn btn-light btn-sm bi bi-arrow-left"> Regresar </a>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10 col-xl-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white py-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="mb-1"><i class="bi bi-box-seam"></i> Detalles de Pesaje</h4>
+                            <small>ID: #@pesaje.PesajeId</small>
                         </div>
+                        <a href="/Pesaje/Index" class="btn btn-light btn-sm bi bi-arrow-left"> Regresar </a>
                     </div>
+                </div>
 
-                    <div class="card-body p-4">
+                <div class="card-body p-4">
 
-                        <!-- FECHA Y EMPLEADO -->
-                        <div class="row mb-4">
-                            <div class="col-12">
-                                <div class="info-box p-4 bg-light rounded shadow-sm">
-                                    <div class="row align-items-center">
-                                        <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                                            <i class="bi bi-calendar-event text-primary fs-1"></i>
-                                            <div class="mt-2">
-                                                <small class="text-muted d-block">Fecha del pesaje</small>
-                                                <h5 class="mb-0">@pesaje.Fecha.ToString("dddd, dd MMMM yyyy")</h5>
-                                                <small class="text-muted">@pesaje.Fecha.ToString("hh:mm tt")</small>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6 text-center text-md-start">
-                                            <i class="bi bi-person-badge text-success fs-1"></i>
-                                            <div class="mt-2">
-                                                <small class="text-muted d-block">Empleado</small>
-                                                <h5 class="mb-0">@pesaje.Empleado?.UserName</h5>
-                                            </div>
+                    <!-- FECHA Y EMPLEADO -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="info-box p-4 bg-light rounded shadow-sm">
+                                <div class="row align-items-center">
+                                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                                        <i class="bi bi-calendar-event text-primary fs-1"></i>
+                                        <div class="mt-2">
+                                            <small class="text-muted d-block">Fecha del pesaje</small>
+                                            <h5 class="mb-0">@pesaje.Fecha.ToString("dddd, dd MMMM yyyy")</h5>
+                                            <small class="text-muted">@pesaje.Fecha.ToString("hh:mm tt")</small>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
 
-                        <!-- ESTADÍSTICAS -->
-                        <div class="row mb-4">
-                            <div class="col-md-4 mb-3 mb-md-0">
-                                <div class="detail-card p-4 rounded border-start border-info border-4 h-100">
-                                    <div class="d-flex align-items-center">
-                                        <div class="icon-circle bg-info text-white me-3">
-                                            <i class="bi bi-list-ol fs-3"></i>
-                                        </div>
-                                        <div>
-                                            <small class="text-muted d-block mb-1">Total de Detalles</small>
-                                            <h4 class="mb-0 text-info">@pesaje.PesajesDetalle.Count</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4 mb-3 mb-md-0">
-                                <div class="detail-card p-4 rounded border-start border-success border-4 h-100">
-                                    <div class="d-flex align-items-center">
-                                        <div class="icon-circle bg-success text-white me-3">
-                                            <i class="bi bi-box fs-3"></i>
-                                        </div>
-                                        <div>
-                                            <small class="text-muted d-block mb-1">Cantidad Total</small>
-                                            <h4 class="mb-0 text-success">@pesaje.PesajesDetalle.Sum(a => a.Cantidad).ToString("F2")</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="detail-card p-4 rounded border-start border-warning border-4 h-100">
-                                    <div class="d-flex align-items-center">
-                                        <div class="icon-circle bg-warning text-dark me-3">
-                                            <i class="bi bi-basket fs-3"></i>
-                                        </div>
-                                        <div>
-                                            <small class="text-muted d-block mb-1">Peso Total (Kg)</small>
-                                            <h4 class="mb-0 text-warning">@pesaje.PesajesDetalle.Sum(a=> a.Cantidad * a.Peso).ToString("F2") kg</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- QUINTALES -->
-                        <div class="row mb-4">
-                            <div class="col-12">
-                                <div class="detail-card p-4 rounded border-start border-primary border-4">
-                                    <div class="d-flex align-items-center">
-                                        <div class="icon-circle bg-primary text-white me-3">
-                                            <i class="bi bi-bag-fill fs-3"></i>
-                                        </div>
-                                        <div>
-                                            <small class="text-muted d-block mb-1">Quintales</small>
-                                            <h3 class="mb-0 text-primary"> @((pesaje.PesajesDetalle.Sum(a => a.Cantidad * a.Peso) / 125).ToString("F2")) ql</h3>
+                                    <div class="col-md-6 text-center text-md-start">
+                                        <i class="bi bi-person-badge text-success fs-1"></i>
+                                        <div class="mt-2">
+                                            <small class="text-muted d-block">Empleado</small>
+                                            <h5 class="mb-0">@pesaje.Empleado?.UserName</h5>
                                         </div>
                                     </div>
                                 </div>
@@ -112,29 +47,82 @@
                         </div>
                     </div>
 
-                    <div class="card-footer bg-white d-flex justify-content-center gap-2">
-                        <a href="/Pesaje/Index" class="btn btn-secondary bi bi-arrow-left-circle"> Regresar </a>
+                    <!-- ESTADÍSTICAS -->
+                    <div class="row mb-4">
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <div class="detail-card p-4 rounded border-start border-info border-4 h-100">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-circle bg-info text-white me-3">
+                                        <i class="bi bi-list-ol fs-3"></i>
+                                    </div>
+                                    <div>
+                                        <small class="text-muted d-block mb-1">Total de Detalles</small>
+                                        <h4 class="mb-0 text-info">@pesaje.PesajesDetalle.Count</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <div class="detail-card p-4 rounded border-start border-success border-4 h-100">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-circle bg-success text-white me-3">
+                                        <i class="bi bi-box fs-3"></i>
+                                    </div>
+                                    <div>
+                                        <small class="text-muted d-block mb-1">Cantidad Total</small>
+                                        <h4 class="mb-0 text-success">@pesaje.PesajesDetalle.Sum(a => a.Cantidad).ToString("F2")</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="detail-card p-4 rounded border-start border-warning border-4 h-100">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-circle bg-warning text-dark me-3">
+                                        <i class="bi bi-basket fs-3"></i>
+                                    </div>
+                                    <div>
+                                        <small class="text-muted d-block mb-1">Peso Total (Kg)</small>
+                                        <h4 class="mb-0 text-warning">@pesaje.PesajesDetalle.Sum(a=> a.Cantidad * a.Peso).ToString("F2") kg</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
+                    <!-- QUINTALES -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="detail-card p-4 rounded border-start border-primary border-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-circle bg-primary text-white me-3">
+                                        <i class="bi bi-bag-fill fs-3"></i>
+                                    </div>
+                                    <div>
+                                        <small class="text-muted d-block mb-1">Quintales</small>
+                                        <h3 class="mb-0 text-primary"> @((pesaje.PesajesDetalle.Sum(a => a.Cantidad * a.Peso) / 125).ToString("F2")) ql</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer bg-white d-flex justify-content-center gap-2">
+                    <a href="/Pesaje/Index" class="btn btn-secondary bi bi-arrow-left-circle"> Regresar </a>
                 </div>
             </div>
         </div>
     </div>
-}
-else
-{
-    <div class="text-center py-5">
-        <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Cargando...</span>
-        </div>
-        <p class="mt-3">Cargando información...</p>
-    </div>
-}
+</div>
 
 @code {
     [Parameter]
     public int PesajeId { get; set; }
 
-    private Pesajes? pesaje;
+    private Pesajes? pesaje { get; set; } = new ();
 
     protected override async Task OnInitializedAsync()
     {

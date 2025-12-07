@@ -6,171 +6,138 @@
 
 <PageTitle>Detalles del Evento Climático</PageTitle>
 
-@if (evento != null)
-{
-    <div class="container mt-4">
-        <div class="row justify-content-center">
-            <div class="col-12 col-lg-10 col-xl-8">
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10 col-xl-8">
 
-                <div class="card shadow-lg border-0">
+            <div class="card shadow-lg border-0">
 
-                    <!-- ENCABEZADO -->
-                    <div class="card-header bg-primary text-white py-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h4 class="mb-1">
-                                    <i class="bi bi-cloud-sun"></i> Detalles del Evento Climático
-                                </h4>
-                                <small>ID: #@evento.EventoClimaticoId</small>
-                            </div>
-
-                            <a href="/EventosClimaticos/Index"
-                               class="btn btn-light btn-sm bi bi-arrow-left"> Regresar </a>
+                <!-- ENCABEZADO -->
+                <div class="card-header bg-primary text-white py-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="mb-1">
+                                <i class="bi bi-cloud-sun"></i> Detalles del Evento Climático
+                            </h4>
+                            <small>ID: #@evento.EventoClimaticoId</small>
                         </div>
-                    </div>
-
-                    <!-- CUERPO -->
-                    <div class="card-body p-4">
-
-                        <!-- FECHA -->
-                        <div class="row mb-4">
-                            <div class="col-12">
-                                <div class="detail-card p-4 rounded border-start border-primary border-4">
-                                    <div class="d-flex align-items-center">
-                                        <div class="icon-circle bg-primary text-white me-3">
-                                            <i class="bi bi-calendar-event fs-3"></i>
-                                        </div>
-                                        <div>
-                                            <small class="text-muted d-block mb-1">Fecha</small>
-                                            <h4 class="mb-0 text-primary">@evento.Fecha.ToShortDateString()</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- ZONA -->
-                        <div class="row mb-4">
-                            <div class="col-12">
-                                <div class="detail-card p-4 rounded border-start border-success border-4">
-                                    <div class="d-flex align-items-center">
-                                        <div class="icon-circle bg-success text-white me-3">
-                                            <i class="bi bi-geo-alt fs-3"></i>
-                                        </div>
-                                        <div>
-                                            <small class="text-muted d-block mb-1">Zona</small>
-                                            <h4 class="mb-0 text-success">@evento.Zona</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- TIPO DE EVENTO -->
-                        <div class="row mb-4">
-                            <div class="col-12">
-                                <div class="detail-card p-4 rounded border-start border-warning border-4">
-                                    <div class="d-flex align-items-center">
-                                        <div class="icon-circle bg-warning text-dark me-3">
-                                            <i class="bi bi-cloud-rain-heavy fs-3"></i>
-                                        </div>
-                                        <div>
-                                            <small class="text-muted d-block mb-1">Tipo de evento</small>
-                                            <h4 class="mb-0">@evento.TipoEvento</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- INTENSIDAD -->
-                        <div class="row mb-4">
-                            <div class="col-12">
-                                <div class="detail-card p-4 rounded border-start border-danger border-4">
-                                    <div class="d-flex align-items-center">
-                                        <div class="icon-circle bg-danger text-white me-3">
-                                            <i class="bi bi-exclamation-triangle fs-3"></i>
-                                        </div>
-                                        <div>
-                                            <small class="text-muted d-block mb-1">Intensidad</small>
-                                            <h4 class="mb-0 text-danger">@evento.Intensidad</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- OBSERVACIONES -->
-                        <div class="row mb-4">
-                            <div class="col-12">
-                                <div class="detail-card p-4 rounded border-start border-info border-4">
-                                    <div class="d-flex align-items-start">
-                                        <div class="icon-circle bg-info text-white me-3">
-                                            <i class="bi bi-journal-text fs-3"></i>
-                                        </div>
-                                        <div class="flex-grow-1">
-                                            <small class="text-muted d-block mb-1">Observaciones</small>
-                                            <p class="fs-5 mb-0">@evento.Observaciones</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- EMPLEADO -->
-                        <div class="row mb-4">
-                            <div class="col-12">
-                                <div class="detail-card p-4 rounded border-start border-secondary border-4">
-                                    <div class="d-flex align-items-center">
-                                        <div class="icon-circle bg-secondary text-white me-3">
-                                            <i class="bi bi-person-circle fs-3"></i>
-                                        </div>
-                                        <div>
-                                            <small class="text-muted d-block mb-1">Empleado Responsable</small>
-                                            <h5 class="mb-0">@EmpleadoNombre</h5>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <!-- FOOTER -->
-                    <div class="card-footer bg-white d-flex justify-content-center gap-2">
-                        <a href="/EventosClimaticos/Edit/@evento.EventoClimaticoId"
-                           class="btn btn-primary bi bi-pencil-square">
-                            Editar
-                        </a>
 
                         <a href="/EventosClimaticos/Index"
-                           class="btn btn-secondary bi bi-arrow-left-circle">
-                            Regresar
-                        </a>
+                            class="btn btn-light btn-sm bi bi-arrow-left"> Regresar </a>
                     </div>
-
                 </div>
 
+                <!-- CUERPO -->
+                <div class="card-body p-4">
+
+                    <!-- FECHA -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="detail-card p-4 rounded border-start border-primary border-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-circle bg-primary text-white me-3">
+                                        <i class="bi bi-calendar-event fs-3"></i>
+                                    </div>
+                                    <div>
+                                        <small class="text-muted d-block mb-1">Fecha</small>
+                                        <h4 class="mb-0 text-primary">@evento.Fecha.ToShortDateString()</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ZONA -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="detail-card p-4 rounded border-start border-success border-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-circle bg-success text-white me-3">
+                                        <i class="bi bi-geo-alt fs-3"></i>
+                                    </div>
+                                    <div>
+                                        <small class="text-muted d-block mb-1">Zona</small>
+                                        <h4 class="mb-0 text-success">@evento.Zona</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TIPO DE EVENTO -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="detail-card p-4 rounded border-start border-warning border-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-circle bg-warning text-dark me-3">
+                                        <i class="bi bi-cloud-rain-heavy fs-3"></i>
+                                    </div>
+                                    <div>
+                                        <small class="text-muted d-block mb-1">Tipo de evento</small>
+                                        <h4 class="mb-0">@evento.TipoEvento</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- INTENSIDAD -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="detail-card p-4 rounded border-start border-danger border-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-circle bg-danger text-white me-3">
+                                        <i class="bi bi-exclamation-triangle fs-3"></i>
+                                    </div>
+                                    <div>
+                                        <small class="text-muted d-block mb-1">Intensidad</small>
+                                        <h4 class="mb-0 text-danger">@evento.Intensidad</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- OBSERVACIONES -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="detail-card p-4 rounded border-start border-info border-4">
+                                <div class="d-flex align-items-start">
+                                    <div class="icon-circle bg-info text-white me-3">
+                                        <i class="bi bi-journal-text fs-3"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <small class="text-muted d-block mb-1">Observaciones</small>
+                                        <p class="fs-5 mb-0">@evento.Observaciones</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FOOTER -->
+                <div class="card-footer bg-white d-flex justify-content-center gap-2">
+                    <a href="/EventosClimaticos/Edit/@evento.EventoClimaticoId"
+                        class="btn btn-primary bi bi-pencil-square">
+                        Editar
+                    </a>
+
+                    <a href="/EventosClimaticos/Index"
+                        class="btn btn-secondary bi bi-arrow-left-circle">
+                        Regresar
+                    </a>
+                </div>
             </div>
         </div>
     </div>
-}
-
-else
-{
-    <div class="text-center py-5">
-        <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Cargando...</span>
-        </div>
-        <p class="mt-3">Cargando información...</p>
-    </div>
-}
+</div>
 
 @code {
     [Parameter]
     public int EventoClimaticoId { get; set; }
 
-    private EventosClimaticos? evento;
+    private EventosClimaticos? evento { get; set; } = new ();
 
     public string EmpleadoNombre { get; set; } = "N/A";
 
