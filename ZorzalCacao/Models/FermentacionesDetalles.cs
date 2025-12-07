@@ -19,7 +19,7 @@ public class FermentacionesDetalles
 
     [ForeignKey(nameof(RemocionId))]
     public virtual Remociones Remocion { get; set; }
-    // empleado
+
     public string EmpleadoId { get; set; }
     public ApplicationUser Empleado { get; set; }
 }
