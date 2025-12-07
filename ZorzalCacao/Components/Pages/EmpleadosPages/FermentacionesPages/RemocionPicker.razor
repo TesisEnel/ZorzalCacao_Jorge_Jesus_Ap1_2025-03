@@ -5,7 +5,7 @@
             <option value="0" disabled selected> Seleccionar remocion </option>
             @foreach (var remo in ListaRemociones)
             {
-                <option value = "@remo.RemocionId"> @remo.NumeroRemocion (Cantidad removida: @remo.Cantidad) </option>
+                <option value = "@remo.RemocionId"> @remo.NumeroRemocion (Cantidad removida: @remo.Cantidad.ToString("F2")) </option>
             }
         </InputSelect>
     </div>
