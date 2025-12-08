@@ -1,0 +1,135 @@
+﻿@page "/ListaEmpleados/Index"
+@inject IUserRoleService userRoleService
+@inject NavigationManager nav
+@rendermode InteractiveServer
+
+<PageTitle>Consulta de Empleados</PageTitle>
+
+<div class="container">
+    <div class="card shadow-lg">
+
+        <!-- Encabezado -->
+        <div class="card-header">
+            <h5 class="text-center">
+                <strong>Consulta de empleados</strong>
+            </h5>
+        </div>
+
+        <div class="card-body">
+
+            <!-- Filtros -->
+            <div class="row align-items-center">
+
+                <div class="col-12 col-md-6 mb-3">
+                    <label class="col-form-label"><strong>Filtrar por</strong></label>
+                    <InputSelect class="form-select" @bind-Value="Filtro">
+                        <option value="" disabled selected>Seleccione una opción</option>
+                        <option value="Id">Id</option>
+                        <option value="UserName">Usuario</option>
+                        <option value="Email">Email</option>
+                    </InputSelect>
+                </div>
+
+                <div class="col-12 col-md-6 mb-3">
+                    <label class="col-form-label"><strong>Búsqueda</strong></label>
+                    <div class="input-group">
+                        <input class="form-control" @bind="ValorFiltro" placeholder="Buscar..." />
+                        <button class="btn btn-outline-info bi bi-search" @onclick="Buscar"></button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Tabla -->
+            <div class="table-responsive">
+                <table class="table table-dark table-striped table-hover text-center">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Id</th>
+                            <th>Usuario</th>
+                            <th>Email</th>
+                            <th>Opciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @if (ListaEmpleados == null || ListaEmpleados.Count == 0)
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center text-muted py-4">
+                                    No se han encontrado empleados.
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (var emp in ListaEmpleados)
+                            {
+                                <tr>
+                                    <td>@emp.Id</td>
+                                    <td>@emp.UserName</td>
+                                    <td>@emp.Email</td>
+                                    <td>
+                                        <a class="btn btn-sm btn-outline-primary bi bi-eye"
+                                           href="/ListaEmpleados/View/@emp.Id"></a>
+
+                                        <a class="btn btn-sm btn-outline-info bi bi-pencil-square"
+                                           href="/ListaEmpleados/Edit/@emp.Id"></a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="card-footer">
+            <label class="col-12">
+                <strong>Total empleados:</strong> @(ListaEmpleados?.Count ?? 0)
+            </label>
+        </div>
+
+    </div>
+</div>
+
+@code {
+
+    public string Filtro { get; set; } = string.Empty;
+    public string ValorFiltro { get; set; } = string.Empty;
+
+    public List<ApplicationUser> ListaEmpleados { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Buscar();
+    }
+
+    public async Task Buscar()
+    {
+        var lista = await userRoleService.GetEmpleadosAsync();
+
+        if (!string.IsNullOrWhiteSpace(ValorFiltro))
+        {
+            // Filtrar por ID
+            if (Filtro == "Id")
+                lista = lista.Where(u =>
+                    u.Id.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            // Filtrar por UserName
+            else if (Filtro == "UserName")
+                lista = lista.Where(u =>
+                    u.UserName.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            // Filtrar por Email
+            else if (Filtro == "Email")
+                lista = lista.Where(u =>
+                    (u.Email ?? "").Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
+        ListaEmpleados = lista;
+    }
+}
+
