@@ -41,6 +41,7 @@ public class ControlesCalidadService(IDbContextFactory<ApplicationDbContext> DbF
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.Controles
+            .Include(c => c.Recogida)
             .Include(p => p.Empleado)
             .FirstOrDefaultAsync(c => c.ControlId == controlId);
     }
@@ -58,6 +59,7 @@ public class ControlesCalidadService(IDbContextFactory<ApplicationDbContext> DbF
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.Controles
+            .Include(c=> c.Recogida)
             .Include(c => c.Empleado)
             .Where(criterio)
             .AsNoTracking()

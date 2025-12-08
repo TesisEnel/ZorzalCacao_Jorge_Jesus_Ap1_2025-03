@@ -3,6 +3,8 @@
 @inject NavigationManager nav
 @rendermode InteractiveServer
 
+@attribute [Authorize(Roles = "Empleado")]
+
 <PageTitle> Consulta controles de calidad </PageTitle>
 
 <div class="container">
@@ -53,10 +55,10 @@
                     <thead class="table-light">
                         <tr>
                             <th>Control Id</th>
-                            <th>Grados Brix</th>
+                            <th>Grados Brix °Bx</th>
                             <th>Observaciones</th>
                             <th>Decisión</th>
-                            <th>Recogida Id</th>
+                            <th>Recogida</th>
                             <th>Empleado</th>
                             <th>Opciones</th>
                         </tr>
@@ -79,7 +81,7 @@
                                     <td>@c.GradosBrix</td>
                                     <td>@c.Observaciones</td>
                                     <td>@c.Decision</td>
-                                    <td>@c.RecogidaId</td>
+                                    <td>@c.Recogida?.Fecha.ToShortDateString() - @c.Recogida?.PuntoEncuentro </td>
                                     <td>@c.Empleado?.UserName</td>
 
                                     <td>

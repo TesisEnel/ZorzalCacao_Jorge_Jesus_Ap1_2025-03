@@ -4,6 +4,8 @@
 @inject NavigationManager navigation
 @rendermode InteractiveServer
 
+@attribute [Authorize(Roles = "Empleado")]
+
 <PageTitle> Crear vehículo </PageTitle>
 
 <div class="container mt-3">
@@ -63,7 +65,7 @@
                     <div class="col-12 col-md-6 mb-3">
                         <label class="col-form-label"><strong>Tipo de vehículo</strong></label>
                         <InputSelect class="form-select" @bind-Value="vehiculo.TipoVehiculo">
-                            <option value="">Seleccione un tipo</option>
+                            <option value="" disabled selected>Seleccione un tipo</option>
                             <option value="Camión">Camión</option>
                             <option value="Camioneta">Camioneta</option>
                             <option value="Automóvil">Automóvil</option>

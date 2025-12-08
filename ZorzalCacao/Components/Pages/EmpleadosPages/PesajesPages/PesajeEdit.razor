@@ -4,93 +4,82 @@
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
+@attribute [Authorize(Roles = "Empleado")]
+
 <PageTitle> Editar Pesaje </PageTitle>
 
-@if(Pesaje != null)
-{
-    <div class="container mt-3">
-        <div class="card shadow-lg">
-            <div class="card-header">
-                <h5 class="card-title text-center">
-                    <strong> Crear Pesaje </strong>
-                </h5>
+<div class="container mt-3">
+    <div class="card shadow-lg">
+        <div class="card-header">
+            <h5 class="card-title text-center">
+                <strong> Crear Pesaje </strong>
+            </h5>
+        </div>
+
+        <EditForm Model="Pesaje" OnValidSubmit="GuardarPesaje">
+            <DataAnnotationsValidator />
+            <div class="card-body">
+                <div class="row">
+                    <!-- Fecha -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label"> <strong> Fecha </strong></label>
+                        <InputDate class="form-control" @bind-Value="Pesaje.Fecha" />
+                        <ValidationMessage For="() => Pesaje.Fecha" />
+                    </div>
+                </div>
             </div>
 
-            <EditForm Model="Pesaje" OnValidSubmit="GuardarPesaje">
-                <DataAnnotationsValidator />
-                <div class="card-body">
-                    <div class="row">
-                        <!-- Fecha -->
-                        <div class="col-12 col-md-6 mb-3">
-                            <label class="col-form-label"> <strong> Fecha </strong></label>
-                            <InputDate class="form-control" @bind-Value="Pesaje.Fecha" />
-                            <ValidationMessage For="() => Pesaje.Fecha" />
-                        </div>
-                    </div>
-                </div>
-
-                <div class="border border-success p-3 mt-3">
-                    <h5> Detalle de Pesaje </h5>
-                    <PesajePicker SacoId="detalleSeleccionado.SacoId"
-                                  Cantidad="detalleSeleccionado.Cantidad"
-                                  Peso="detalleSeleccionado.Peso"
-                                  ListaSacos="ListaSacos"
-                                  OnPesajeSeleccionado="AgregarDetalle" />
-                    <div class="table-responsive">
-                        <table class="table table-hover table-bordered table-light text-center">
-                            <thead>
+            <div class="border border-success p-3 mt-3">
+                <h5> Detalle de Pesaje </h5>
+                <PesajePicker SacoId="detalleSeleccionado.SacoId"
+                                Cantidad="detalleSeleccionado.Cantidad"
+                                Peso="detalleSeleccionado.Peso"
+                                ListaSacos="ListaSacos"
+                                OnPesajeSeleccionado="AgregarDetalle" />
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered table-light text-center">
+                        <thead>
+                            <tr>
+                                <th> Cantidad </th>
+                                <th> Peso (kg) </th>
+                                <th> Peso Total (kg) </th>
+                                <th> Quintales </th>
+                                <th> Opciones </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var detalle in Pesaje.PesajesDetalle)
+                            {
                                 <tr>
-                                    <th> Cantidad </th>
-                                    <th> Peso (kg) </th>
-                                    <th> Peso Total (kg) </th>
-                                    <th> Quintales </th>
-                                    <th> Opciones </th>
+                                    <td> @detalle.Cantidad</td>
+                                    <td> @detalle.Peso.ToString("F2")</td>
+                                    <td> @((detalle.Cantidad * detalle.Peso).ToString("F2"))</td>
+                                    <td> @(((detalle.Cantidad * detalle.Peso) / 125).ToString("F2")) </td>
+                                    <td>
+                                        <button type="button" class="btn btn-outline-dark bi bi-trash" @onclick="() => RemoverDetalle(detalle)">
+                                            Remover
+                                        </button>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var detalle in Pesaje.PesajesDetalle)
-                                {
-                                    <tr>
-                                        <td> @detalle.Cantidad</td>
-                                        <td> @detalle.Peso.ToString("F2")</td>
-                                        <td> @((detalle.Cantidad * detalle.Peso).ToString("F2"))</td>
-                                        <td> @(((detalle.Cantidad * detalle.Peso) / 125).ToString("F2")) </td>
-                                        <td>
-                                            <button type="button" class="btn btn-outline-danger bi bi-trash" @onclick="() => RemoverDetalle(detalle)">
-                                                Remover
-                                            </button>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="mt-3">
-                        <label class="col-12"> <strong> Cantidad Total de Sacos: </strong> @Pesaje.PesajesDetalle.Sum(d => d.Cantidad)</label>
-                        <label class="col-12"> <strong> Peso Total: </strong> @Pesaje.PesajesDetalle.Sum(d => d.Cantidad * d.Peso).ToString("F2") kg</label>
-                        <label class="col-12"> <strong> Peso Total en Quintales: </strong> @((Pesaje.PesajesDetalle.Sum(d => d.Cantidad * d.Peso) / 125).ToString("F2"))</label>
-                    </div>
+                            }
+                        </tbody>
+                    </table>
                 </div>
-
-                <div class="card-footer d-flex justify-content-center gap-2">
-                    <button type="submit" class="btn btn-primary bi bi-save"> Guardar </button>
-                    <button type="button" class="btn btn-danger bi bi-trash" @onclick="() => MostrarModal = true" > Eliminar </button>
-                    <a href="/Pesaje/Index" class="btn btn-secondary bi-arrow-left-circle"> Regresar </a>
+                <div class="mt-3">
+                    <label class="col-12"> <strong> Cantidad Total de Sacos: </strong> @Pesaje.PesajesDetalle.Sum(d => d.Cantidad)</label>
+                    <label class="col-12"> <strong> Peso Total: </strong> @Pesaje.PesajesDetalle.Sum(d => d.Cantidad * d.Peso).ToString("F2") kg</label>
+                    <label class="col-12"> <strong> Peso Total en Quintales: </strong> @((Pesaje.PesajesDetalle.Sum(d => d.Cantidad * d.Peso) / 125).ToString("F2"))</label>
                 </div>
-            </EditForm>
-        </div>
-    </div>
-}
+            </div>
 
-else
-{
-    <div class="text-center py-5">
-        <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Cargando...</span>
-        </div>
-        <p class="mt-3">Cargando información...</p>
+            <div class="card-footer d-flex justify-content-center gap-2">
+                <button type="submit" class="btn btn-primary bi bi-save"> Guardar </button>
+                <button type="button" class="btn btn-danger bi bi-trash" @onclick="() => MostrarModal = true" > Eliminar </button>
+                <a href="/Pesaje/Index" class="btn btn-secondary bi-arrow-left-circle"> Regresar </a>
+            </div>
+        </EditForm>
     </div>
-}
+</div>
 
 @if(MostrarModal)
 {
@@ -140,7 +129,7 @@ else
     [Parameter]
     public int PesajeId { get; set; }
 
-    public Pesajes? Pesaje { get; set; }
+    public Pesajes? Pesaje { get; set; } = new();
 
     public List<Sacos> ListaSacos { get; set; } = new List<Sacos>();
 

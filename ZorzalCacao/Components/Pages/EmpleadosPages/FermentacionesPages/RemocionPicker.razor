@@ -1,19 +1,21 @@
 ﻿<div class="row align-items-center">
     <div class="col-12 col-md-3 mb-3">
         <label class="col-form-label"> <strong> Remocion </strong></label>
-        <InputSelect class="form-select" @bind-Value="RemocionId">
-            <option value="" disabled selected> Seleccionar remocion </option>
+        <InputSelect class="form-select" @bind-Value="RemocionId" disabled="@temporizadorActivo">
+            <option value="0" disabled selected> Seleccionar remocion </option>
             @foreach (var remo in ListaRemociones)
             {
-                <option value = "@remo.RemocionId"> @remo.NumeroRemocion (Cantidad removida: @remo.Cantidad) </option>
+                <option value="@remo.RemocionId" disabled="@EstaRemocionDeshabilitada(remo)">
+                    @remo.NumeroRemocion (Cantidad removida: @remo.Cantidad.ToString("F2"))
+                </option>
             }
         </InputSelect>
     </div>
 
-    <div class="col-12 col-md-3 mb-3">
+    <div class="col-12 col-md-2 mb-3">
         <label class="col-form-label"> <strong> Responsable </strong></label>
-        <InputSelect class="form-select" @bind-Value="EmpleadoId">
-            <option value=""> Seleccionar responsable </option>
+        <InputSelect class="form-select" @bind-Value="EmpleadoId" disabled="@temporizadorActivo">
+            <option value="" selected> Seleccione responsable </option>
             @foreach (var empleado in ListaEmpleados)
             {
                 <option value="@empleado.Id"> @empleado.UserName </option>
@@ -21,28 +23,46 @@
         </InputSelect>
     </div>
 
-    <div class="col-12 col-md-2 mb-3">
+    <div class="col-12 col-md-3 mb-3">
         <label class="col-form-label"> <strong> Fecha </strong></label>
-        <InputDate Type="InputDateType.DateTimeLocal" class="form-control" @bind-Value="Fecha" />
+        <InputDate Type="InputDateType.DateTimeLocal" class="form-control" @bind-Value="Fecha" disabled="@temporizadorActivo" />
     </div>
 
     <div class="col-12 col-md-2 mb-3">
         <label class="col-form-label"> <strong> Cantidad </strong></label>
-        <InputNumber class="form-control" @bind-Value="Cantidad" />
+        <InputNumber class="form-control" @bind-Value="Cantidad" disabled="@temporizadorActivo" />
     </div>
 
     <div class="col-12 col-md-2 mb-3">
         <label class="col-form-label"> <strong> Temperatura </strong></label>
         <div class="input-group">
-            <InputNumber class="form-control" @bind-Value="Temperatura" />
-            <button type="button" class="btn btn-success bi bi-plus-square" @onclick="TriggerSelection"></button>
+            <InputNumber class="form-control" @bind-Value="Temperatura" disabled="@temporizadorActivo" />
+            <button type="button" class="btn btn-success bi bi-plus-square" @onclick="TriggerSelection" disabled="@temporizadorActivo"></button>
         </div>
     </div>
 </div>
 
-@if(mensajeError != null)
+@if (temporizadorActivo)
 {
-    <div class="alert alert-danger"> @mensajeError</div>
+    <div class="alert alert-info d-flex align-items-center justify-content-between">
+        <div>
+            <i class="bi bi-hourglass-split"></i>
+            <strong> Procesando remoción... </strong>
+            Por favor espere @segundosRestantes segundos para la siguiente remoción.
+        </div>
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
+    </div>
+}
+
+@if (mensajeError != null)
+{
+    <div class="alert alert-danger">@mensajeError</div>
+}
+else if (mensajeExito != null)
+{
+    <div class="alert alert-success">@mensajeExito</div>
 }
 
 @code {
@@ -50,10 +70,10 @@
     public int RemocionId { get; set; }
 
     [Parameter]
-    public int Cantidad { get; set; }
+    public double Cantidad { get; set; }
 
     [Parameter]
-    public string EmpleadoId { get; set; } = null!;
+    public string EmpleadoId { get; set; } = "";
 
     [Parameter]
     public double Temperatura { get; set; }
@@ -62,27 +82,57 @@
     public DateTime Fecha { get; set; } = DateTime.Now;
 
     [Parameter]
+    public int CantidadEnDetalle { get; set; } = 0;
+
+    [Parameter]
     public List<Remociones> ListaRemociones { get; set; } = new();
 
     [Parameter]
     public List<ApplicationUser> ListaEmpleados { get; set; } = new();
 
     [Parameter]
-    public EventCallback<(Remociones remocion, double temperatura, int cantidad, ApplicationUser empleado, DateTime fecha)> OnRemocionSeleccionada { get; set; }
+    public EventCallback<(Remociones remocion, double temperatura, double cantidad, ApplicationUser empleado, DateTime fecha)> OnRemocionSeleccionada { get; set; }
+
     public string? mensajeError { get; set; }
+
+    public string? mensajeExito { get; set; }
+
+    private bool temporizadorActivo = false;
+
+    private int segundosRestantes = 0;
+
+    private System.Threading.Timer? timer;
+
+    private bool EstaRemocionDeshabilitada(Remociones remocion)
+    {
+        var indiceRemocion = ListaRemociones
+            .OrderBy(r => r.NumeroRemocion)
+            .ToList()
+            .FindIndex(r => r.RemocionId == remocion.RemocionId);
+
+        return indiceRemocion != CantidadEnDetalle;
+    }
+
+    private int ObtenerTiempoEspera()
+    {
+        // Primera y segunda remoción: 10 segundos
+        // Tercera y cuarta remoción: 5 segundos
+        return CantidadEnDetalle < 2 ? 10 : 5;
+    }
 
     public async Task TriggerSelection()
     {
         mensajeError = null;
+        mensajeExito = null;
 
         if (RemocionId == 0)
         {
             mensajeError = "Por favor, seleccione una remoción";
             return;
         }
-        if (!(Temperatura >= 70 && Temperatura <= 95))
+        if (!(Temperatura >= 50 && Temperatura <= 100))
         {
-            mensajeError = "Temperatura no válida. Debe estar entre 70°C y 95°C";
+            mensajeError = "Temperatura no válida. Debe estar entre 50°F y 100°F";
             return;
         }
         if (Cantidad <= 0)
@@ -103,8 +153,38 @@
             return;
         }
 
+        if (CantidadEnDetalle + 1 >= ListaRemociones.Count)
+        {
+            mensajeExito = "¡Se han completado todas las remociones exitosamente!";
+        }
+
         var remocionSeleccionada = ListaRemociones.Single(r => r.RemocionId == RemocionId);
         
         await OnRemocionSeleccionada.InvokeAsync((remocionSeleccionada, Temperatura, Cantidad, empleadoSeleccionado, Fecha));
+        IniciarTemporizador();
+    }
+
+    private void IniciarTemporizador()
+    {
+        temporizadorActivo = true;
+        segundosRestantes = ObtenerTiempoEspera();
+
+        timer = new System.Threading.Timer(async _ =>
+        {
+            segundosRestantes--;
+
+            if (segundosRestantes <= 0)
+            {
+                temporizadorActivo = false;
+                timer?.Dispose();
+            }
+
+            await InvokeAsync(StateHasChanged);
+        }, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
+    }
+
+    public void Dispose()
+    {
+        timer?.Dispose();
     }
 }

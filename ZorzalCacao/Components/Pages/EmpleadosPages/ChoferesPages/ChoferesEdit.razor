@@ -3,105 +3,97 @@
 @inject NavigationManager navigation
 @rendermode InteractiveServer
 
+@attribute [Authorize(Roles = "Empleado")]
+
 <PageTitle>Editar Chofer</PageTitle>
 
-@if (chofer != null)
-{
-    <div class="container mt-3">
-        <div class="card shadow-lg">
+<div class="container mt-3">
+    <div class="card shadow-lg">
 
-            <div class="card-header bg-primary text-white text-center">
-                <h5 class="mb-0">
-                    <strong>Editar Chofer</strong>
-                </h5>
+        <div class="card-header bg-primary text-white text-center">
+            <h5 class="mb-0">
+                <strong>Editar Chofer</strong>
+            </h5>
+        </div>
+
+        <EditForm Model="chofer" OnValidSubmit="GuardarChofer">
+            <DataAnnotationsValidator />
+
+            <div class="card-body">
+
+                @if (!string.IsNullOrEmpty(mensajeError))
+                {
+                    <div class="alert alert-danger">@mensajeError</div>
+                }
+
+                <div class="row">
+
+                    <!-- Nombre -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label"><strong>Nombre</strong></label>
+                        <InputText class="form-control" @bind-Value="chofer.Nombre" />
+                        <ValidationMessage For="() => chofer.Nombre" />
+                    </div>
+
+                    <!-- Apellido -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label"><strong>Apellido</strong></label>
+                        <InputText class="form-control" @bind-Value="chofer.Apellido" />
+                        <ValidationMessage For="() => chofer.Apellido" />
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <!-- Cédula -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label"><strong>Cédula</strong></label>
+                        <InputText class="form-control" @bind-Value="chofer.Cedula" />
+                        <ValidationMessage For="() => chofer.Cedula" />
+                    </div>
+
+                    <!-- Teléfono -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label"><strong>Teléfono</strong></label>
+                        <InputText class="form-control" @bind-Value="chofer.Telefono" />
+                        <ValidationMessage For="() => chofer.Telefono" />
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <!-- Licencia -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label"><strong>Licencia</strong></label>
+                        <InputText class="form-control" @bind-Value="chofer.Licencia" />
+                        <ValidationMessage For="() => chofer.Licencia" />
+                    </div>
+                </div>
             </div>
 
-            <EditForm Model="chofer" OnValidSubmit="GuardarChofer">
-                <DataAnnotationsValidator />
+            <div class="card-footer d-flex justify-content-center gap-2 bg-white">
 
-                <div class="card-body">
+                <button type="submit"
+                        class="btn btn-primary bi bi-save"
+                        disabled="@cargando">
+                    @(cargando ? " Guardando..." : " Guardar")
+                </button>
 
-                    @if (!string.IsNullOrEmpty(mensajeError))
-                    {
-                        <div class="alert alert-danger">@mensajeError</div>
-                    }
+                <button type="button"
+                        class="btn btn-danger bi bi-trash"
+                        disabled="@tieneVehiculos"
+                        @onclick="MostrarModalEliminar">
+                    Eliminar
+                </button>
 
-                    <div class="row">
-
-                        <!-- Nombre -->
-                        <div class="col-12 col-md-6 mb-3">
-                            <label class="col-form-label"><strong>Nombre</strong></label>
-                            <InputText class="form-control" @bind-Value="chofer.Nombre" />
-                            <ValidationMessage For="() => chofer.Nombre" />
-                        </div>
-
-                        <!-- Apellido -->
-                        <div class="col-12 col-md-6 mb-3">
-                            <label class="col-form-label"><strong>Apellido</strong></label>
-                            <InputText class="form-control" @bind-Value="chofer.Apellido" />
-                            <ValidationMessage For="() => chofer.Apellido" />
-                        </div>
-                    </div>
-
-                    <div class="row">
-
-                        <!-- Cédula -->
-                        <div class="col-12 col-md-6 mb-3">
-                            <label class="col-form-label"><strong>Cédula</strong></label>
-                            <InputText class="form-control" @bind-Value="chofer.Cedula" />
-                            <ValidationMessage For="() => chofer.Cedula" />
-                        </div>
-
-                        <!-- Teléfono -->
-                        <div class="col-12 col-md-6 mb-3">
-                            <label class="col-form-label"><strong>Teléfono</strong></label>
-                            <InputText class="form-control" @bind-Value="chofer.Telefono" />
-                            <ValidationMessage For="() => chofer.Telefono" />
-                        </div>
-                    </div>
-
-                    <div class="row">
-
-                        <!-- Licencia -->
-                        <div class="col-12 col-md-6 mb-3">
-                            <label class="col-form-label"><strong>Licencia</strong></label>
-                            <InputText class="form-control" @bind-Value="chofer.Licencia" />
-                            <ValidationMessage For="() => chofer.Licencia" />
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-footer d-flex justify-content-center gap-2 bg-white">
-
-                    <button type="submit"
-                            class="btn btn-primary bi bi-save"
-                            disabled="@cargando">
-                        @(cargando ? " Guardando..." : " Guardar")
-                    </button>
-
-                    <button type="button"
-                            class="btn btn-danger bi bi-trash"
-                            disabled="@tieneVehiculos"
-                            @onclick="MostrarModalEliminar">
-                        Eliminar
-                    </button>
-
-                    <a class="btn btn-secondary bi bi-arrow-left-circle"
-                       href="/Choferes/Index">
-                        Cancelar
-                    </a>
-                </div>
-            </EditForm>
-        </div>
+                <a class="btn btn-secondary bi bi-arrow-left-circle"
+                    href="/Choferes/Index">
+                    Regresar
+                </a>
+            </div>
+        </EditForm>
     </div>
-}
-else
-{
-    <div class="text-center py-5">
-        <div class="spinner-border text-primary" role="status"></div>
-        <p class="mt-3">Cargando información...</p>
-    </div>
-}
+</div>
 
 @if (MostrarModal)
 {
@@ -156,7 +148,7 @@ else
     [Parameter]
     public int ChoferId { get; set; }
 
-    private Choferes? chofer;
+    private Choferes? chofer { get; set; } = new ();
     private bool MostrarModal = false;
     private bool cargando = false;
     private bool tieneVehiculos = false;

@@ -12,13 +12,13 @@ namespace ZorzalCacao.Models
         public DateTime Fecha { get; set; } = DateTime.Now;
 
         [Required(ErrorMessage = "La zona es requerida")]
-        public string Zona { get; set; }
+        public string Zona { get; set; } = null!;
 
         [Required(ErrorMessage = "El tipo de evento es requerido")]
-        public string TipoEvento { get; set; }
+        public string TipoEvento { get; set; } = null!;
         [Required(ErrorMessage = "La intensidad es requerida")]
-        public string Intensidad { get; set; } // leve, moderada, fuerte
-        public string Observaciones { get; set; }
+        public string Intensidad { get; set; } = null!;
+        public string Observaciones { get; set; } = string.Empty;
         public string EmpleadoId { get; set; }
         public ApplicationUser Empleado { get; set; }
     }

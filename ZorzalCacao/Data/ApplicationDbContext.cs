@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 using ZorzalCacao.Models;
 
 namespace ZorzalCacao.Data;
@@ -41,9 +42,9 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
         builder.Entity<Recogidas>()
             .HasOne(r => r.Productor)
-            .WithMany() 
+            .WithMany()
             .HasForeignKey(r => r.ProductorId)
-            .OnDelete(DeleteBehavior.Restrict); 
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.Entity<Vehiculo>()
             .HasOne(v => v.Chofer)

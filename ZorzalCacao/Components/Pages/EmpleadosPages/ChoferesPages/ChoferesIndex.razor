@@ -3,6 +3,8 @@
 @inject NavigationManager nav
 @rendermode InteractiveServer
 
+@attribute [Authorize(Roles = "Empleado")]
+
 <PageTitle>Choferes</PageTitle>
 
 <div class="container-fluid px-4 mt-4 cacao-background">

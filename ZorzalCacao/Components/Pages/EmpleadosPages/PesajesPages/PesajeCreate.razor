@@ -4,6 +4,8 @@
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
+@attribute [Authorize(Roles = "Empleado")]
+
 <PageTitle> Crear Pesaje </PageTitle>
 
 <div class="container mt-3">
@@ -26,6 +28,11 @@
                     </div>
                 </div>
             </div>
+
+            @if(mensajeError != null)
+            {
+                <div class="alert alert-danger"> @mensajeError </div>
+            }
 
             <div class="border border-success p-3 mt-3">
                 <h5> Detalle de Pesaje </h5>
@@ -54,7 +61,7 @@
                                     <td> @((detalle.Cantidad * detalle.Peso).ToString("F2"))</td>
                                     <td> @(((detalle.Cantidad * detalle.Peso) / 125).ToString("F2")) </td>
                                     <td>
-                                        <button type="button" class="btn btn-outline-danger bi bi-trash" @onclick="() => RemoverDetalle(detalle)">
+                                        <button type="button" class="btn btn-outline-dark bi bi-trash" @onclick="() => RemoverDetalle(detalle)">
                                             Remover
                                         </button>
                                     </td>
@@ -83,6 +90,8 @@
     public Pesajes Pesaje { get; set; } = new Pesajes();
     public List<Sacos> ListaSacos { get; set; } = new List<Sacos>();
 
+    private string? mensajeError { get; set; }
+
     public PesajesDetalles detalleSeleccionado { get; set; } = new PesajesDetalles()
     {
         SacoId = 1
@@ -100,8 +109,16 @@
 
         Pesaje.EmpleadoId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
+        @if (Pesaje.PesajesDetalle.Count == 0)
+        {
+            mensajeError = "Por favor, realice por lo menos 1 pesaje";
+            return;
+        }
+
         if (string.IsNullOrEmpty(Pesaje.EmpleadoId))
+        {
             throw new Exception("No se pudo obtener el EmpleadoId logueado.");
+        }
 
         if (await pesajeService.Guardar(Pesaje))
         {

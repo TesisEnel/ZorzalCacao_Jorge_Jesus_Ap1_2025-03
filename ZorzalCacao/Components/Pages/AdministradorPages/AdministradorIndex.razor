@@ -1,12 +1,13 @@
 ﻿@page "/Administrador/Index"
+@inject IUserRoleService UserRoleService
 @rendermode InteractiveServer
 
 @attribute [Authorize(Roles = "Administrador")]
 
-<PageTitle>Home - Administrador</PageTitle>
+<PageTitle>Menu administrador </PageTitle>
 
 <!-- Stats Title -->
-<div class="container section-title" data-aos="fade-up">
+<div class="container section-title">
     <h2 style="font-weight: 700; font-size: 32px; color: #222;">Estadísticas del Sistema</h2>
     <p style="color: #555; font-size: 16px;">
         Resumen general de productores y empleados registrados
@@ -15,14 +16,14 @@
 
 <!-- Stats Section - Solo Productores y Empleados -->
 <section id="stats" class="stats section">
-    <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="container">
         <div class="row justify-content-center" style="gap: 30px;">
 
             <!-- Productores -->
             <div class="col-auto">
                 <div class="stats-item stats-box">
                     <i class="bi bi-people"></i>
-                    <span data-purecounter-start="0" data-purecounter-end="30" data-purecounter-duration="1" class="purecounter"></span>
+                    <span class="purecounter"> @ListaProductores.Count</span>
                     <p><strong>Productores</strong></p>
                     <span class="description">Total registrados en el sistema</span>
                 </div>
@@ -32,12 +33,11 @@
             <div class="col-auto">
                 <div class="stats-item stats-box">
                     <i class="bi bi-person-badge"></i>
-                    <span data-purecounter-start="0" data-purecounter-end="15" data-purecounter-duration="1" class="purecounter"></span>
+                    <span class="purecounter"> @ListaEmpleados.Count </span>
                     <p><strong>Empleados</strong></p>
                     <span class="description">Equipo activo registrado</span>
                 </div>
             </div>
-
         </div>
     </div>
 </section>
@@ -45,7 +45,7 @@
 <!-- Servicios - Solo consulta de Productores y Empleados -->
 <section id="services" class="services section">
 
-    <div class="container section-title" data-aos="fade-up">
+    <div class="container section-title">
         <h2 style="font-weight: 700; font-size: 32px;">Consultas Disponibles</h2>
         <p style="font-size: 16px; color: #555;">
             Opciones de gestión habilitadas para el administrador del sistema.
@@ -56,7 +56,7 @@
         <div class="row gy-4">
 
             <!-- Consulta de Productores -->
-            <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="100">
+            <div class="col-lg-4 col-md-6 service-item d-flex">
                 <div class="icon flex-shrink-0"><i class="bi bi-people"></i></div>
                 <div>
                     <h4 class="title"><a href="/Productores/Index" class="stretched-link">Consulta de Productores</a></h4>
@@ -67,7 +67,7 @@
             </div>
 
             <!-- Consulta de Empleados -->
-            <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="200">
+            <div class="col-lg-4 col-md-6 service-item d-flex">
                 <div class="icon flex-shrink-0"><i class="bi bi-person-badge"></i></div>
                 <div>
                     <h4 class="title"><a href="/Empleados/Index" class="stretched-link">Consulta de Empleados</a></h4>
@@ -96,3 +96,20 @@
 <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
     <i class="bi bi-arrow-up-short"></i>
 </a>
+
+@code 
+{
+    public List<ApplicationUser> ListaProductores = new List<ApplicationUser>();
+
+    public List<ApplicationUser> ListaEmpleados = new List<ApplicationUser>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        //Listado de productores y empleados
+        var productores = await UserRoleService.GetUsersByRoleAsync("Productor");
+        ListaProductores = productores.ToList();
+
+        var empleados = await UserRoleService.GetUsersByRoleAsync("Empleado");
+        ListaEmpleados = empleados.ToList();
+    }
+}

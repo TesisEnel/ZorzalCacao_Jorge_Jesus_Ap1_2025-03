@@ -2,16 +2,17 @@
 @inject FermentacionesService fermentacionService
 @inject RecogidasService recogidasService
 @inject PesajesService pesajesService
-@inject ChoferesService choferesService
+@inject ControlesCalidadService controlesService
+@inject NavigationManager navigation
 @inject IUserRoleService UserRoleService
 @rendermode InteractiveServer
 
 @attribute [Authorize(Roles = "Empleado")]
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Menu empleados</PageTitle>
 
 <!-- Stats Title -->
-<div class="container section-title" data-aos="fade-up">
+<div class="container section-title">
     <h2 style="font-weight: 700; font-size: 32px; color: #222;">Nuestras Estadísticas</h2>
     <p style="color: #555; font-size: 16px;">
         Un resumen general de nuestras operaciones y desempeño
@@ -20,7 +21,7 @@
 
 <!-- Stats Section -->
 <section id="stats" class="stats section">
-    <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="container">
         <div class="row justify-content-center" style="gap: 30px;">
             <div class="col-auto">
                 <div class="stats-item stats-box">
@@ -43,15 +44,15 @@
                     <i class="bi bi-hourglass-split"></i>
                     <span class="purecounter"> @ListaPendientes.Count</span>
                     <p><strong>Recogidas Pendientes</strong></p>
-                    <span class="description">Solicitudes pendientes de procesamient</span>
+                    <span class="description">Solicitudes pendientes de procesamiento</span>
                 </div>
             </div><!-- End Stats Item -->
             <div class="col-auto">
                 <div class="stats-item stats-box">
-                    <i class="bi bi-truck"></i>
-                    <span class="purecounter">@ListaChoferes.Count</span>
-                    <p><strong>Choferes</strong></p>
-                    <span class="description">Conductores disponibles para transporte</span>
+                    <i class="bi bi-clipboard-check"></i>
+                    <span class="purecounter">@ListaControles.Count</span>
+                    <p><strong>Controles de calidad</strong></p>
+                    <span class="description">Inspecciones realizadas al cacao</span>
                 </div>
             </div><!-- End Stats Item -->
             <div class="col-auto">
@@ -77,7 +78,7 @@
 <!-- Services Section -->
 <section id="servicesP" class="services section">
 
-    <div class="container section-title" data-aos="fade-up">
+    <div class="container section-title">
         <h2 style="font-weight: 700; font-size: 32px;">Servicios</h2>
         <p style="font-size: 16px; color: #555;">
             Ofrecemos un conjunto de servicios diseñados para optimizar cada etapa del proceso del cacao,
@@ -91,7 +92,7 @@
     <div class="container">
         <div class="row gy-4">
 
-            <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="100">
+            <div class="col-lg-4 col-md-6 service-item d-flex">
                 <div class="icon flex-shrink-0"><i class="bi bi-briefcase"></i></div>
                 <div>
                     <h4 class="title"><a href="/Recogida/Index" class="stretched-link"> Recogidas </a></h4>
@@ -102,7 +103,7 @@
             </div>
             <!-- End Service Item -->
 
-            <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="200">
+            <div class="col-lg-4 col-md-6 service-item d-flex">
                 <div class="icon flex-shrink-0"><i class="bi bi-card-checklist"></i></div>
                 <div>
                     <h4 class="title"><a href="/ControlesCalidad/Index" class="stretched-link"> Control de calidad </a></h4>
@@ -112,7 +113,27 @@
                 </div>
             </div><!-- End Service Item -->
 
-            <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="200">
+            <div class="col-lg-4 col-md-6 service-item d-flex">
+                <div class="icon flex-shrink-0"><i class="bi bi-bar-chart"></i></div>
+                <div>
+                    <h4 class="title"><a href="/Pesaje/Index" class="stretched-link"> Pesajes </a></h4>
+                    <p class="description">
+                        Registro preciso del peso del cacao entregado. Controla kilogramos por productor, lotes generados y conversiones automáticas a quintales.
+                    </p>
+                </div>
+            </div><!-- End Service Item -->
+
+            <div class="col-lg-4 col-md-6 service-item d-flex">
+                <div class="icon flex-shrink-0"><i class="bi bi-brightness-high"></i></div>
+                <div>
+                    <h4 class="title"><a href="/Fermentacion/Index" class="stretched-link"> Fermentación </a></h4>
+                    <p class="description">
+                        Controla todas las fases de fermentación: día por día, cambios de caja, temperatura, tiempos y estado final para garantizar un cacao de alta calidad.
+                    </p>
+                </div>
+            </div><!-- End Service Item -->
+
+            <div class="col-lg-4 col-md-6 service-item d-flex">
                 <div class="icon flex-shrink-0"><i class="bi bi-truck"></i></div>
                 <div>
                     <h4 class="title">
@@ -124,7 +145,7 @@
                 </div>
             </div><!-- End Service Item -->
 
-            <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="200">
+            <div class="col-lg-4 col-md-6 service-item d-flex">
                 <div class="icon flex-shrink-0">
                     <i class="bi bi-person-badge"></i>
                 </div>
@@ -138,7 +159,7 @@
                 </div>
             </div><!-- End Service Item -->
 
-            <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="300">
+            <div class="col-lg-4 col-md-6 service-item d-flex">
                 <div class="icon flex-shrink-0">
                     <i class="bi bi-cloud-lightning"></i>
                 </div>
@@ -151,44 +172,9 @@
                     </p>
                 </div>
             </div><!-- End Service Item -->
-
-
-            <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="300">
-                <div class="icon flex-shrink-0"><i class="bi bi-bar-chart"></i></div>
-                <div>
-                    <h4 class="title"><a href="/Pesaje/Index" class="stretched-link"> Pesajes </a></h4>
-                    <p class="description">
-                        Registro preciso del peso del cacao entregado. Controla kilogramos por productor, lotes generados y conversiones automáticas a quintales.
-                    </p>
-                </div>
-            </div><!-- End Service Item -->
-
-            <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="500">
-                <div class="icon flex-shrink-0"><i class="bi bi-brightness-high"></i></div>
-                <div>
-                    <h4 class="title"><a href="/Fermentacion/Index" class="stretched-link"> Fermentación </a></h4>
-                    <p class="description">
-                        Controla todas las fases de fermentación: día por día, cambios de caja, temperatura, tiempos y estado final para garantizar un cacao de alta calidad.
-                    </p>
-                </div>
-            </div><!-- End Service Item -->
         </div>
     </div>
 </section><!-- /Services Section -->
-
-<footer id="footer" class="footer position-relative light-background">
-    <div class="container">
-        <div class="copyright text-center ">
-            <p>© <span>Copyright</span> <strong class="px-1 sitename">iPortfolio</strong> <span>All Rights Reserved</span></p>
-        </div>
-        <div class="credits">
-            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> Distributed by <a href="https://themewagon.com">ThemeWagon</a>
-        </div>
-    </div>
-</footer>
-
-<!-- Scroll Top -->
-<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
 @code{
     public List<ApplicationUser> ListaProductores = new List<ApplicationUser>();
@@ -197,7 +183,7 @@
 
     public List<Recogidas> ListaPendientes = new List<Recogidas>();
 
-    public List<Choferes> ListaChoferes = new List<Choferes>();
+    public List<ControlesCalidad> ListaControles = new List<ControlesCalidad>();
 
     public List<Pesajes> ListaPesajes = new List<Pesajes>();
 
@@ -208,13 +194,13 @@
         //Listado de productores y empleados
         var productores = await UserRoleService.GetUsersByRoleAsync("Productor"); 
         ListaProductores = productores.ToList(); 
-        
+
         var empleados = await UserRoleService.GetUsersByRoleAsync("Empleado"); 
         ListaEmpleados = empleados.ToList();
 
         //Listado de actividades 
         ListaPendientes = await recogidasService.Listar(r => r.EstadoEntrega == "Pendiente");
-        ListaChoferes = await choferesService.Listar(c => true);
+        ListaControles = await controlesService.Listar(c => true);
         ListaPesajes = await pesajesService.Listar(p => true);
         ListaFermentaciones = await fermentacionService.Listar(f => true);
     }

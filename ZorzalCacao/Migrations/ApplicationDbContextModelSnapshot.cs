@@ -368,8 +368,8 @@ namespace ZorzalCacao.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DetalleId"));
 
-                    b.Property<int>("Cantidad")
-                        .HasColumnType("int");
+                    b.Property<double>("Cantidad")
+                        .HasColumnType("float");
 
                     b.Property<string>("EmpleadoId")
                         .IsRequired()
@@ -460,13 +460,12 @@ namespace ZorzalCacao.Migrations
                     b.Property<double>("CantidadSacos")
                         .HasColumnType("float");
 
-                    b.PrimitiveCollection<string>("CertificacionesProducto")
+                    b.Property<string>("CertificacionProducto")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Chofer")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ChoferId")
+                        .HasColumnType("int");
 
                     b.Property<string>("EstadoEntrega")
                         .IsRequired()
@@ -484,6 +483,8 @@ namespace ZorzalCacao.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("RecogidaId");
+
+                    b.HasIndex("ChoferId");
 
                     b.HasIndex("ProductorId");
 
@@ -628,6 +629,7 @@ namespace ZorzalCacao.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Referencia")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ZonaId");
@@ -796,11 +798,19 @@ namespace ZorzalCacao.Migrations
 
             modelBuilder.Entity("ZorzalCacao.Models.Recogidas", b =>
                 {
+                    b.HasOne("ZorzalCacao.Models.Choferes", "Chofer")
+                        .WithMany()
+                        .HasForeignKey("ChoferId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ZorzalCacao.Data.ApplicationUser", "Productor")
                         .WithMany()
                         .HasForeignKey("ProductorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Chofer");
 
                     b.Navigation("Productor");
                 });

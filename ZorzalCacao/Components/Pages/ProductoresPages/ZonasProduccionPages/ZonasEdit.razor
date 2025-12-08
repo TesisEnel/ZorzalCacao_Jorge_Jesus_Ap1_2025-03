@@ -4,13 +4,15 @@
 @inject NavigationManager navigation
 @rendermode InteractiveServer
 
+@attribute [Authorize(Roles = "Productor")]
+
 <PageTitle> Editar zona de producción </PageTitle>
 
 <div class="container mt-3">
     <div class="card shadow-lg">
         <div class="card-header">
             <h5 class="card-title text-center">
-                <strong> Editar Zona </strong>
+                <strong> Editar zona de producción </strong>
             </h5>
         </div>
 

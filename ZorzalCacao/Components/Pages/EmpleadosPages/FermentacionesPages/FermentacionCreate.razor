@@ -5,6 +5,8 @@
 @inject IUserRoleService UserRoleService
 @rendermode InteractiveServer
 
+@attribute [Authorize(Roles = "Empleado")]
+
 <PageTitle> Crear fermentacion </PageTitle>
 
 <div class="container mt-3">
@@ -39,24 +41,26 @@
                     <div class="col-6 col-md-6 mb-3">
                         <label class="col-form-label"> <strong> Responsable </strong></label>
                         <InputSelect class="form-select" @bind-Value="Fermentacion.EmpleadoId"> 
-                            <option value = "" disabled selected> Seleccione una opcion </option>
+                            <option value="" disabled selected>Seleccione un empleado</option>
 
                             @foreach(var empleado in ListaEmpleados)
                             {
                                 <option value= "@empleado.Id"> @empleado.UserName</option>
                             }
                         </InputSelect>
+                        <ValidationMessage For="() => Fermentacion.EmpleadoId" />
 
                         <div class="row">
                             <div class="col-12 col-md-12 mt-3">
                                 <label class="col-form-label"> <strong> Recogida </strong> </label>
                                 <InputSelect class="form-select" @bind-Value="Fermentacion.RecogidaId">
-                                    <option value = "" disabled selected> Seleccione una recogida </option>
+                                    <option value="0" disabled selected>Seleccione una recogida</option>
                                     @foreach(var recogida in ListaRecogidas)
                                     {
                                         <option value="@recogida.RecogidaId"> @recogida.RecogidaId - @recogida.Fecha.ToString("dd/MM/yyyy HH:mm")</option>
                                     }
                                 </InputSelect>
+                                <ValidationMessage For="() => Fermentacion.RecogidaId"/>
                             </div>
                         </div>
                     </div>
@@ -71,6 +75,7 @@
                                     Fecha="detalleSeleccionado.FechaFermentacion"
                                     ListaRemociones="ListaRemociones"
                                     ListaEmpleados="ListaEmpleados"
+                                    CantidadEnDetalle="Fermentacion.FermentacionesDetalle.Count"
                                     OnRemocionSeleccionada="AgregarDetalle" />
 
                     <div class="table-responsive">
@@ -80,7 +85,7 @@
                                     <th> Remoción </th>
                                     <th> Responsable </th>
                                     <th> Fecha </th>
-                                    <th> Temperatura </th>
+                                    <th> Temperatura °F</th>
                                     <th> Cantidad </th>
                                     <th> Opciones </th>
                                 </tr>
@@ -92,7 +97,7 @@
                                         <td> @ListaRemociones.FirstOrDefault(r => r.RemocionId == detalle.RemocionId)?.NumeroRemocion</td>
                                         <td> @ListaEmpleados.FirstOrDefault(e => e.Id == detalle.EmpleadoId)?.UserName</td>
                                         <td> @detalle.FechaFermentacion.ToString("dd/MM/yyyy HH:mm")</td>
-                                        <td> @detalle.Temperatura.ToString("F2")°C</td>
+                                        <td> @detalle.Temperatura.ToString("F2")</td>
                                         <td> @detalle.Cantidad</td>
                                         <td>
                                             <button type="button" class="btn btn-outline-dark bi bi-trash" @onclick="() => RemoverDetalle(detalle)">
@@ -106,17 +111,15 @@
                     </div>
 
                     <div class="mt-3">
-                        <label class="form-label"> <strong> Conteo de Registros: </strong> @Fermentacion.FermentacionesDetalle.Count</label>
-                        <br />
-                        <label class="form-label"> <strong> Cantidad Total: </strong> @Fermentacion.FermentacionesDetalle.Sum(d => d.Cantidad)</label>
-                        <br />
-                        <label class="form-label"> <strong> Promedio de Temperatura: </strong> @(Fermentacion.FermentacionesDetalle.Any() ? Fermentacion.FermentacionesDetalle.Average(d => d.Temperatura).ToString("F2") : "0.00")°C</label>
+                        <label class="col-12 form-label"> <strong> Conteo de Registros: </strong> @Fermentacion.FermentacionesDetalle.Count</label>
+                        <label class="col-12 form-label"> <strong> Cantidad Total: </strong> @Fermentacion.FermentacionesDetalle.Sum(d => d.Cantidad)</label>
+                        <label class="col-12 form-label"> <strong> Promedio de Temperatura: </strong> @(Fermentacion.FermentacionesDetalle.Any() ? Fermentacion.FermentacionesDetalle.Average(d => d.Temperatura).ToString("F2") : "0.00")°C</label>
                     </div>
                 </div>
             </div>
 
             <div class="card-footer d-flex justify-content-center gap-2">
-                <button type="submit" class="btn btn-primary bi bi-floppy"> Guardar </button>
+                <button type="submit" class="btn btn-primary bi bi-save"> Guardar </button>
                 <a class="btn btn-secondary bi bi-arrow-left-circle" href="/Fermentacion/Index"> Regresar </a>
             </div>
         </EditForm>
@@ -136,7 +139,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        ListaRecogidas = await recogidasService.Listar(e => true);
+        ListaRecogidas = await recogidasService.Listar(r => r.EstadoEntrega == "Entregada");
         ListaRemociones = await fermentacionesServices.ListarRemociones(f => true);
         var empleados = await UserRoleService.GetUsersByRoleAsync("Empleado");
         ListaEmpleados = empleados.ToList();
@@ -150,7 +153,7 @@
         }
     }
 
-    private void AgregarDetalle((Remociones remocion, double temperatura, int cantidad, ApplicationUser empleado, DateTime fecha) datos)
+    private void AgregarDetalle((Remociones remocion, double temperatura, double cantidad, ApplicationUser empleado, DateTime fecha) datos)
     {
         var nuevoDetalle = new FermentacionesDetalles
         {

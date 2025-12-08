@@ -5,6 +5,8 @@
 @inject NavigationManager navigation
 @rendermode InteractiveServer
 
+@attribute [Authorize(Roles = "Empleado")]
+
 <PageTitle> Registrar evento climático </PageTitle>
 
 <div class="container mt-3">
@@ -117,6 +119,5 @@
             navigation.NavigateTo("/EventosClimaticos/Index");
         }
     }
-
 }
 

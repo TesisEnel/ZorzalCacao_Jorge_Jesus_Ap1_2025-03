@@ -3,12 +3,14 @@
 @inject ZonasProduccionService zonaService
 @rendermode InteractiveServer
 
+@attribute [Authorize(Roles = "Productor")]
+
 <PageTitle> Consulta Zonas </PageTitle>
 
 <div class="container">
     <div class="card shadow-lg">
         <div class="card-header">
-            <h5 class="text-center"> <strong> Consulte Zonas de produccion </strong></h5>
+            <h5 class="text-center"> <strong> Consulte zonas de producción </strong></h5>
 
             <div class="d-flex justify-content-end">
                 <a class="btn btn-info bi bi-plus-square" href="/Zonas/Create"> Crear zona </a>
@@ -32,10 +34,12 @@
                 <div class="col-12 col-md-6 mb-3">
                     <label class="col-form-label"> <strong> Filtrar por </strong></label>
                     <InputSelect class="form-select" @bind-Value="Filtro">
+                        <option value ="" selected disabled> Seleccione una opcion </option>
                         <option value="ZonaId"> Zona Id </option>
                         <option value="Nombre"> Nombre </option>
                         <option value="Provincia"> Provincia </option>
                         <option value="Distancia"> Distancia </option>
+                        <option value="Referencia"> Referencia </option>
                     </InputSelect>
                 </div>
 
@@ -55,7 +59,7 @@
                             <th> Zona Id </th>
                             <th> Nombre </th>
                             <th> Provincia </th>
-                            <th> Distancia (km) </th>
+                            <th> Distancia (Km) </th>
                             <th> Referencia </th>
                             <th> Opciones </th>
                         </tr>
@@ -160,6 +164,12 @@
             else if (Filtro == nameof(ZonasProduccion.Distancia) && double.TryParse(ValorFiltro, out double distancia))
             {
                 lista = lista.Where(z => z.Distancia == distancia).ToList();
+            }
+
+            else if (Filtro == nameof(ZonasProduccion.Referencia))
+            {
+                lista = lista.Where(z =>
+                    z.Referencia.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
             }
         }
         ListaZonas = lista;

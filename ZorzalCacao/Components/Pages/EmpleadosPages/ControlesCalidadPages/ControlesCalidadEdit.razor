@@ -5,69 +5,60 @@
 @inject NavigationManager navigation
 @rendermode InteractiveServer
 
+@attribute [Authorize(Roles = "Empleado")]
+
 <PageTitle> Editar Control de Calidad </PageTitle>
 
-@if (control != null)
-{
-    <div class="container mt-3">
-        <div class="card shadow-lg">
-            <div class="card-header">
-                <h5 class="card-title text-center"> <strong> Editar control de calidad </strong></h5>
+<div class="container mt-3">
+    <div class="card shadow-lg">
+        <div class="card-header">
+            <h5 class="card-title text-center"> <strong> Editar control de calidad </strong></h5>
+        </div>
+
+        <EditForm Model="control" OnValidSubmit="GuardarControl">
+            <DataAnnotationsValidator />
+
+            <div class="card-body">
+                <div class="row">
+                    <!-- Grados Brix -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label"><strong>Grados Brix</strong></label>
+                        <InputNumber class="form-control" @bind-Value="control.GradosBrix" />
+                        <ValidationMessage For="() => control.GradosBrix" />
+                    </div>
+
+
+                    <!--Recogida-->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label"><strong>Recogida</strong></label>
+                        <InputSelect class="form-select" @bind-Value="control.RecogidaId">
+                            <option value="0" disabled selected>Seleccione una recogida</option>
+                            @foreach (var r in ListaRecogidas)
+                            {
+                                <option value="@r.RecogidaId"> @($"{r.Fecha.ToShortDateString()} - {r.PuntoEncuentro}") </option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="() => control.RecogidaId" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Observaciones -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label"><strong>Observaciones</strong></label>
+                        <InputTextArea class="form-control" @bind-Value="control.Observaciones" />
+                    </div>
+                </div>
             </div>
 
-            <EditForm Model="control" OnValidSubmit="GuardarControl">
-                <DataAnnotationsValidator />
-
-                <div class="card-body">
-                    <div class="row">
-                        <!-- Grados Brix -->
-                        <div class="col-12 col-md-6 mb-3">
-                            <label class="col-form-label"><strong>Grados Brix</strong></label>
-                            <InputNumber class="form-control" @bind-Value="control.GradosBrix" />
-                            <ValidationMessage For="() => control.GradosBrix" />
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <!-- Observaciones -->
-                        <div class="col-12 col-md-6 mb-3">
-                            <label class="col-form-label"><strong>Observaciones</strong></label>
-                            <InputTextArea class="form-control" @bind-Value="control.Observaciones" />
-                        </div>
-
-                        <!-- Recogida -->
-                        <div class="col-12 col-md-6 mb-3">
-                            <label class="col-form-label"><strong>Recogida</strong></label>
-                            <InputSelect class="form-select" @bind-Value="control.RecogidaId">
-                                <option value="" disabled>Seleccione una recogida</option>
-                                @foreach (var r in ListaRecogidas)
-                                {
-                                    <option value="@r.RecogidaId"> @($"#{r.Fecha.ToShortDateString()} - {r.PuntoEncuentro}") </option>
-                                }
-                            </InputSelect>
-                            <ValidationMessage For="() => control.RecogidaId" />
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-footer gap-2 bg-white d-flex justify-content-center">
-                    <button type="submit" class="btn btn-primary bi bi-save"> Guardar </button>
-                    <button type="button" class="btn btn-danger bi bi-trash" @onclick="() => MostrarModal = true"> Eliminar </button>
-                    <a class="btn btn-secondary bi bi-arrow-left-circle" href="/ControlesCalidad/Index"> Cancelar </a>
-                </div>
-            </EditForm>
-        </div>
+            <div class="card-footer gap-2 bg-white d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary bi bi-save"> Guardar </button>
+                <button type="button" class="btn btn-danger bi bi-trash" @onclick="() => MostrarModal = true"> Eliminar </button>
+                <a class="btn btn-secondary bi bi-arrow-left-circle" href="/ControlesCalidad/Index"> Regresar </a>
+            </div>
+        </EditForm>
     </div>
-}
-else
-{
-    <div class="text-center py-5">
-        <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Cargando...</span>
-        </div>
-        <p class="mt-3">Cargando información...</p>
-    </div>
-}
+</div>
 
 @if (MostrarModal)
 {
@@ -81,9 +72,9 @@ else
 
                 <div class="modal-body">
                     <label class="col-12"><strong>Control Id:</strong> @control.ControlId</label>
-                    <label class="col-12"><strong>Grados Brix:</strong> @control.GradosBrix</label>
+                    <label class="col-12"><strong>Grados Brix:</strong> @control.GradosBrix.ToString("F2")</label>
                     <label class="col-12"><strong>Decisión:</strong> @control.Decision</label>
-                    <label class="col-12"><strong>Recogida:</strong> @control.RecogidaId</label>
+                    <label class="col-12"><strong>Recogida:</strong> @control.Recogida?.Fecha.ToShortDateString() - @control.Recogida?.PuntoEncuentro</label>
                     <label class="col-12"><strong>Empleado:</strong> @control.Empleado?.UserName</label>
 
                     <label class="col-12 text-danger mt-3">¿Está seguro que desea eliminar este registro?</label>
@@ -91,7 +82,7 @@ else
 
                 <div class="modal-footer d-flex justify-content-center gap-2">
                     <button type="button" class="btn btn-danger bi bi-trash" @onclick="EliminarControl"> Sí, eliminar </button>
-                    <button type="button" class="btn btn-secondary bi bi-arrow-left-circle" @onclick="() => MostrarModal = false"> Cancelar </button>
+                    <button type="button" class="btn btn-secondary bi bi-arrow-left-circle" @onclick="() => MostrarModal = false"> Regresar </button>
                 </div>
 
             </div>
@@ -114,7 +105,7 @@ else
     {
         control = await controlesService.Buscar(ControlId);
 
-        ListaRecogidas = await recogidasService.Listar(r => true);
+        ListaRecogidas = await recogidasService.Listar(r => r.EstadoEntrega == "Entregada");
 
         var empleados = await userRoleService.GetUsersByRoleAsync("Empleado");
         ListaEmpleados = empleados.ToList();
