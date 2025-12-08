@@ -9,9 +9,19 @@
             <img src="assets/img/ZorzalPic.png" alt="" class="img-fluid rounded-circle">
         </div>
 
-        <a href="" class="logo d-flex align-items-center justify-content-center">
-            <h1 class="sitename">ZorzalCacao</h1>
-        </a>
+        <AuthorizeView>
+            <Authorized>
+                <a href="" class="logo d-flex align-items-center justify-content-center">
+                    <h1 class="sitename">@context.User.Identity?.Name</h1>
+                </a>
+            </Authorized>
+
+            <NotAuthorized>
+                <a href="" class="logo d-flex align-items-center justify-content-center">
+                    <h1 class="sitename">Zorzal Cacao</h1>
+                </a>
+            </NotAuthorized>
+        </AuthorizeView>
 
         <nav id="navmenu" class="navmenu">
             <ul>
@@ -48,11 +58,6 @@
                 <AuthorizeView>
                     <Authorized>
                         <li>
-                            <NavLink href="Account/Manage">
-                                <i class="bi bi-person-fill navicon"></i> @context.User.Identity?.Name
-                            </NavLink>
-                        </li>
-                        <li>
                             <form action="Account/Logout" method="post">
                                 <AntiforgeryToken />
                                 <input type="hidden" name="ReturnUrl" value="" />
@@ -88,7 +93,6 @@
 
     private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
     {
-        
         StateHasChanged();
     }
 
