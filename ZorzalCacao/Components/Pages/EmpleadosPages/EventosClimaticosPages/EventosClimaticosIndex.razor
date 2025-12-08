@@ -1,0 +1,193 @@
+﻿@page "/EventosClimaticos/Index"
+@inject EventosClimaticosService eventosService
+@inject NavigationManager nav
+@rendermode InteractiveServer
+
+@attribute [Authorize(Roles = "Empleado")]
+
+<PageTitle>Consulta de Eventos Climáticos</PageTitle>
+<div class="container-fluid px-4 mt-4 cacao-background">
+
+    <!-- ✅ ENCABEZADO CACAO -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold text-brown mb-0">
+                <i class="bi bi-cloud-rain-heavy me-1"></i> Eventos Climáticos
+            </h3>
+            <small class="text-muted">Registro de fenómenos climáticos que afectan la producción</small>
+        </div>
+
+        <a class="btn btn-cacao shadow-sm bi bi-plus-circle"
+           href="/EventosClimaticos/Create">
+            Nuevo Evento
+        </a>
+    </div>
+
+    <!-- ✅ TARJETA PRINCIPAL -->
+    <div class="card shadow border-0 rounded-4 bg-cacao-light">
+
+        <div class="card-body border-bottom bg-cacao rounded-top-4">
+            <div class="row g-3">
+
+                <div class="col-12 col-md-3">
+                    <label class="form-label fw-semibold text-white">Desde</label>
+                    <InputDate class="form-control" @bind-Value="Desde" />
+                </div>
+
+                <div class="col-12 col-md-3">
+                    <label class="form-label fw-semibold text-white">Hasta</label>
+                    <InputDate class="form-control" @bind-Value="Hasta" />
+                </div>
+
+                <div class="col-12 col-md-3">
+                    <label class="form-label fw-semibold text-white">Filtrar por</label>
+
+                    <InputSelect class="form-select" @bind-Value="Filtro">
+                        <option value="" disabled selected>Seleccione una opción</option>
+                        <option value="Id">Evento Id</option>
+                        <option value="Fecha">Fecha</option>
+                        <option value="Zona">Zona</option>
+                        <option value="TipoEvento">Tipo de Evento</option>
+                        <option value="Intensidad">Intensidad</option>
+                        <option value="Observaciones">Observaciones</option>
+                    </InputSelect>
+                </div>
+
+                <div class="col-12 col-md-3">
+                    <label class="form-label fw-semibold text-white">Búsqueda</label>
+                    <div class="input-group">
+                        <input class="form-control" @bind="ValorFiltro" placeholder="Buscar evento..." />
+                        <button class="btn btn-outline-light bi bi-search" @onclick="Buscar"></button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Tabla -->
+        <div class="table-responsive">
+            <table class="table align-middle mb-0 text-center">
+
+                <thead style="background:#5a3a1b; color:white;">
+                    <tr>
+                        <th>Id</th>
+                        <th>Fecha</th>
+                        <th>Zona</th>
+                        <th>Tipo Evento</th>
+                        <th>Intensidad</th>
+                        <th>Observaciones</th>
+                        <th>Empleado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody class="text-center bg-white">
+
+                    @if (ListaEventos == null || ListaEventos.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="8" class="py-4 text-muted">
+                                <i class="bi bi-info-circle"></i> No se han encontrado eventos climáticos.
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var e in ListaEventos)
+                        {
+                            <tr style="border-bottom:1px solid #e7d8c9;">
+                                <td class="fw-semibold">@e.EventoClimaticoId</td>
+                                <td>@e.Fecha.ToString("dd/MM/yyyy")</td>
+                                <td>@e.Zona</td>
+
+                                <td>
+                                    <span class="badge bg-cacao-vehiculo">@e.TipoEvento</span>
+                                </td>
+
+                                <td>@e.Intensidad</td>
+                                <td>@e.Observaciones</td>
+                                <td>@e.Empleado?.UserName</td>
+
+                                <td>
+                                    <a class="btn btn-sm btn-outline-cacao bi bi-eye"
+                                       href="/EventosClimaticos/View/@e.EventoClimaticoId"
+                                       title="Ver"></a>
+
+                                    <a class="btn btn-sm btn-outline-warning bi bi-pencil-square ms-1"
+                                       href="/EventosClimaticos/Edit/@e.EventoClimaticoId"
+                                       title="Editar"></a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card-footer">
+            <label class="badge bg-dark fs-6 m-0">Total: @ListaEventos.Count</label>
+        </div>
+    </div>
+</div>
+
+@code {
+    public DateTime? Desde { get; set; }
+
+    public DateTime? Hasta { get; set; }
+
+    public string Filtro { get; set; } = string.Empty;
+
+    public string ValorFiltro { get; set; } = string.Empty;
+
+    public List<EventosClimaticos> ListaEventos { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Buscar();
+    }
+
+    public async Task Buscar()
+    {
+        var lista = await eventosService.Listar(e => true);
+
+        if (Desde.HasValue && Hasta.HasValue)
+        {
+            lista = lista.Where(f => f.Fecha >= Desde && f.Fecha <= Hasta).ToList();
+        }
+
+        if (!string.IsNullOrWhiteSpace(ValorFiltro))
+        {
+            if (Filtro == "Id" && int.TryParse(ValorFiltro, out int id))
+            {
+                lista = lista.Where(e => e.EventoClimaticoId == id).ToList();
+            }
+
+            else if (Filtro == "Zona")
+            {
+                lista = lista.Where(e =>
+                    e.Zona.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            else if (Filtro == "TipoEvento")
+            {
+                lista = lista.Where(e =>
+                    e.TipoEvento.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            else if (Filtro == "Intensidad")
+            {
+                lista = lista.Where(e =>
+                    e.Intensidad.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            else if (Filtro == "Observaciones")
+            {
+                lista = lista.Where(e =>
+                    (e.Observaciones ?? "").Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+        }
+
+        ListaEventos = lista;
+    }
+}
+

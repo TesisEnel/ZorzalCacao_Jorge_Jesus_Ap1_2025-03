@@ -1,0 +1,58 @@
+﻿<div class="row align-items-center">
+    <div class="col-12 col-md-6 mb-3">
+        <label class="col-form-label text-heading"> <strong> Cantidad </strong></label>
+        <InputNumber class="form-control" @bind-Value="Cantidad" />
+    </div>
+
+    <div class="col-12 col-md-6 mb-3">
+        <label class="col-form-label  text-heading"> <strong> Peso (KG) </strong></label>
+        <div class="input-group">
+            <InputNumber class="form-control" @bind-Value="Peso" />
+            <button type="button" class="btn btn-success bi bi-plus " @onclick="TriggerSelection"></button>
+        </div>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(mensajeError))
+{
+    <div class="alert alert-danger"> @mensajeError </div>
+}
+
+@code {
+    [Parameter]
+    public int SacoId { get; set; }
+
+    [Parameter]
+    public double Cantidad { get; set; }
+
+    [Parameter]
+    public double Peso { get; set; }
+
+    [Parameter]
+    public List<Sacos> ListaSacos { get; set; } = new List<Sacos>();
+
+    private string? mensajeError { get; set; }
+
+    [Parameter]
+    public EventCallback<(Sacos saco, double cantidad, double peso)> OnPesajeSeleccionado { get; set; }
+
+    public async Task TriggerSelection()
+    {
+        mensajeError = null;
+
+        if (Cantidad <= 0)
+        {
+            mensajeError = "La cantidad debe ser mayor a 0";
+            return;
+        }
+
+        if (Peso <= 0)
+        {
+            mensajeError = "El peso debe ser mayor a 0";
+            return;
+        }
+
+        var sacoSeleccionado = ListaSacos.Single(s => s.SacoId == SacoId);
+        await OnPesajeSeleccionado.InvokeAsync((sacoSeleccionado, Cantidad, Peso));
+    }
+}

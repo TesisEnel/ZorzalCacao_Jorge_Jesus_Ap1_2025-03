@@ -1,0 +1,201 @@
+﻿@page "/Zonas/Index"
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject ZonasProduccionService zonaService
+@rendermode InteractiveServer
+
+@attribute [Authorize(Roles = "Productor")]
+
+<PageTitle> Consulta Zonas </PageTitle>
+<div class="container-fluid px-4 mt-4 cacao-background">
+
+    <!-- 🟫 ENCABEZADO CACAO -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold text-brown mb-0">
+                <i class="bi bi-geo-alt me-1"></i> Zonas de producción
+            </h3>
+            <small class="text-muted">Historial de zonas registradas</small>
+        </div>
+
+        <a class="btn btn-cacao shadow-sm bi bi-plus-circle"
+           href="/Zonas/Create">
+            Nueva zona
+        </a>
+    </div>
+
+    <!-- 🟫 TARJETA PRINCIPAL -->
+    <div class="card shadow border-0 rounded-4 bg-cacao-light">
+
+        <!-- 🟫 FILTROS -->
+        <div class="card-body border-bottom bg-cacao rounded-top-4">
+            <div class="row align-items-end g-3">
+
+                <!-- Desde -->
+                <div class="col-12 col-md-3">
+                    <label class="form-label fw-semibold text-white">Desde</label>
+                    <InputDate class="form-control" @bind-Value="Desde" />
+                </div>
+
+                <!-- Hasta -->
+                <div class="col-12 col-md-3">
+                    <label class="form-label fw-semibold text-white">Hasta</label>
+                    <InputDate class="form-control" @bind-Value="Hasta" />
+                </div>
+
+                <!-- Filtrar por -->
+                <div class="col-12 col-md-3">
+                    <label class="form-label fw-semibold text-white">Filtrar por</label>
+                    <InputSelect class="form-select" @bind-Value="Filtro">
+                        <option value="" disabled selected>Seleccione una opción</option>
+                        <option value="ZonaId">Zona Id</option>
+                        <option value="Nombre">Nombre</option>
+                        <option value="Provincia">Provincia</option>
+                        <option value="Distancia">Distancia</option>
+                        <option value="Referencia">Referencia</option>
+                    </InputSelect>
+                </div>
+
+                <!-- Búsqueda -->
+                <div class="col-12 col-md-3">
+                    <label class="form-label fw-semibold text-white">Búsqueda</label>
+                    <div class="input-group">
+                        <input class="form-control" @bind="ValorFiltro" placeholder="Buscar..." />
+                        <button class="btn btn-outline-light bi bi-search" @onclick="Buscar"></button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 🟫 TABLA CACAO -->
+        <div class="table-responsive">
+            <table class="table align-middle mb-0 text-center">
+
+                <thead style="background:#5a3a1b; color:white;">
+                    <tr>
+                        <th>Zona Id</th>
+                        <th>Nombre</th>
+                        <th>Provincia</th>
+                        <th>Distancia (Km)</th>
+                        <th>Referencia</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody class="bg-white">
+
+                    @if (ListaZonas == null || ListaZonas.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="6" class="py-4 text-muted">
+                                <i class="bi bi-info-circle"></i> No se han encontrado zonas de producción.
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var z in ListaZonas)
+                        {
+                            <tr style="border-bottom:1px solid #e7d8c9;">
+                                <td>@z.ZonaId</td>
+                                <td>@z.Nombre</td>
+                                <td>@z.Provincia</td>
+                                <td>@z.Distancia</td>
+                                <td>@z.Referencia</td>
+
+                                <td class="d-flex justify-content-center">
+                                    <a class="btn btn-sm btn-outline-cacao bi bi-eye"
+                                       href="/Zonas/View/@z.ZonaId"
+                                       title="Ver"></a>
+
+                                    <a class="btn btn-sm btn-outline-warning bi bi-pencil-square ms-1"
+                                       href="/Zonas/Edit/@z.ZonaId"
+                                       title="Editar"></a>
+                                </td>
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 🟫 FOOTER CON CONTADOR -->
+        <div class="card-footer">
+            <span class="badge bg-dark fs-6 m-0">
+                Total zonas registradas: @(ListaZonas?.Count ?? 0)
+            </span>
+        </div>
+
+    </div>
+</div>
+
+@code {
+    public string Filtro { get; set; } = string.Empty;
+
+    public string ValorFiltro { get; set; } = string.Empty;
+
+    public DateTime? Desde { get; set; }
+
+    public DateTime? Hasta { get; set; }
+
+    public List<ZonasProduccion> ListaZonas { get; set; } = new List<ZonasProduccion>();
+
+    private string? userId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity?.IsAuthenticated == true)
+        {
+            userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        }
+
+        await Buscar();
+    }
+
+    public async Task Buscar()
+    {
+        List<ZonasProduccion> lista = new();
+
+        if (!string.IsNullOrEmpty(userId))
+        {
+            lista = await zonaService.Listar(z => z.ProductorId == userId);
+        }
+        else
+        {
+            lista = new List<ZonasProduccion>();
+        }
+
+        if (!string.IsNullOrEmpty(ValorFiltro))
+        {
+            if (Filtro == nameof(ZonasProduccion.ZonaId) && int.TryParse(ValorFiltro, out int id))
+            {
+                lista = lista.Where(z => z.ZonaId == id).ToList();
+            }
+            else if (Filtro == nameof(ZonasProduccion.Nombre))
+            {
+                lista = lista.Where(z =>
+                    z.Nombre.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+            else if (Filtro == nameof(ZonasProduccion.Provincia))
+            {
+                lista = lista.Where(z =>
+                    z.Provincia.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+            else if (Filtro == nameof(ZonasProduccion.Distancia) && double.TryParse(ValorFiltro, out double distancia))
+            {
+                lista = lista.Where(z => z.Distancia == distancia).ToList();
+            }
+
+            else if (Filtro == nameof(ZonasProduccion.Referencia))
+            {
+                lista = lista.Where(z =>
+                    z.Referencia.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+        }
+        ListaZonas = lista;
+    }
+}

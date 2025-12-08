@@ -1,0 +1,125 @@
+﻿@page "/Vehiculos/Create"
+@inject VehiculosService vehiculosService
+@inject ChoferesService choferesService
+@inject NavigationManager navigation
+@rendermode InteractiveServer
+
+@attribute [Authorize(Roles = "Empleado")]
+
+<PageTitle> Crear vehículo </PageTitle>
+
+<div class="container mt-3">
+    <div class="card theme-card">
+        <div class="card-header bg-accent text-contrast">
+            <h5 class="card-title text-center">
+                <strong> Crear vehículo </strong>
+            </h5>
+        </div>
+
+        <EditForm Model="vehiculo" OnValidSubmit="GuardarVehiculo">
+            <DataAnnotationsValidator />
+
+            <div class="card-body">
+
+                <div class="row">
+                    <!-- Marca -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label text-heading"><strong>Marca</strong></label>
+                        <InputText class="form-control" @bind-Value="vehiculo.Marca" />
+                        <ValidationMessage For="() => vehiculo.Marca" />
+                    </div>
+
+                    <!-- Modelo -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label text-heading"><strong>Modelo</strong></label>
+                        <InputText class="form-control" @bind-Value="vehiculo.Modelo" />
+                        <ValidationMessage For="() => vehiculo.Modelo" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Placa -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label text-heading"><strong>Placa</strong></label>
+                        <InputText class="form-control" @bind-Value="vehiculo.Placa" />
+                        <ValidationMessage For="() => vehiculo.Placa" />
+                    </div>
+
+                    <!-- Año -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label text-heading"><strong>Año</strong></label>
+                        <InputNumber class="form-control" @bind-Value="vehiculo.Anio" />
+                        <ValidationMessage For="() => vehiculo.Anio" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Color -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label text-heading"><strong>Color</strong></label>
+                        <InputText class="form-control" @bind-Value="vehiculo.Color" />
+                        <ValidationMessage For="() => vehiculo.Color" />
+                    </div>
+
+                    <!-- Tipo de Vehículo -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label text-heading"><strong>Tipo de vehículo</strong></label>
+                        <InputSelect class="form-select" @bind-Value="vehiculo.TipoVehiculo">
+                            <option value="" disabled selected>Seleccione un tipo</option>
+                            <option value="Camión">Camión</option>
+                            <option value="Camioneta">Camioneta</option>
+                            <option value="Automóvil">Automóvil</option>
+                            <option value="Motocicleta">Motocicleta</option>
+                        </InputSelect>
+                        <ValidationMessage For="() => vehiculo.TipoVehiculo" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label text-heading"><strong>Chofer</strong></label>
+
+                        <InputSelect class="form-select" @bind-Value="vehiculo.ChoferId">
+                            <option value="">Sin asignar</option>
+
+                            @foreach (var c in ListaChoferes)
+                            {
+                                <option value="@c.ChoferId">
+                                    @c.Nombre @c.Apellido
+                                </option>
+                            }
+                        </InputSelect>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="card-footer bg-white d-flex justify-content-center gap-2">
+                <button type="submit" class="btn btn-accent bi bi-save"> Guardar </button>
+                <a class="btn btn-outline-accent bi bi-arrow-left-circle" href="/Vehiculos/Index"> Regresar </a>
+            </div>
+
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private Vehiculo vehiculo = new();
+    private List<Choferes> ListaChoferes = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaChoferes = await choferesService.Listar(c => true);
+    }
+
+    private async Task GuardarVehiculo()
+    {
+        if (await vehiculosService.Guardar(vehiculo))
+        {
+            navigation.NavigateTo("/Vehiculos/Index");
+        }
+    }
+}
+
+

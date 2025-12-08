@@ -1,0 +1,190 @@
+﻿@page "/Pesaje/Edit/{PesajeId:int}"
+@inject AuthenticationStateProvider AuthStateProvider
+@inject PesajesService pesajeService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+@attribute [Authorize(Roles = "Empleado")]
+
+<PageTitle> Editar Pesaje </PageTitle>
+
+<div class="container mt-3">
+    <div class="card theme-card">
+        <div class="card-header bg-accent text-contrast">
+            <h5 class="card-title text-center">
+                <strong> Editar Pesaje </strong>
+            </h5>
+        </div>
+
+        <EditForm Model="Pesaje" OnValidSubmit="GuardarPesaje">
+            <DataAnnotationsValidator />
+            <div class="card-body">
+                <div class="row">
+                    <!-- Fecha -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label text-heading"> <strong> Fecha </strong></label>
+                        <InputDate class="form-control" @bind-Value="Pesaje.Fecha" />
+                        <ValidationMessage For="() => Pesaje.Fecha" />
+                    </div>
+                </div>
+            </div>
+
+            @if (mensajeError != null)
+            {
+                <div class="alert alert-danger"> @mensajeError </div>
+            }
+
+            <div class="border border-success p-3 mt-3">
+                <h5> Detalle de Pesaje </h5>
+                <PesajePicker SacoId="detalleSeleccionado.SacoId"
+                              Cantidad="detalleSeleccionado.Cantidad"
+                              Peso="detalleSeleccionado.Peso"
+                              ListaSacos="ListaSacos"
+                              OnPesajeSeleccionado="AgregarDetalle" />
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered table-light text-center">
+                        <thead>
+                            <tr>
+                                <th> Cantidad </th>
+                                <th> Peso (Kg) </th>
+                                <th> Peso Total (Kg) </th>
+                                <th> Quintales </th>
+                                <th> Opciones </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var detalle in Pesaje.PesajesDetalle)
+                            {
+                                <tr>
+                                    <td> @detalle.Cantidad</td>
+                                    <td> @detalle.Peso.ToString("F2")</td>
+                                    <td> @((detalle.Cantidad * detalle.Peso).ToString("F2"))</td>
+                                    <td> @(((detalle.Cantidad * detalle.Peso) / 125).ToString("F2")) </td>
+                                    <td>
+                                        <button type="button" class="btn btn-outline-dark bi bi-trash" @onclick="() => RemoverDetalle(detalle)">
+                                            Remover
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-3">
+                    <label class="col-12"> <strong> Cantidad Total de Sacos: </strong> @Pesaje.PesajesDetalle.Sum(d => d.Cantidad)</label>
+                    <label class="col-12"> <strong> Peso Total: </strong> @Pesaje.PesajesDetalle.Sum(d => d.Cantidad * d.Peso).ToString("F2") kg</label>
+                    <label class="col-12"> <strong> Peso Total en Quintales: </strong> @((Pesaje.PesajesDetalle.Sum(d => d.Cantidad * d.Peso) / 125).ToString("F2"))</label>
+                </div>
+            </div>
+
+            <div class="card-footer d-flex justify-content-center gap-2">
+                <button type="submit" class="btn btn-accent bi bi-save"> Guardar </button>
+                <button type="button" class="btn btn-danger bi bi-trash" @onclick="() => MostrarModal = true" > Eliminar </button>
+                <a href="/Pesaje/Index" class="btn btn-outline-accent bi-arrow-left-circle"> Regresar </a>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@if(MostrarModal)
+{
+    <div class="modal d-block" role="dialog" tabindex="-1" style="background: rgba(0,0,0,0.5)">
+        <div class="modal-dialog">
+            <div class="modal-content modal-theme">
+
+                <div class="modal-header modal-header-accent">
+                    <h5 class="modal-title text-contrast mx-auto">
+                        <strong> Confirmar Eliminación </strong>
+                    </h5>
+                </div>
+
+                <div class="modal-body">
+
+                    <label class="col-12"> <strong> Datos del Pesaje </strong></label>
+                    <label class="col-12"> <strong> ID: </strong> @Pesaje.PesajeId </label>
+                    <label class="col-12"> <strong> Fecha: </strong> @Pesaje.Fecha.ToShortDateString() </label>
+                    <label class="col-12"> <strong> Empleado: </strong> @Pesaje.Empleado?.UserName </label>
+                    <label class="col-12"> <strong> Cantidad Total: </strong> @Pesaje.PesajesDetalle.Sum(a => a.Cantidad).ToString("F2") </label>
+                    <label class="col-12"> <strong> Peso Total: </strong> @Pesaje.PesajesDetalle.Sum(d => d.Cantidad * d.Peso).ToString("F2") kg </label>
+                    <label class="col-12"> <strong> Quintales: </strong> @((Pesaje.PesajesDetalle.Sum(a => a.Cantidad * a.Peso) / 125).ToString("F2"))</label>
+
+                    <label class="text-danger mt-3">
+                        ¿Está seguro que desea eliminar este pesaje?
+                    </label>
+                </div>
+
+                <div class="modal-footer gap-2 bg-white d-flex justify-content-center">
+                    <button type="button" class="btn btn-danger bi bi-trash"
+                            @onclick="EliminarPesaje">
+                        Sí, eliminar
+                    </button>
+
+                    <button type="button" class="btn btn-outline-accent bi bi-arrow-left"
+                            @onclick="() => MostrarModal = false">
+                        Regresar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int PesajeId { get; set; }
+
+    public Pesajes? Pesaje { get; set; } = new();
+
+    public List<Sacos> ListaSacos { get; set; } = new List<Sacos>();
+
+    private string? mensajeError { get; set; }
+
+    public bool MostrarModal { get; set; } = false;
+
+    public PesajesDetalles detalleSeleccionado { get; set; } = new PesajesDetalles()
+    {
+        SacoId = 1
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        Pesaje = await pesajeService.Buscar(PesajeId);
+        ListaSacos = await pesajeService.ListarSacos(p => true);
+    }
+
+    public async Task GuardarPesaje()
+    {
+        if (await pesajeService.Guardar(Pesaje))
+        {
+            navigationManager.NavigateTo("/Pesaje/Index");
+        }
+    }
+
+    public async Task EliminarPesaje()
+    {
+        if (await pesajeService.Eliminar(PesajeId))
+        {
+            navigationManager.NavigateTo("/Pesaje/Index");
+        }
+    }
+
+    private void AgregarDetalle((Sacos saco, double cantidad, double peso) datos)
+    {
+        var nuevoDetalle = new PesajesDetalles
+        {
+            SacoId = datos.saco.SacoId,
+            Cantidad = datos.cantidad,
+            Peso = datos.peso
+        };
+
+        Pesaje.PesajesDetalle.Add(nuevoDetalle);
+
+        detalleSeleccionado = new PesajesDetalles() { SacoId = 1 };
+    }
+
+    private void RemoverDetalle(PesajesDetalles detalle)
+    {
+        Pesaje.PesajesDetalle.Remove(detalle);
+        detalleSeleccionado = detalle;
+    }
+}

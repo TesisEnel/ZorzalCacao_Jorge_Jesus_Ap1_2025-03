@@ -1,0 +1,177 @@
+﻿@page "/Choferes/View/{ChoferId:int}"
+@inject ChoferesService choferService
+@inject NavigationManager navigation
+@rendermode InteractiveServer
+
+@attribute [Authorize(Roles = "Empleado")]
+
+<PageTitle>Detalles del Chofer</PageTitle>
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10 col-xl-8">
+
+            <div class="card shadow-lg border-0">
+
+                <!-- Encabezado -->
+                <div class="card-header bg-accent text-contrast py-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="mb-1 text-contrast">
+                                <i class="bi bi-truck-front-fill"></i> Detalles del Chofer
+                            </h4>
+                            <small>ID: #@chofer.ChoferId</small>
+                        </div>
+
+                        <a href="/Choferes/Index" class="btn btn-light btn-sm bi bi-arrow-left">
+                            Regresar
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card-body p-4">
+
+                    <!-- Nombre -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="detail-card p-4 rounded border-start border-primary border-4">
+                                <div class="d-flex align-items-start">
+                                    <i class="bi bi-person-fill fs-3 text-primary me-3"></i>
+                                    <div>
+                                        <small class="text-muted">Nombre</small>
+                                        <p class="mb-0 fs-5">@chofer.Nombre</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Apellido -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="detail-card p-4 rounded border-start border-dark border-4">
+                                <div class="d-flex align-items-start">
+                                    <i class="bi bi-person-vcard-fill fs-3 text-dark me-3"></i>
+                                    <div>
+                                        <small class="text-muted">Apellido</small>
+                                        <p class="mb-0 fs-5">@chofer.Apellido</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cédula -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="detail-card p-4 rounded border-start border-secondary border-4">
+                                <div class="d-flex align-items-start">
+                                    <i class="bi bi-credit-card-2-front-fill fs-3 text-secondary me-3"></i>
+                                    <div>
+                                        <small class="text-muted">Cédula</small>
+                                        <p class="mb-0 fs-5">@chofer.Cedula</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Teléfono -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="detail-card p-4 rounded border-start border-success border-4">
+                                <div class="d-flex align-items-start">
+                                    <i class="bi bi-telephone-fill fs-3 text-success me-3"></i>
+                                    <div>
+                                        <small class="text-muted">Teléfono</small>
+                                        <p class="mb-0 fs-5">@chofer.Telefono</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Licencia -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="detail-card p-4 rounded border-start border-warning border-4">
+                                <div class="d-flex align-items-start">
+                                    <i class="bi bi-card-checklist fs-3 text-warning me-3"></i>
+                                    <div>
+                                        <small class="text-muted">Licencia</small>
+                                        <p class="mb-0 fs-5">@chofer.Licencia</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ================= VEHÍCULOS ASIGNADOS ================= -->
+                    <div class="row mt-5">
+                        <div class="col-12">
+                            <h5 class="text-center mb-3">
+                                <i class="bi bi-truck"></i> Vehículos Asignados
+                            </h5>
+
+                            @if (chofer.Vehiculos == null || !chofer.Vehiculos.Any())
+                            {
+                                <div class="alert alert-warning text-center">
+                                    ⚠ Este chofer no tiene vehículos asignados.
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered text-center">
+                                        <thead class="table-dark">
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Marca</th>
+                                                <th>Modelo</th>
+                                                <th>Placa</th>
+                                                <th>Tipo</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var v in chofer.Vehiculos)
+                                            {
+                                                <tr>
+                                                    <td>@v.VehiculoId</td>
+                                                    <td>@v.Marca</td>
+                                                    <td>@v.Modelo</td>
+                                                    <td>@v.Placa</td>
+                                                    <td>@v.TipoVehiculo</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="card-footer bg-white d-flex justify-content-center gap-2">
+                    <a href="/Choferes/Index"
+                       class="btn btn-outline-accent bi bi-arrow-left-circle">
+                        Regresar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int ChoferId { get; set; }
+
+    private Choferes? chofer { get; set; } = new ();
+
+    protected override async Task OnInitializedAsync()
+    {
+        chofer = await choferService.Buscar(ChoferId);
+    }
+}
+
+

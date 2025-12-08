@@ -1,0 +1,139 @@
+﻿@page "/ListaProductores/Index"
+@inject IUserRoleService userRoleService
+@inject NavigationManager nav
+@rendermode InteractiveServer
+
+<PageTitle>Consulta de Productores</PageTitle>
+<div class="container-fluid px-4 mt-4 cacao-background">
+
+    <!-- ✅ ENCABEZADO CACAO -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold text-brown mb-0">
+                <i class="bi bi-people-fill me-1"></i> Productores
+            </h3>
+            <small class="text-muted">Consulta y gestión de productores de cacao</small>
+        </div>
+    </div>
+
+    <!-- ✅ TARJETA PRINCIPAL -->
+    <div class="card shadow border-0 rounded-4 bg-cacao-light">
+
+        <!-- ✅ FILTROS -->
+        <div class="card-body border-bottom bg-cacao rounded-top-4">
+            <div class="row align-items-end g-3">
+
+                <div class="col-12 col-md-4">
+                    <label class="form-label fw-semibold text-white">Filtrar por</label>
+                    <InputSelect class="form-select" @bind-Value="Filtro">
+                        <option value="" disabled selected>Seleccione una opción</option>
+                        <option value="Nombre">Nombre</option>
+                        <option value="Email">Email</option>
+                    </InputSelect>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <label class="form-label fw-semibold text-white">Búsqueda</label>
+                    <div class="input-group">
+                        <input class="form-control" @bind="ValorFiltro" placeholder="Buscar productor..." />
+                        <button class="btn btn-outline-light bi bi-search" @onclick="Buscar"></button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ✅ TABLA ESTILO CACAO -->
+        <div class="table-responsive">
+            <table class="table align-middle mb-0 text-center">
+
+                <thead style="background:#5a3a1b; color:white;">
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Email</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody class="bg-white">
+
+                    @if (ListaProductores == null || !ListaProductores.Any())
+                    {
+                        <tr>
+                            <td colspan="3" class="py-4 text-muted">
+                                <i class="bi bi-info-circle"></i> No se han encontrado productores.
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var pro in ListaProductores)
+                        {
+                            <tr style="border-bottom:1px solid #e7d8c9;">
+                                <td class="fw-semibold">@pro.UserName</td>
+                                <td>@pro.Email</td>
+
+                                <!-- ACCIONES -->
+                                <td class="d-flex justify-content-center">
+
+                                    <a class="btn btn-sm btn-outline-cacao bi bi-eye"
+                                       href="/ListaProductores/View/@pro.Id"
+                                       title="Ver"></a>
+
+                                    <a class="btn btn-sm btn-outline-warning bi bi-pencil-square ms-1"
+                                       href="/ListaProductores/Edit/@pro.Id"
+                                       title="Editar"></a>
+
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+
+            </table>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="card-footer">
+            <label class="badge bg-dark fs-6 m-0">
+                Total: @ListaProductores?.Count
+            </label>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    public string Filtro { get; set; } = string.Empty;
+
+    public string ValorFiltro { get; set; } = string.Empty;
+
+    public List<ApplicationUser> ListaProductores { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Buscar();
+    }
+
+    public async Task Buscar()
+    {
+        var lista = await userRoleService.GetProductoresAsync();
+
+        if (!string.IsNullOrWhiteSpace(ValorFiltro))
+        {
+            if (Filtro == "Nombre")
+            {
+                lista = lista.Where(p =>
+                    p.UserName.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            else if (Filtro == "Email")
+            {
+                lista = lista.Where(u =>
+                    (u.Email ?? "").Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+        }
+
+        ListaProductores = lista;
+    }
+}

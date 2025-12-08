@@ -1,0 +1,189 @@
+﻿@page "/Choferes/Index"
+@inject ChoferesService choferesService
+@inject NavigationManager nav
+@rendermode InteractiveServer
+
+@attribute [Authorize(Roles = "Empleado")]
+
+<PageTitle>Choferes</PageTitle>
+
+<div class="container-fluid px-4 mt-4 cacao-background">
+
+    <!-- ✅ ENCABEZADO CACAO -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold text-brown mb-0">
+                <i class="bi bi-person-badge me-1"></i> Choferes
+            </h3>
+            <small class="text-muted">Registro de personal de transporte de cacao</small>
+        </div>
+
+        <a class="btn btn-cacao shadow-sm bi bi-plus-circle"
+           href="/Choferes/Create">
+            Nuevo Chofer
+        </a>
+    </div>
+
+    <!-- ✅ TARJETA PRINCIPAL -->
+    <div class="card shadow border-0 rounded-4 bg-cacao-light">
+
+        <!-- ✅ FILTROS -->
+        <div class="card-body border-bottom bg-cacao rounded-top-4">
+            <div class="row align-items-end g-3">
+
+                <div class="col-12 col-md-4">
+                    <label class="form-label fw-semibold text-white">Filtrar por</label>
+                    <InputSelect class="form-select" @bind-Value="Filtro">
+                        <option value="" disabled selected>Seleccione una opción</option>
+                        <option value="ChoferId">Chofer Id</option>
+                        <option value="Nombre">Nombre</option>
+                        <option value="Apellido">Apellido</option>
+                        <option value="Cedula">Cédula</option>
+                        <option value="Telefono">Teléfono</option>
+                        <option value="Licencia">Licencia</option>
+                    </InputSelect>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <label class="form-label fw-semibold text-white">Búsqueda</label>
+                    <div class="input-group">
+                        <input class="form-control" @bind="ValorFiltro" placeholder="Buscar chofer..." />
+                        <button class="btn btn-outline-light bi bi-search" @onclick="Buscar"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ✅ TABLA CACAO -->
+        <div class="table-responsive">
+            <table class="table align-middle mb-0 text-center">
+
+                <thead style="background:#5a3a1b; color:white;">
+                    <tr>
+                        <th>Chofer Id</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Cédula</th>
+                        <th>Teléfono</th>
+                        <th>Licencia</th>
+                        <th>Vehículos</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody class="text-center bg-white">
+
+                    @if (!ListaChoferes.Any())
+                    {
+                        <tr>
+                            <td colspan="8" class="py-4 text-muted">
+                                <i class="bi bi-info-circle"></i> No hay choferes registrados.
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var c in ListaChoferes)
+                        {
+                            <tr style="border-bottom:1px solid #e7d8c9;">
+                                <td class="fw-semibold">@c.ChoferId</td>
+                                <td>@c.Nombre</td>
+                                <td>@c.Apellido</td>
+                                <td>@c.Cedula</td>
+                                <td>@c.Telefono</td>
+                                <td>@c.Licencia</td>
+
+                                <!-- ✅ VEHÍCULOS ESTILO CACAO -->
+                                <td>
+                                    @if (c.Vehiculos != null && c.Vehiculos.Any())
+                                    {
+                                        @foreach (var v in c.Vehiculos)
+                                        {
+                                            <span class="badge bg-cacao-vehiculo me-1 mb-1">
+                                                @v.Marca @v.Modelo
+                                            </span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">Sin vehículo</span>
+                                    }
+                                </td>
+
+                                <!-- ✅ ACCIONES -->
+                                <td class="d-flex justify-content-center">
+                                    <a class="btn btn-sm btn-outline-cacao bi bi-eye"
+                                       href="/Choferes/View/@c.ChoferId"
+                                       title="Ver"></a>
+
+                                    <a class="btn btn-sm btn-outline-warning bi bi-pencil-square ms-1"
+                                       href="/Choferes/Edit/@c.ChoferId"
+                                       title="Editar"></a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card-footer">
+            <label class="badge bg-dark fs-6 m-0"> Total: @ListaChoferes.Count</label>
+        </div>
+    </div>
+</div>
+
+@code {
+    public string Filtro { get; set; } = string.Empty;
+    public string ValorFiltro { get; set; } = string.Empty;
+
+    public List<Choferes> ListaChoferes { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Buscar();
+    }
+
+    public async Task Buscar()
+    {
+        var lista = await choferesService.Listar(c => true);
+
+        if (!string.IsNullOrWhiteSpace(ValorFiltro))
+        {
+            if (Filtro == "ChoferId" && int.TryParse(ValorFiltro, out int id))
+            {
+                lista = lista.Where(c => c.ChoferId == id).ToList();
+            }
+
+            else if (Filtro == "Nombre")
+            {
+                lista = lista.Where(c => c.Nombre.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            else if (Filtro == "Apellido")
+            {
+                lista = lista.Where(c => c.Apellido.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            else if (Filtro == "Cedula")
+            {
+                lista = lista.Where(c => c.Cedula.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            else if (Filtro == "Telefono")
+            {
+                lista = lista.Where(c => c.Telefono.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            else if (Filtro == "Licencia")
+            {
+                lista = lista.Where(c => c.Licencia.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+        }
+
+
+        ListaChoferes = lista;
+    }
+}
+
+

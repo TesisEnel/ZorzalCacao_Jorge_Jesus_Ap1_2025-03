@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using ZorzalCacao.Data;
 
 namespace ZorzalCacao.Models;
@@ -14,21 +13,17 @@ public class Recogidas
 
     [Required(ErrorMessage = "Punto de encuentro requerido")]
     public string PuntoEncuentro { get; set; } = null!;
-    public List<string> CertificacionesProducto { get; set; } = new List<string>();
+    public string CertificacionProducto { get; set; } = string.Empty;
     public string EstadoEntrega { get; set; } = "Pendiente";
 
-    [Required(ErrorMessage = "Cantidad de sacos requerida")]
     [Range(0.01, double.MaxValue, ErrorMessage = "Cantidad de sacos no valida")]
     public double CantidadSacos { get; set; }
 
-    [Required(ErrorMessage = "Chofer requerido")]
-    public string Chofer { get; set; } = null!;
+    [Required(ErrorMessage = "Por favor, seleccione un chofer")]
+    public int? ChoferId { get; set; }
+    public Choferes? Chofer { get; set; }
 
-    //productor 
+    [Required(ErrorMessage ="Por favor, seleccione un productor")]
     public string ProductorId { get; set; }
     public ApplicationUser Productor { get; set; }
-
-    ////empleado
-    //public string EmpleadoId { get; set; }
-    //public ApplicationUser Empleado { get; set; }
 }

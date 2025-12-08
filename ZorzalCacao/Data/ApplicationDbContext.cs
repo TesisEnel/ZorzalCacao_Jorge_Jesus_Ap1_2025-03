@@ -15,17 +15,42 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Remociones> Remociones { get; set; }
     public DbSet<FermentacionesDetalles> FermentacionesDetalles { get; set; }
     public DbSet<Sacos> Sacos { get; set; }
-
+    public DbSet<Vehiculo> Vehiculos { get; set; }
+    public DbSet<Choferes> Choferes { get; set; }
+    public DbSet<EventosClimaticos> EventosClimaticos { get; set; }
+    public DbSet<ZonasProduccion> ZonasProduccion { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
 
-        // Relación entre Recogida y ApplicationUser (Productor)
+        builder.Entity<Remociones>(entity =>
+        {
+            entity.HasData(
+                new(){RemocionId = 1, NumeroRemocion = 1,},
+                new() { RemocionId = 2, NumeroRemocion = 2, },
+                new() { RemocionId = 3, NumeroRemocion = 3, },
+                new() { RemocionId = 4, NumeroRemocion = 4, }
+            );
+        });
+
+        builder.Entity<Sacos>(entity =>
+        {
+            entity.HasData(
+                new Sacos{ SacoId = 1, Descripcion = "Saco estÃ¡ndar",}
+            );
+        });
+
         builder.Entity<Recogidas>()
             .HasOne(r => r.Productor)
-            .WithMany() // o WithMany(u => u.Recogidas) si agregas navegación inversa
+            .WithMany()
             .HasForeignKey(r => r.ProductorId)
-            .OnDelete(DeleteBehavior.Restrict); // No eliminar recogidas si se borra el usuario
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.Entity<Vehiculo>()
+            .HasOne(v => v.Chofer)
+            .WithMany(c => c.Vehiculos)
+            .HasForeignKey(v => v.ChoferId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.Entity<FermentacionesDetalles>(entity =>
         {

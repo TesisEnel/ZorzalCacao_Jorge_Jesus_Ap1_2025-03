@@ -1,0 +1,162 @@
+﻿@page "/EventosClimaticos/Edit/{EventoClimaticoId:int}"
+@inject EventosClimaticosService eventosService
+@inject IUserRoleService userRoleService
+@inject NavigationManager navigation
+@rendermode InteractiveServer
+
+@attribute [Authorize(Roles = "Empleado")]
+
+<PageTitle>Editar Evento Climático</PageTitle>
+
+
+<div class="container mt-3">
+    <div class="card theme-card">
+        <div class="card-header bg-accent text-contrast">
+            <h5 class="card-title text-center">
+                <strong> Editar evento climático </strong>
+            </h5>
+        </div>
+
+        <EditForm Model="evento" OnValidSubmit="GuardarEvento">
+            <DataAnnotationsValidator />
+
+            <div class="card-body">
+
+                <div class="row">
+
+                    <!-- Fecha -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label text-heading"><strong>Fecha</strong></label>
+                        <InputDate class="form-control" @bind-Value="evento.Fecha" />
+                        <ValidationMessage For="() => evento.Fecha" />
+                    </div>
+
+                    <!-- Zona -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label text-heading"><strong>Zona</strong></label>
+                        <InputText class="form-control" @bind-Value="evento.Zona" />
+                        <ValidationMessage For="() => evento.Zona" />
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <!-- Tipo de evento -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label text-heading"><strong>Tipo de evento</strong></label>
+                        <InputSelect class="form-select" @bind-Value="evento.TipoEvento">
+                            <option value="" disabled selected>Seleccione un tipo</option>
+                            <option value="Lluvia">Lluvia</option>
+                            <option value="Sequía">Sequía</option>
+                            <option value="Tormenta">Tormenta</option>
+                            <option value="Viento fuerte">Viento fuerte</option>
+                            <option value="Otros">Otros</option>
+                        </InputSelect>
+                        <ValidationMessage For="() => evento.TipoEvento" />
+                    </div>
+
+                    <!-- Intensidad -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label text-heading"><strong>Intensidad</strong></label>
+                        <InputSelect class="form-select" @bind-Value="evento.Intensidad">
+                            <option value="" disabled selected>Seleccione una intensidad</option>
+                            <option value="Leve">Leve</option>
+                            <option value="Moderada">Moderada</option>
+                            <option value="Fuerte">Fuerte</option>
+                        </InputSelect>
+                        <ValidationMessage For="() => evento.Intensidad" />
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <!-- Observaciones -->
+                    <div class="col-12 col-md-12 mb-3">
+                        <label class="col-form-label text-heading"><strong>Observaciones</strong></label>
+                        <InputTextArea class="form-control" @bind-Value="evento.Observaciones" />
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="card-footer gap-2 bg-white d-flex justify-content-center">
+                <button type="submit" class="btn btn-accent bi bi-save"> Guardar </button>
+                <button type="button" class="btn btn-danger bi bi-trash" @onclick="() => MostrarModal = true"> Eliminar </button>
+                <a class="btn btn-outline-accent bi bi-arrow-left-circle" href="/EventosClimaticos/Index"> Regresar </a>
+            </div>
+
+        </EditForm>
+    </div>
+</div>
+
+
+@if (MostrarModal)
+{
+    <div class="modal d-block" role="dialog" tabindex="-1" style="background:rgba(0,0,0,0.5)">
+        <div class="modal-dialog">
+            <div class="modal-content modal-theme">
+
+                <div class="modal-header modal-header-accent">
+                    <h5 class="modal-title text-contrast mx-auto"><strong>Eliminar Evento Climático</strong></h5>
+                </div>
+
+                <div class="modal-body">
+                    <label class="col-12"><strong>ID:</strong> @evento.EventoClimaticoId</label>
+                    <label class="col-12"><strong>Fecha:</strong> @evento.Fecha.ToShortDateString()</label>
+                    <label class="col-12"><strong>Zona:</strong> @evento.Zona</label>
+                    <label class="col-12"><strong>Tipo:</strong> @evento.TipoEvento</label>
+                    <label class="col-12"><strong>Intensidad:</strong> @evento.Intensidad</label>
+                    <label class="col-12"><strong>Empleado:</strong> @evento.Empleado?.UserName</label>
+
+                    <label class="col-12 text-danger mt-3">¿Está seguro que desea eliminar este registro?</label>
+                </div>
+
+                <div class="modal-footer d-flex justify-content-center gap-2">
+                    <button type="button" class="btn btn-danger bi bi-trash" @onclick="EliminarEvento"> Sí, eliminar </button>
+                    <button type="button" class="btn btn-outline-accent bi bi-arrow-left" @onclick="() => MostrarModal = false"> Regresar </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public int EventoClimaticoId { get; set; }
+
+    public EventosClimaticos? evento { get; set; } = new();
+
+    private bool MostrarModal = false;
+
+    private List<ApplicationUser> ListaEmpleados = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        evento = await eventosService.Buscar(EventoClimaticoId);
+
+        var empleados = await userRoleService.GetUsersByRoleAsync("Empleado");
+        ListaEmpleados = empleados.ToList();
+    }
+
+    public async Task GuardarEvento()
+    {
+        if (evento != null && await eventosService.Guardar(evento))
+        {
+            navigation.NavigateTo("/EventosClimaticos/Index");
+        }
+    }
+
+    public async Task EliminarEvento()
+    {
+        if (await eventosService.Eliminar(EventoClimaticoId))
+        {
+            navigation.NavigateTo("/EventosClimaticos/Index");
+        }
+    }
+}
+
+

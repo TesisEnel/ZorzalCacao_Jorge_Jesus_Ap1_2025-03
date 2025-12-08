@@ -1,12 +1,15 @@
 ﻿@page "/Productor/Index"
+@inject RecogidasService recogidaService
+@inject ZonasProduccionService zonaService
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @rendermode InteractiveServer
 
 @attribute [Authorize(Roles = "Productor")]
 
-<PageTitle>Productores</PageTitle>
+<PageTitle>Menu productores</PageTitle>
 
 <!-- Stats Title -->
-<div class="container section-title" data-aos="fade-up">
+<div class="container section-title">
     <h2 style="font-weight: 700; font-size: 32px; color: #222;">Estadísticas del Productor</h2>
     <p style="color: #555; font-size: 16px;">
         Resumen general de las operaciones relacionadas al productor
@@ -15,13 +18,13 @@
 
 <!-- Stats Section -->
 <section id="stats" class="stats section">
-    <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="container">
         <div class="row justify-content-center" style="gap: 30px;">
 
             <div class="col-auto">
                 <div class="stats-item stats-box">
                     <i class="bi bi-hourglass-split"></i>
-                    <span data-purecounter-start="0" data-purecounter-end="12" data-purecounter-duration="1" class="purecounter"></span>
+                    <span class="purecounter"> @ListaPendientes.Count </span>
                     <p><strong>Recogidas Pendientes</strong></p>
                     <span class="description">Aún no completadas</span>
                 </div>
@@ -30,9 +33,18 @@
             <div class="col-auto">
                 <div class="stats-item stats-box">
                     <i class="bi bi-check2-circle"></i>
-                    <span data-purecounter-start="0" data-purecounter-end="25" data-purecounter-duration="1" class="purecounter"></span>
+                    <span class="purecounter"> @ListaEntregadas.Count</span>
                     <p><strong>Recogidas Entregadas</strong></p>
                     <span class="description">Completadas exitosamente</span>
+                </div>
+            </div><!-- End Stats Item -->
+
+            <div class="col-auto">
+                <div class="stats-item stats-box">
+                    <i class="bi bi-geo-alt"></i>
+                    <span class="purecounter"> @ListaZonas.Count</span>
+                    <p><strong>Zonas de Producción</strong></p>
+                    <span class="description">Áreas de cobertura</span>
                 </div>
             </div><!-- End Stats Item -->
 
@@ -42,7 +54,7 @@
 <!-- Services Section -->
 <section id="servicesE" class="services section">
 
-    <div class="container section-title" data-aos="fade-up">
+    <div class="container section-title">
         <h2 style="font-weight: 700; font-size: 32px;">Servicios para Productores</h2>
         <p style="font-size: 16px; color: #555;">
             Consulta rápida y detallada de todas las recogidas asociadas al productor para un mejor seguimiento y control.
@@ -52,7 +64,7 @@
     <div class="container">
         <div class="row gy-4">
 
-            <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="100">
+            <div class="col-lg-4 col-md-6 service-item d-flex">
                 <div class="icon flex-shrink-0"><i class="bi bi-search"></i></div>
                 <div>
                     <h4 class="title">
@@ -64,98 +76,55 @@
                 </div>
             </div><!-- End Service Item -->
 
+            <div class="col-lg-4 col-md-6 service-item d-flex">
+                <div class="icon flex-shrink-0"><i class="bi bi-geo-alt"></i></div>
+                <div>
+                    <h4 class="title">
+                        <a href="/Zonas/Index" class="stretched-link">Zonas de Producción</a>
+                    </h4>
+                    <p class="description">
+                        Consulta y gestiona tus zonas de producción, incluyendo ubicación, provincia y distancia desde el centro de acopio.
+                    </p>
+                </div>
+            </div><!-- End Service Item -->
         </div>
     </div>
 </section><!-- /Services Section -->
 
-<footer id="footer" class="footer position-relative light-background">
-    <div class="container">
-        <div class="copyright text-center ">
-            <p>© <span>Copyright</span> <strong class="px-1 sitename">iPortfolio</strong> <span>All Rights Reserved</span></p>
-        </div>
-        <div class="credits">
-            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> Distributed by <a href="https://themewagon.com">ThemeWagon</a>
-        </div>
-    </div>
-</footer>
-
-<!-- Scroll Top -->
-<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
-    <i class="bi bi-arrow-up-short"></i>
-</a>
-
-<style>
-    .stats-box {
-        background: #fff;
-        border: 2px solid #e8e8e8;
-        border-radius: 16px;
-        padding: 25px 20px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        transition: all 0.3s ease;
-        text-align: center;
-        width: 200px;
-        min-height: 260px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-
-        .stats-box:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-        }
-
-        .stats-box i {
-            font-size: 48px;
-            margin-bottom: 15px;
-            display: block;
-            line-height: 1;
-        }
-
-        .stats-box .purecounter {
-            font-size: 48px;
-            font-weight: 700;
-            color: #050d18;
-            display: block;
-            margin: 10px 0;
-            line-height: 1;
-        }
-
-        .stats-box p {
-            margin: 10px 0 5px 0;
-        }
-
-        .stats-box strong {
-            font-size: 17px;
-            color: #050d18;
-            font-weight: 600;
-            display: block;
-            line-height: 1.3;
-        }
-
-        .stats-box .description {
-            color: #6c757d;
-            font-size: 12px;
-            line-height: 1.4;
-            display: block;
-            margin-top: 8px;
-        }
-
-    @@media (max-width: 768px) {
-        .stats-box {
-            width: 160px;
-            min-height: 220px;
-            padding: 25px 15px;
-        }
-
-        .stats .row {
-            gap: 20px !important;
-        }
-    }
-</style>
-
-
 @code {
+    public List<Recogidas> ListaPendientes = new List<Recogidas>();
+
+    public List<Recogidas> ListaEntregadas = new List<Recogidas>();
+
+    public List<ZonasProduccion> ListaZonas = new List<ZonasProduccion>();
+
+    private string? userId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaPendientes = await recogidaService.Listar(r => r.EstadoEntrega == "Pendiente");
+        ListaEntregadas = await recogidaService.Listar(r => r.EstadoEntrega == "Entregada");
+
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity?.IsAuthenticated == true)
+        {
+            userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (!string.IsNullOrEmpty(userId))
+            {
+                ListaZonas = await zonaService.Listar(z => z.ProductorId == userId);
+            }
+            else
+            {
+                ListaZonas = new List<ZonasProduccion>();
+            }
+        }
+        else
+        {
+            ListaZonas = new List<ZonasProduccion>();
+        }
+    }
 
 }

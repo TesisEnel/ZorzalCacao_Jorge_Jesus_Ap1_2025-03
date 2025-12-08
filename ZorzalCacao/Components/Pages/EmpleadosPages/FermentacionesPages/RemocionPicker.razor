@@ -1,5 +1,148 @@
-﻿<h3>RemocionPicker</h3>
+﻿<div class="row align-items-center">
+    <div class="col-12 col-md-3 mb-3">
+        <label class="col-form-label  text-heading"> <strong> Remocion </strong></label>
+        <InputSelect class="form-select" @bind-Value="RemocionId" disabled="@TemporizadorPadreActivo">
+            <option value="0" disabled selected> Seleccionar remocion </option>
+            @foreach (var remo in ListaRemociones)
+            {
+                <option value="@remo.RemocionId" disabled="@EstaRemocionDeshabilitada(remo)">
+                    @remo.NumeroRemocion (Cantidad removida: @remo.Cantidad.ToString("F2"))
+                </option>
+            }
+        </InputSelect>
+    </div>
+
+    <div class="col-12 col-md-2 mb-3">
+        <label class="col-form-label  text-heading"> <strong> Responsable </strong></label>
+        <InputSelect class="form-select" @bind-Value="EmpleadoId" disabled="@TemporizadorPadreActivo">
+            <option value="" selected> Seleccione responsable </option>
+            @foreach (var empleado in ListaEmpleados)
+            {
+                <option value="@empleado.Id"> @empleado.UserName </option>
+            }
+        </InputSelect>
+    </div>
+
+    <div class="col-12 col-md-3 mb-3">
+        <label class="col-form-label text-heading"> <strong> Fecha </strong></label>
+        <InputDate Type="InputDateType.DateTimeLocal" class="form-control" @bind-Value="Fecha" disabled="@TemporizadorPadreActivo" />
+    </div>
+
+    <div class="col-12 col-md-2 mb-3">
+        <label class="col-form-label text-heading"> <strong> Cantidad </strong></label>
+        <InputNumber class="form-control" @bind-Value="Cantidad" disabled="@TemporizadorPadreActivo" />
+    </div>
+
+    <div class="col-12 col-md-2 mb-3">
+        <label class="col-form-label text-heading"> <strong> Temperatura </strong></label>
+        <div class="input-group">
+            <InputNumber class="form-control" @bind-Value="Temperatura" disabled="@TemporizadorPadreActivo" />
+            <button type="button" class="btn btn-success bi bi-plus-square" @onclick="TriggerSelection" disabled="@TemporizadorPadreActivo"></button>
+        </div>
+    </div>
+</div>
+
+@if (mensajeError != null)
+{
+    <div class="alert alert-danger">@mensajeError</div>
+}
+else if (mensajeExito != null)
+{
+    <div class="alert alert-success">
+        <i class="bi bi-check-circle-fill"></i> @mensajeExito
+    </div>
+}
 
 @code {
+    [Parameter]
+    public int RemocionId { get; set; }
 
+    [Parameter]
+    public double Cantidad { get; set; }
+
+    [Parameter]
+    public string EmpleadoId { get; set; } = "";
+
+    [Parameter]
+    public double Temperatura { get; set; }
+
+    [Parameter]
+    public DateTime Fecha { get; set; } = DateTime.Now;
+
+    [Parameter]
+    public int CantidadEnDetalle { get; set; } = 0;
+
+    [Parameter]
+    public bool TemporizadorPadreActivo { get; set; } = false;
+
+    [Parameter]
+    public List<Remociones> ListaRemociones { get; set; } = new();
+
+    [Parameter]
+    public List<ApplicationUser> ListaEmpleados { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<(Remociones remocion, double temperatura, double cantidad, ApplicationUser empleado, DateTime fecha)> OnRemocionSeleccionada { get; set; }
+
+    public string? mensajeError { get; set; }
+    public string? mensajeExito { get; set; }
+
+    private bool EstaRemocionDeshabilitada(Remociones remocion)
+    {
+        var indiceRemocion = ListaRemociones
+            .OrderBy(r => r.NumeroRemocion)
+            .ToList()
+            .FindIndex(r => r.RemocionId == remocion.RemocionId);
+
+        return indiceRemocion != CantidadEnDetalle;
+    }
+
+    public async Task TriggerSelection()
+    {
+        mensajeError = null;
+        mensajeExito = null;
+
+        if (RemocionId == 0)
+        {
+            mensajeError = "Por favor, seleccione una remoción";
+            return;
+        }
+        if (!(Temperatura >= 50 && Temperatura <= 100))
+        {
+            mensajeError = "Temperatura no válida. Debe estar entre 50°F y 100°F";
+            return;
+        }
+        if (Cantidad <= 0)
+        {
+            mensajeError = "Cantidad no válida";
+            return;
+        }
+        if (string.IsNullOrEmpty(EmpleadoId))
+        {
+            mensajeError = "Por favor, seleccione un empleado";
+            return;
+        }
+
+        var empleadoSeleccionado = ListaEmpleados.FirstOrDefault(e => e.Id == EmpleadoId);
+        if (empleadoSeleccionado == null)
+        {
+            mensajeError = "Empleado no encontrado";
+            return;
+        }
+
+        var remocionSeleccionada = ListaRemociones.Single(r => r.RemocionId == RemocionId);
+
+        // Verificar si es la última remoción
+        if (CantidadEnDetalle + 1 >= ListaRemociones.Count)
+        {
+            mensajeExito = "¡Se han completado todas las remociones exitosamente!";
+        }
+
+        await OnRemocionSeleccionada.InvokeAsync((remocionSeleccionada, Temperatura, Cantidad, empleadoSeleccionado, Fecha));
+    }
+
+    public void Dispose()
+    {
+        // Ya no hay timer interno que limpiar
+    }
 }

@@ -18,20 +18,20 @@ public class ControlesCalidadService(IDbContextFactory<ApplicationDbContext> DbF
             return await Modificar(control);
         }
     }
-    public async Task<bool> Existe(int controlId)
+    private async Task<bool> Existe(int controlId)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.Controles.AnyAsync(c => c.ControlId == controlId);
     }
 
-    public async Task<bool> Insertar(ControlesCalidad control)
+    private async Task<bool> Insertar(ControlesCalidad control)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         contexto.Controles.Add(control);
         return await contexto.SaveChangesAsync() > 0;
     }
 
-    public async Task<bool> Modificar(ControlesCalidad control)
+    private async Task<bool> Modificar(ControlesCalidad control)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         contexto.Update(control);
@@ -40,7 +40,10 @@ public class ControlesCalidadService(IDbContextFactory<ApplicationDbContext> DbF
     public async Task<ControlesCalidad?> Buscar(int controlId)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
-        return await contexto.Controles.FirstOrDefaultAsync(c => c.ControlId == controlId);
+        return await contexto.Controles
+            .Include(c => c.Recogida)
+            .Include(p => p.Empleado)
+            .FirstOrDefaultAsync(c => c.ControlId == controlId);
     }
 
     public async Task<bool> Eliminar(int controlId)
@@ -56,6 +59,8 @@ public class ControlesCalidadService(IDbContextFactory<ApplicationDbContext> DbF
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.Controles
+            .Include(c=> c.Recogida)
+            .Include(c => c.Empleado)
             .Where(criterio)
             .AsNoTracking()
             .ToListAsync();

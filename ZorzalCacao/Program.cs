@@ -24,7 +24,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
-    options.SignIn.RequireConfirmedAccount = false; // false en desarrollo, true en producción
+    options.SignIn.RequireConfirmedAccount = false; // false en desarrollo, true en producciÃ³n
 
     options.User.RequireUniqueEmail = true;
     options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
@@ -32,7 +32,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
     options.Password.RequireUppercase = true;
-    options.Password.RequireNonAlphanumeric = true; // Tus contraseñas tienen "!"
+    options.Password.RequireNonAlphanumeric = true; // Tus contraseÃ±as tienen "!"
     options.Password.RequiredLength = 8;
     options.Password.RequiredUniqueChars = 1;
 
@@ -50,7 +50,10 @@ builder.Services.AddScoped<RecogidasService>();
 builder.Services.AddScoped<ControlesCalidadService>();
 builder.Services.AddScoped<PesajesService>();
 builder.Services.AddScoped<FermentacionesService>();
-
+builder.Services.AddScoped<VehiculosService>();
+builder.Services.AddScoped<ChoferesService>();
+builder.Services.AddScoped<EventosClimaticosService>();
+builder.Services.AddScoped<ZonasProduccionService>();
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 
 var app = builder.Build();

@@ -73,6 +73,7 @@ public class FermentacionesService(IDbContextFactory<ApplicationDbContext> DbFac
         fermentacionActual.Temperatura = fermentacion.Temperatura;
         fermentacionActual.Observaciones = fermentacion.Observaciones;
         fermentacionActual.Fecha = fermentacion.Fecha;
+        fermentacionActual.EmpleadoId = fermentacion.EmpleadoId;
 
         foreach (var detalle in fermentacion.FermentacionesDetalle)
         {
@@ -82,6 +83,7 @@ public class FermentacionesService(IDbContextFactory<ApplicationDbContext> DbFac
                 Cantidad = detalle.Cantidad,
                 Temperatura = detalle.Temperatura,
                 FechaFermentacion = detalle.FechaFermentacion,
+                EmpleadoId = detalle.EmpleadoId
             };
 
             fermentacionActual.FermentacionesDetalle.Add(nuevoDetalle);
@@ -112,6 +114,8 @@ public class FermentacionesService(IDbContextFactory<ApplicationDbContext> DbFac
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.Fermentaciones
+            .Include(r => r.Recogida)
+            .Include(f => f.Empleado)
             .Include(d => d.FermentacionesDetalle)
             .FirstOrDefaultAsync(f => f.FermentacionId == fermentacionId);
     }
@@ -120,6 +124,7 @@ public class FermentacionesService(IDbContextFactory<ApplicationDbContext> DbFac
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.Fermentaciones
+            .Include(f => f.Empleado)
             .Include(d => d.FermentacionesDetalle)
             .Where(criterio)
             .AsNoTracking()

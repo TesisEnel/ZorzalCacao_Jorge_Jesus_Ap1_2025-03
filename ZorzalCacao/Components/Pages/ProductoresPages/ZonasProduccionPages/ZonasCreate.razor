@@ -1,0 +1,75 @@
+﻿@page "/Zonas/Create"
+@inject AuthenticationStateProvider AuthStateProvider
+@inject ZonasProduccionService zonasService
+@inject NavigationManager navigation
+@rendermode InteractiveServer
+
+@attribute [Authorize(Roles = "Productor")]
+
+<PageTitle> Crear zona de producción </PageTitle>
+
+<div class="container mt-3">
+    <div class="card theme-card">
+        <div class="card-header bg-accent text-contrast">
+            <h5 class="card-title text-center">
+                <strong> Crear zona de producción </strong>
+            </h5>
+        </div>
+
+        <EditForm Model="zona" OnValidSubmit="GuardarZona">
+            <DataAnnotationsValidator />
+
+            <div class="card-body">
+                <div class="row">
+                    <!-- Nombre -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label text-heading"><strong>Nombre de la zona</strong></label>
+                        <InputText class="form-control" @bind-Value="zona.Nombre" />
+                        <ValidationMessage For="() => zona.Nombre" />
+                    </div>
+
+                    <!-- Provincia -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label text-heading"><strong>Provincia</strong></label>
+                        <InputText class="form-control" @bind-Value="zona.Provincia" />
+                        <ValidationMessage For="() => zona.Provincia" />
+                    </div>
+
+                    <!-- Distancia -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label text-heading"><strong>Distancia (km)</strong></label>
+                        <InputNumber class="form-control" @bind-Value="zona.Distancia" />
+                        <ValidationMessage For="() => zona.Distancia" />
+                    </div>
+
+                    <div class="col-12 col-md-6 mb-3">
+                        <label class="col-form-label text-heading"><strong>Referencia</strong></label>
+                        <InputTextArea class="form-control" rows="3" @bind-Value="zona.Referencia" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer gap-2 bg-white d-flex justify-content-center">
+                <button type="submit" class="btn btn-accent bi bi-save"> Guardar </button>
+                <a class="btn btn-outline-accent bi bi-arrow-left-circle" href="/Zonas/Index"> Regresar </a>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    public ZonasProduccion zona { get; set; } = new ZonasProduccion();
+
+    public async Task GuardarZona()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        zona.ProductorId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (await zonasService.Guardar(zona))
+        {
+            navigation.NavigateTo("/Zonas/Index");
+        }
+    }
+}

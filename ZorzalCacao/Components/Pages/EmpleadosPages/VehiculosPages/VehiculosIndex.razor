@@ -1,0 +1,177 @@
+﻿@page "/Vehiculos/Index"
+@inject VehiculosService vehiculosService
+@inject NavigationManager nav
+@rendermode InteractiveServer
+
+@attribute [Authorize(Roles = "Empleado")]
+
+<PageTitle> Consulta de vehículos </PageTitle>
+<div class="container-fluid px-4 mt-4 cacao-background">
+
+    <!-- 🟫 ENCABEZADO CACAO -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h3 class="fw-bold text-brown mb-0">
+                <i class="bi bi-truck me-1"></i> Vehículos
+            </h3>
+            <small class="text-muted">Listado de vehículos registrados</small>
+        </div>
+
+        <a class="btn btn-cacao shadow-sm bi bi-plus-circle"
+           href="/Vehiculos/Create">
+            Nuevo vehículo
+        </a>
+    </div>
+
+    <!-- 🟫 TARJETA PRINCIPAL -->
+    <div class="card shadow border-0 rounded-4 bg-cacao-light">
+
+        <!-- FILTROS EN CACAO -->
+        <div class="card-body border-bottom bg-cacao rounded-top-4">
+            <div class="row align-items-end g-3">
+
+                <!-- Filtrar por -->
+                <div class="col-12 col-md-6">
+                    <label class="form-label fw-semibold text-white">Filtrar por</label>
+                    <InputSelect class="form-select" @bind-Value="Filtro">
+                        <option value="" disabled selected>Seleccione una opción</option>
+                        <option value="VehiculoId">Vehículo Id</option>
+                        <option value="Marca">Marca</option>
+                        <option value="Modelo">Modelo</option>
+                        <option value="Placa">Placa</option>
+                        <option value="TipoVehiculo">Tipo</option>
+                        <option value="Chofer">Chofer</option>
+                    </InputSelect>
+                </div>
+
+                <!-- Búsqueda -->
+                <div class="col-12 col-md-6">
+                    <label class="form-label fw-semibold text-white">Búsqueda</label>
+                    <div class="input-group">
+                        <input class="form-control" @bind="ValorFiltro" placeholder="Buscar..." />
+                        <button class="btn btn-outline-light bi bi-search"
+                                @onclick="Buscar"></button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TABLA CACAO -->
+        <div class="table-responsive">
+            <table class="table align-middle mb-0 text-center">
+
+                <thead style="background:#5a3a1b; color:white;">
+                    <tr>
+                        <th>Vehículo Id</th>
+                        <th>Marca</th>
+                        <th>Modelo</th>
+                        <th>Placa</th>
+                        <th>Año</th>
+                        <th>Tipo</th>
+                        <th>Chofer</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody class="bg-white">
+
+                    @if (ListaVehiculos == null || ListaVehiculos.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="8" class="py-4 text-muted">
+                                <i class="bi bi-info-circle"></i> No se han encontrado vehículos.
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var v in ListaVehiculos)
+                        {
+                            <tr style="border-bottom:1px solid #e7d8c9;">
+                                <td>@v.VehiculoId</td>
+                                <td>@v.Marca</td>
+                                <td>@v.Modelo</td>
+                                <td>@v.Placa</td>
+                                <td>@v.Anio</td>
+                                <td>@v.TipoVehiculo</td>
+
+                                <td>
+                                    @(v.Chofer == null
+                                                                ? "Sin asignar"
+                                                                : $"{v.Chofer.Nombre} {v.Chofer.Apellido}")
+                                </td>
+
+                                <td class="d-flex justify-content-center">
+                                    <a class="btn btn-sm btn-outline-cacao bi bi-eye"
+                                       href="/Vehiculos/View/@v.VehiculoId"
+                                       title="Ver"></a>
+
+                                    <a class="btn btn-sm btn-outline-warning bi bi-pencil-square ms-1"
+                                       href="/Vehiculos/Edit/@v.VehiculoId"
+                                       title="Editar"></a>
+                                </td>
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+            </table>
+        </div>
+
+        <!-- FOOTER CACAO -->
+        <div class="card-footer">
+            <span class="badge bg-dark fs-6 m-0">
+                Total vehículos: @(ListaVehiculos?.Count ?? 0)
+            </span>
+        </div>
+
+    </div>
+</div>
+
+@code {
+    public string Filtro { get; set; } = string.Empty;
+    public string ValorFiltro { get; set; } = string.Empty;
+
+    public List<Vehiculo> ListaVehiculos { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Buscar();
+    }
+
+    public async Task Buscar()
+    {
+        var lista = await vehiculosService.Listar(v => true);
+
+        if (!string.IsNullOrWhiteSpace(ValorFiltro))
+        {
+            if (Filtro == "VehiculoId" && int.TryParse(ValorFiltro, out int id))
+                lista = lista.Where(v => v.VehiculoId == id).ToList();
+
+            else if (Filtro == "Marca")
+                lista = lista.Where(v => v.Marca.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            else if (Filtro == "Modelo")
+                lista = lista.Where(v => v.Modelo.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            else if (Filtro == "Placa")
+                lista = lista.Where(v => v.Placa.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            else if (Filtro == "TipoVehiculo")
+                lista = lista.Where(v => v.TipoVehiculo.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            else if (Filtro == "Chofer")
+                lista = lista.Where(v =>
+                    v.Chofer != null &&
+                    (v.Chofer.Nombre + " " + v.Chofer.Apellido)
+                    .Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)
+                ).ToList();
+        }
+
+        ListaVehiculos = lista;
+    }
+}
+
+
