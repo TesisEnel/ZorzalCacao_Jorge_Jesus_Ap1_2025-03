@@ -149,33 +149,34 @@
 
         if (!string.IsNullOrWhiteSpace(ValorFiltro))
         {
-            // Filtrar por ID
             if (Filtro == "Id" && int.TryParse(ValorFiltro, out int id))
+            {
                 lista = lista.Where(e => e.EventoClimaticoId == id).ToList();
+            }
 
-            // Filtrar por Fecha
-            else if (Filtro == "Fecha" && DateTime.TryParse(ValorFiltro, out DateTime fecha))
-                lista = lista.Where(e => e.Fecha.Date == fecha.Date).ToList();
-
-            // Filtrar por Zona
             else if (Filtro == "Zona")
+            {
                 lista = lista.Where(e =>
                     e.Zona.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
 
-            // Filtrar por TipoEvento
             else if (Filtro == "TipoEvento")
+            {
                 lista = lista.Where(e =>
                     e.TipoEvento.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
 
-            // Filtrar por Intensidad
             else if (Filtro == "Intensidad")
+            {
                 lista = lista.Where(e =>
                     e.Intensidad.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
 
-            // Filtrar por Observaciones
             else if (Filtro == "Observaciones")
+            {
                 lista = lista.Where(e =>
                     (e.Observaciones ?? "").Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
         }
 
         ListaEventos = lista;
