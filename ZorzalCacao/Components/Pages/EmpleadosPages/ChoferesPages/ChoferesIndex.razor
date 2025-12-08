@@ -153,23 +153,36 @@
         if (!string.IsNullOrWhiteSpace(ValorFiltro))
         {
             if (Filtro == "ChoferId" && int.TryParse(ValorFiltro, out int id))
+            {
                 lista = lista.Where(c => c.ChoferId == id).ToList();
+            }
 
             else if (Filtro == "Nombre")
+            {
                 lista = lista.Where(c => c.Nombre.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
 
             else if (Filtro == "Apellido")
+            {
                 lista = lista.Where(c => c.Apellido.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
 
             else if (Filtro == "Cedula")
+            {
                 lista = lista.Where(c => c.Cedula.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
 
             else if (Filtro == "Telefono")
+            {
                 lista = lista.Where(c => c.Telefono.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
 
             else if (Filtro == "Licencia")
+            {
                 lista = lista.Where(c => c.Licencia.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
         }
+
 
         ListaChoferes = lista;
     }
