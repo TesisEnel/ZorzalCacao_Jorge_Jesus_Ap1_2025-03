@@ -21,13 +21,13 @@
                 <div class="row">
                     <div class="col-6 col-md-6 mb-3">
                         <label class="col-form-label"> <strong> Fecha inicio </strong> </label>
-                        <InputDate Type="InputDateType.DateTimeLocal" class="form-control" @bind-Value="Fermentacion.Fecha" />
+                        <InputDate Type="InputDateType.DateTimeLocal" class="form-control" @bind-Value="Fermentacion.Fecha" disabled="@temporizadorActivo" />
                         <ValidationMessage For="() => Fermentacion.Fecha" />
                     </div>
 
                     <div class="col-6 col-md-6 mb-3">
                         <label class="col-form-label"> <strong> Temperatura inicio </strong> </label>
-                        <InputNumber class="form-control" @bind-Value="Fermentacion.Temperatura" />
+                        <InputNumber class="form-control" @bind-Value="Fermentacion.Temperatura" disabled="@temporizadorActivo" />
                         <ValidationMessage For="() => Fermentacion.Temperatura" />
                     </div>
                 </div>
@@ -35,13 +35,13 @@
                 <div class="row">
                     <div class="col-6 col-md-6 mb-3">
                         <label class="col-form-label"> <strong> Observaciones </strong></label>
-                        <InputTextArea class="form-control" rows="5" @bind-Value="Fermentacion.Observaciones" />
+                        <InputTextArea class="form-control" rows="5" @bind-Value="Fermentacion.Observaciones" disabled="@temporizadorActivo" />
                     </div>
 
                     <div class="col-6 col-md-6 mb-3">
                         <label class="col-form-label"> <strong> Responsable </strong></label>
-                        <InputSelect class="form-select" @bind-Value="Fermentacion.EmpleadoId">
-                            <option value="" disabled selected> Seleccione una opcion </option>
+                        <InputSelect class="form-select" @bind-Value="Fermentacion.EmpleadoId" disabled="@temporizadorActivo">
+                            <option value="" disabled selected>Seleccione un empleado</option>
 
                             @foreach (var empleado in ListaEmpleados)
                             {
@@ -53,8 +53,8 @@
                         <div class="row">
                             <div class="col-12 col-md-12 mt-3">
                                 <label class="col-form-label"> <strong> Recogida </strong> </label>
-                                <InputSelect class="form-select" @bind-Value="Fermentacion.RecogidaId">
-                                    <option value="0" disabled selected> Seleccione una recogida </option>
+                                <InputSelect class="form-select" @bind-Value="Fermentacion.RecogidaId" disabled="@temporizadorActivo">
+                                    <option value="0" disabled selected>Seleccione una recogida</option>
                                     @foreach (var recogida in ListaRecogidas)
                                     {
                                         <option value="@recogida.RecogidaId"> @recogida.RecogidaId - @recogida.Fecha.ToString("dd/MM/yyyy HH:mm")</option>
@@ -66,70 +66,96 @@
                     </div>
                 </div>
 
-                <div class="border border-success p-3 mt-3">
-                    <h5> Detalle de Fermentación </h5>
-                    <RemocionPicker RemocionId="detalleSeleccionado.RemocionId"
-                                    Cantidad="detalleSeleccionado.Cantidad"
-                                    Temperatura="detalleSeleccionado.Temperatura"
-                                    EmpleadoId="detalleSeleccionado.EmpleadoId"
-                                    Fecha="detalleSeleccionado.FechaFermentacion"
-                                    ListaRemociones="ListaRemociones"
-                                    ListaEmpleados="ListaEmpleados"
-                                    CantidadEnDetalle="Fermentacion.FermentacionesDetalle.Count"
-                                    OnRemocionSeleccionada="AgregarDetalle" />
+                @if (!procesoIniciado && !temporizadorActivo)
+                {
+                    <div class="d-flex justify-content-center mt-3 mb-3">
+                        <button type="button" class="btn btn-success btn-lg" @onclick="IniciarProceso">
+                            <i class="bi bi-play-circle"></i> Iniciar Proceso de Fermentación
+                        </button>
+                    </div>
+                }
 
-                    <div class="table-responsive">
-                        <table class="table table-hover table-bordered table-light text-center">
-                            <thead>
-                                <tr>
-                                    <th> Remoción </th>
-                                    <th> Responsable </th>
-                                    <th> Fecha </th>
-                                    <th> Temperatura °F </th>
-                                    <th> Cantidad </th>
-                                    <th> Opciones </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var detalle in Fermentacion.FermentacionesDetalle)
-                                {
+                @if (temporizadorActivo)
+                {
+                    <div class="alert alert-warning d-flex align-items-center justify-content-between">
+                        <div>
+                            <i class="bi bi-hourglass-split"></i>
+                            <strong> Esperando tiempo de fermentación... </strong>
+                            Por favor espere @segundosRestantes segundos para continuar.
+                        </div>
+                        <div class="spinner-border text-warning" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                    </div>
+                }
+
+                @if (procesoIniciado)
+                {
+                    <div class="border border-success p-3 mt-3">
+                        <h5> Detalle de Fermentación </h5>
+                        <RemocionPicker RemocionId="detalleSeleccionado.RemocionId"
+                                        Cantidad="detalleSeleccionado.Cantidad"
+                                        Temperatura="detalleSeleccionado.Temperatura"
+                                        EmpleadoId="detalleSeleccionado.EmpleadoId"
+                                        Fecha="detalleSeleccionado.FechaFermentacion"
+                                        ListaRemociones="ListaRemociones"
+                                        ListaEmpleados="ListaEmpleados"
+                                        CantidadEnDetalle="Fermentacion.FermentacionesDetalle.Count"
+                                        TemporizadorPadreActivo="temporizadorActivo"
+                                        OnRemocionSeleccionada="AgregarDetalle" />
+
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered table-light text-center">
+                                <thead>
                                     <tr>
-                                        <td> @ListaRemociones.FirstOrDefault(r => r.RemocionId == detalle.RemocionId)?.NumeroRemocion</td>
-                                        <td> @ListaEmpleados.FirstOrDefault(e => e.Id == detalle.EmpleadoId)?.UserName</td>
-                                        <td> @detalle.FechaFermentacion.ToString("dd/MM/yyyy HH:mm")</td>
-                                        <td> @detalle.Temperatura.ToString("F2")°C</td>
-                                        <td> @detalle.Cantidad</td>
-                                        <td>
-                                            <button type="button"
-                                                    class="btn btn-outline-dark bi bi-trash"
-                                                    @onclick="() => RemoverDetalle(detalle)"
-                                                    disabled="@NoEsUltimaRemocion(detalle)">
-                                                Remover
-                                            </button>
-                                        </td>
+                                        <th> Remoción </th>
+                                        <th> Responsable </th>
+                                        <th> Fecha </th>
+                                        <th> Temperatura °F</th>
+                                        <th> Cantidad </th>
+                                        <th> Opciones </th>
                                     </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+                                </thead>
+                                <tbody>
+                                    @foreach (var detalle in Fermentacion.FermentacionesDetalle)
+                                    {
+                                        <tr>
+                                            <td> @ListaRemociones.FirstOrDefault(r => r.RemocionId == detalle.RemocionId)?.NumeroRemocion</td>
+                                            <td> @ListaEmpleados.FirstOrDefault(e => e.Id == detalle.EmpleadoId)?.UserName</td>
+                                            <td> @detalle.FechaFermentacion.ToString("dd/MM/yyyy HH:mm")</td>
+                                            <td> @detalle.Temperatura.ToString("F2")</td>
+                                            <td> @detalle.Cantidad</td>
+                                            <td>
+                                                <button type="button"
+                                                        class="btn btn-outline-dark bi bi-trash"
+                                                        @onclick="() => RemoverDetalle(detalle)"
+                                                        disabled="@(NoEsUltimaRemocion(detalle) || temporizadorActivo)">
+                                                    Remover
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
 
-                    <div class="mt-3">
-                        <label class="col-12 form-label"> <strong> Conteo de Registros: </strong> @Fermentacion.FermentacionesDetalle.Count</label>
-                        <label class="col-12 form-label"> <strong> Cantidad Total: </strong> @Fermentacion.FermentacionesDetalle.Sum(d => d.Cantidad).ToString("F2")</label>
-                        <label class="col-12 form-label"> <strong> Promedio de Temperatura: </strong> @(Fermentacion.FermentacionesDetalle.Any() ? Fermentacion.FermentacionesDetalle.Average(d => d.Temperatura).ToString("F2") : "0.00")°F</label>
+                        <div class="mt-3">
+                            <label class="col-12 form-label"> <strong> Conteo de Registros: </strong> @Fermentacion.FermentacionesDetalle.Count</label>
+                            <label class="col-12 form-label"> <strong> Cantidad Total: </strong> @Fermentacion.FermentacionesDetalle.Sum(d => d.Cantidad).ToString("F2")</label>
+                            <label class="col-12 form-label"> <strong> Promedio de Temperatura: </strong> @(Fermentacion.FermentacionesDetalle.Any() ? Fermentacion.FermentacionesDetalle.Average(d => d.Temperatura).ToString("F2") : "0.00")°F</label>
+                        </div>
                     </div>
-                </div>
+                }
             </div>
 
             <div class="card-footer d-flex justify-content-center gap-2">
-                <button type="submit" class="btn btn-primary bi bi-floppy"> Guardar </button>
-                <button type="button" class="btn btn-danger bi bi-trash" @onclick="() => MostrarModal = true" > Eliminar </button>
+                <button type="submit" class="btn btn-primary bi bi-save"> Guardar </button>
+                <button type="button" class="btn btn-danger bi bi-trash" @onclick="() => MostrarModal = true"> Eliminar </button>
                 <a class="btn btn-secondary bi bi-arrow-left-circle" href="/Fermentacion/Index"> Regresar </a>
             </div>
         </EditForm>
     </div>
 </div>
-
 
 @if (MostrarModal)
 {
@@ -150,7 +176,7 @@
                     <label class="col-12"> <strong> Temperatura Inicial: </strong> @Fermentacion?.Temperatura°F </label>
                     <label class="col-12"><strong> Observaciones: </strong> @Fermentacion?.Observaciones </label>
                     <label class="col-12"> <strong> Cantidad de Detalles: </strong> @Fermentacion.FermentacionesDetalle.Count </label>
-                    <label class="col-12"> <strong> Cantidad Total (Sum): </strong> @Fermentacion.FermentacionesDetalle.Sum(f => f.Cantidad).ToString("F2") </label>
+                    <label class="col-12"> <strong> Cantidad Total: </strong> @Fermentacion.FermentacionesDetalle.Sum(f => f.Cantidad).ToString("F2") </label>
                     <label class="col-12">
                         <strong> Promedio Temperatura: </strong> @(Fermentacion.FermentacionesDetalle.Any()
                                             ? Fermentacion.FermentacionesDetalle.Average(d => d.Temperatura).ToString("F2")
@@ -189,13 +215,66 @@
 
     private bool MostrarModal { get; set; } = false;
 
+    private bool procesoIniciado = false;
+    private bool temporizadorActivo = false;
+    private int segundosRestantes = 0;
+    private System.Threading.Timer? timer;
+
     protected override async Task OnInitializedAsync()
     {
         Fermentacion = await fermentacionesServices.Buscar(FermentacionId);
+
+        // Carga de listas auxiliares
         ListaRecogidas = await recogidasService.Listar(r => r.EstadoEntrega == "Entregada");
         ListaRemociones = await fermentacionesServices.ListarRemociones(f => true);
         var empleados = await UserRoleService.GetUsersByRoleAsync("Empleado");
         ListaEmpleados = empleados.ToList();
+
+        // 1. LÓGICA DE EDICIÓN: Si ya hay detalles, procesoIniciado es TRUE inmediatamente.
+        if (Fermentacion.FermentacionesDetalle != null && Fermentacion.FermentacionesDetalle.Any())
+        {
+            procesoIniciado = true;
+        }
+    }
+
+    private void IniciarProceso()
+    {
+        // Validar campos obligatorios
+        if (Fermentacion.Temperatura <= 0)
+        {
+            return;
+        }
+        if (string.IsNullOrEmpty(Fermentacion.EmpleadoId))
+        {
+            return;
+        }
+        if (Fermentacion.RecogidaId == 0)
+        {
+            return;
+        }
+
+        procesoIniciado = true;
+        IniciarTemporizador(10); // Primer temporizador de 10 segundos
+    }
+
+    private void IniciarTemporizador(int segundos)
+    {
+        temporizadorActivo = true;
+        segundosRestantes = segundos;
+
+        timer?.Dispose();
+        timer = new System.Threading.Timer(async _ =>
+        {
+            segundosRestantes--;
+
+            if (segundosRestantes <= 0)
+            {
+                temporizadorActivo = false;
+                timer?.Dispose();
+            }
+
+            await InvokeAsync(StateHasChanged);
+        }, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
     }
 
     public async Task GuardarFermentacion()
@@ -217,16 +296,26 @@
     private void AgregarDetalle((Remociones remocion, double temperatura, double cantidad, ApplicationUser empleado, DateTime fecha) datos)
     {
         var nuevoDetalle = new FermentacionesDetalles
-        {
-            RemocionId = datos.remocion.RemocionId,
-            Temperatura = datos.temperatura,
-            Cantidad = datos.cantidad,
-            EmpleadoId = datos.empleado.Id,
-            FechaFermentacion = datos.fecha
-        };
+            {
+                RemocionId = datos.remocion.RemocionId,
+                Temperatura = datos.temperatura,
+                Cantidad = datos.cantidad,
+                EmpleadoId = datos.empleado.Id,
+                FechaFermentacion = datos.fecha
+            };
 
         Fermentacion.FermentacionesDetalle.Add(nuevoDetalle);
         detalleSeleccionado = new();
+
+        // Iniciar temporizador según la cantidad de remociones realizadas
+        var cantidadRemociones = Fermentacion.FermentacionesDetalle.Count;
+
+        if (cantidadRemociones < ListaRemociones.Count)
+        {
+            // 1ra y 2da: 10 segundos, 3ra: 5 segundos
+            int tiempoEspera = cantidadRemociones < 2 ? 10 : 5;
+            IniciarTemporizador(tiempoEspera);
+        }
     }
 
     private void RemoverDetalle(FermentacionesDetalles detalle)
@@ -245,5 +334,10 @@
         var ultimaRemocion = Fermentacion.FermentacionesDetalle.LastOrDefault();
 
         return ultimaRemocion != detalle;
+    }
+
+    public void Dispose()
+    {
+        timer?.Dispose();
     }
 }
