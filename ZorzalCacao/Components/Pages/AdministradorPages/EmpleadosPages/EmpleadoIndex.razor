@@ -5,23 +5,27 @@
 
 <PageTitle>Consulta de Empleados</PageTitle>
 
-<div class="container">
-    <div class="card shadow-lg">
+<div class="container-fluid px-4 mt-4 cacao-background">
 
-        <!-- Encabezado -->
-        <div class="card-header">
-            <h5 class="text-center">
-                <strong>Consulta de empleados</strong>
-            </h5>
+    <!-- ✅ ENCABEZADO CACAO -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold text-brown mb-0">
+                <i class="bi bi-people me-1"></i> Empleados
+            </h3>
+            <small class="text-muted">Consulta general de empleados del sistema</small>
         </div>
+    </div>
 
-        <div class="card-body">
+    <!-- ✅ TARJETA PRINCIPAL -->
+    <div class="card shadow border-0 rounded-4 bg-cacao-light">
 
-            <!-- Filtros -->
-            <div class="row align-items-center">
+        <!-- ✅ FILTROS -->
+        <div class="card-body border-bottom bg-cacao rounded-top-4">
+            <div class="row align-items-end g-3">
 
-                <div class="col-12 col-md-6 mb-3">
-                    <label class="col-form-label"><strong>Filtrar por</strong></label>
+                <div class="col-12 col-md-4">
+                    <label class="form-label fw-semibold text-white">Filtrar por</label>
                     <InputSelect class="form-select" @bind-Value="Filtro">
                         <option value="" disabled selected>Seleccione una opción</option>
                         <option value="Id">Id</option>
@@ -30,64 +34,70 @@
                     </InputSelect>
                 </div>
 
-                <div class="col-12 col-md-6 mb-3">
-                    <label class="col-form-label"><strong>Búsqueda</strong></label>
+                <div class="col-12 col-md-6">
+                    <label class="form-label fw-semibold text-white">Búsqueda</label>
                     <div class="input-group">
-                        <input class="form-control" @bind="ValorFiltro" placeholder="Buscar..." />
-                        <button class="btn btn-outline-info bi bi-search" @onclick="Buscar"></button>
+                        <input class="form-control" @bind="ValorFiltro" placeholder="Buscar empleado..." />
+                        <button class="btn btn-outline-light bi bi-search" @onclick="Buscar"></button>
                     </div>
                 </div>
 
             </div>
+        </div>
 
-            <!-- Tabla -->
-            <div class="table-responsive">
-                <table class="table table-dark table-striped table-hover text-center">
-                    <thead class="table-light">
+        <!-- ✅ TABLA CACAO -->
+        <div class="table-responsive">
+            <table class="table align-middle mb-0 text-center">
+
+                <thead style="background:#5a3a1b; color:white;">
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Email</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody class="text-center bg-white">
+
+                    @if (ListaEmpleados == null || !ListaEmpleados.Any())
+                    {
                         <tr>
-                            <th>Usuario</th>
-                            <th>Email</th>
-                            <th>Opciones</th>
+                            <td colspan="3" class="py-4 text-muted">
+                                <i class="bi bi-info-circle"></i> No se han encontrado empleados.
+                            </td>
                         </tr>
-                    </thead>
-
-                    <tbody>
-                        @if (ListaEmpleados == null || ListaEmpleados.Count == 0)
+                    }
+                    else
+                    {
+                        @foreach (var emp in ListaEmpleados)
                         {
-                            <tr>
-                                <td colspan="4" class="text-center text-muted py-4">
-                                    No se han encontrado empleados.
+                            <tr style="border-bottom:1px solid #e7d8c9;">
+                                <td class="fw-semibold">@emp.UserName</td>
+                                <td>@emp.Email</td>
+
+                                <!-- ACCIONES -->
+                                <td class="d-flex justify-content-center">
+                                    <a class="btn btn-sm btn-outline-cacao bi bi-eye"
+                                       href="/ListaEmpleados/View/@emp.Id"
+                                       title="Ver"></a>
+
+                                    <a class="btn btn-sm btn-outline-warning bi bi-pencil-square ms-1"
+                                       href="/ListaEmpleados/Edit/@emp.Id"
+                                       title="Editar"></a>
                                 </td>
                             </tr>
                         }
-                        else
-                        {
-                            @foreach (var emp in ListaEmpleados)
-                            {
-                                <tr>
-                                    <td>@emp.UserName</td>
-                                    <td>@emp.Email</td>
-                                    <td>
-                                        <a class="btn btn-sm btn-outline-primary bi bi-eye"
-                                           href="/ListaEmpleados/View/@emp.Id"></a>
+                    }
+                </tbody>
 
-                                        <a class="btn btn-sm btn-outline-info bi bi-pencil-square"
-                                           href="/ListaEmpleados/Edit/@emp.Id"></a>
-                                    </td>
-                                </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
-            </div>
+            </table>
         </div>
 
-        <!-- Footer -->
+        <!-- FOOTER -->
         <div class="card-footer">
-            <label class="col-12">
-                <strong>Total empleados:</strong> @(ListaEmpleados?.Count ?? 0)
-            </label>
+            <label class="badge bg-dark fs-6 m-0"> Total: @ListaEmpleados?.Count </label>
         </div>
+
     </div>
 </div>
 
