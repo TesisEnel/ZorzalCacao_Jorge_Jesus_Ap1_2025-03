@@ -162,14 +162,16 @@ body {
 
 /* Botón outline */
 .btn-outline-accent {
-    border: 1px solid var(--accent-color);
+    border: 2px solid var(--accent-color);
     color: var(--accent-color);
+    background-color: color-mix(in srgb, var(--accent-color) 12%, transparent);
 }
 
     .btn-outline-accent:hover {
         background-color: var(--accent-color);
         color: var(--contrast-color);
     }
+
 
 /* Labels coherentes con headings del template */
 .text-heading {
