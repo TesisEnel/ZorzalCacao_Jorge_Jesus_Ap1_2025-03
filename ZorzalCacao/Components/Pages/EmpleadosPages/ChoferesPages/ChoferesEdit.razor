@@ -6,14 +6,12 @@
 @attribute [Authorize(Roles = "Empleado")]
 
 <PageTitle>Editar Chofer</PageTitle>
-
 <div class="container mt-3">
-    <div class="card shadow-lg">
+    <div class="card theme-card">
 
-        <div class="card-header bg-primary text-white text-center">
-            <h5 class="mb-0">
-                <strong>Editar Chofer</strong>
-            </h5>
+        <!-- Encabezado -->
+        <div class="card-header bg-accent text-white text-center">
+            <h5 class="mb-0"><strong>Crear Chofer</strong></h5>
         </div>
 
         <EditForm Model="chofer" OnValidSubmit="GuardarChofer">
@@ -26,71 +24,64 @@
                     <div class="alert alert-danger">@mensajeError</div>
                 }
 
-                <div class="row">
+                @if (guardado)
+                {
+                    <div class="alert alert-success">Chofer registrado correctamente.</div>
+                }
 
-                    <!-- Nombre -->
+                <div class="row">
                     <div class="col-12 col-md-6 mb-3">
-                        <label class="col-form-label"><strong>Nombre</strong></label>
-                        <InputText class="form-control" @bind-Value="chofer.Nombre" />
+                        <label class="col-form-label text-heading"><strong>Nombre</strong></label>
+                        <InputText class="form-control theme-input" @bind-Value="chofer.Nombre" />
                         <ValidationMessage For="() => chofer.Nombre" />
                     </div>
 
-                    <!-- Apellido -->
                     <div class="col-12 col-md-6 mb-3">
-                        <label class="col-form-label"><strong>Apellido</strong></label>
-                        <InputText class="form-control" @bind-Value="chofer.Apellido" />
+                        <label class="col-form-label text-heading"><strong>Apellido</strong></label>
+                        <InputText class="form-control theme-input" @bind-Value="chofer.Apellido" />
                         <ValidationMessage For="() => chofer.Apellido" />
                     </div>
                 </div>
 
                 <div class="row">
-
-                    <!-- Cédula -->
                     <div class="col-12 col-md-6 mb-3">
-                        <label class="col-form-label"><strong>Cédula</strong></label>
-                        <InputText class="form-control" @bind-Value="chofer.Cedula" />
+                        <label class="col-form-label text-heading"><strong>Cédula</strong></label>
+                        <InputText class="form-control theme-input" @bind-Value="chofer.Cedula" />
                         <ValidationMessage For="() => chofer.Cedula" />
                     </div>
 
-                    <!-- Teléfono -->
                     <div class="col-12 col-md-6 mb-3">
-                        <label class="col-form-label"><strong>Teléfono</strong></label>
-                        <InputText class="form-control" @bind-Value="chofer.Telefono" />
+                        <label class="col-form-label text-heading"><strong>Teléfono</strong></label>
+                        <InputText class="form-control theme-input" @bind-Value="chofer.Telefono" />
                         <ValidationMessage For="() => chofer.Telefono" />
                     </div>
                 </div>
 
                 <div class="row">
-
-                    <!-- Licencia -->
                     <div class="col-12 col-md-6 mb-3">
-                        <label class="col-form-label"><strong>Licencia</strong></label>
-                        <InputText class="form-control" @bind-Value="chofer.Licencia" />
+                        <label class="col-form-label text-heading"><strong>Licencia</strong></label>
+                        <InputText class="form-control theme-input" @bind-Value="chofer.Licencia" />
                         <ValidationMessage For="() => chofer.Licencia" />
                     </div>
                 </div>
+
             </div>
 
-            <div class="card-footer d-flex justify-content-center gap-2 bg-white">
+            <!-- Footer -->
+            <div class="card-footer bg-white d-flex justify-content-center gap-2">
 
                 <button type="submit"
-                        class="btn btn-primary bi bi-save"
+                        class="btn btn-accent bi bi-save"
                         disabled="@cargando">
                     @(cargando ? " Guardando..." : " Guardar")
                 </button>
 
-                <button type="button"
-                        class="btn btn-danger bi bi-trash"
-                        disabled="@tieneVehiculos"
-                        @onclick="MostrarModalEliminar">
-                    Eliminar
-                </button>
-
-                <a class="btn btn-secondary bi bi-arrow-left-circle"
-                    href="/Choferes/Index">
+                <a class="btn btn-outline-accent bi bi-arrow-left-circle"
+                   href="/Choferes/Index">
                     Regresar
                 </a>
             </div>
+
         </EditForm>
     </div>
 </div>
@@ -99,10 +90,10 @@
 {
     <div class="modal d-block" style="background:rgba(0,0,0,0.5)">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
+            <div class="modal-content modal-theme">
 
-                <div class="modal-header">
-                    <h5 class="modal-title mx-auto text-danger">
+                <div class="modal-header modal-header-accent">
+                    <h5 class="modal-title mx-auto text-contrast">
                         <strong>Eliminar Chofer</strong>
                     </h5>
                 </div>
@@ -127,14 +118,14 @@
 
                 <div class="modal-footer d-flex justify-content-center gap-2">
                     <button type="button"
-                            class="btn btn-danger bi bi-trash"
+                            class="btn btn-accent bi bi-trash"
                             disabled="@tieneVehiculos"
                             @onclick="EliminarChoferConfirmado">
                         Sí, eliminar
                     </button>
 
                     <button type="button"
-                            class="btn btn-secondary bi bi-arrow-left"
+                            class="btn btn-outline-accent bi bi-arrow-left"
                             @onclick="() => MostrarModal = false">
                         Regresar
                     </button>
@@ -153,6 +144,8 @@
     private bool cargando = false;
     private bool tieneVehiculos = false;
     private string mensajeError = string.Empty;
+
+    private bool guardado = false;
 
     protected override async Task OnInitializedAsync()
     {

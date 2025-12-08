@@ -8,13 +8,11 @@
 <PageTitle>Crear Chofer</PageTitle>
 
 <div class="container mt-3">
-    <div class="card shadow-lg">
+    <div class="card theme-card">
 
         <!-- Encabezado -->
-        <div class="card-header bg-primary text-white text-center">
-            <h5 class="mb-0">
-                <strong>Crear Chofer</strong>
-            </h5>
+        <div class="card-header bg-accent text-white text-center">
+            <h5 class="mb-0"><strong>Crear Chofer</strong></h5>
         </div>
 
         <EditForm Model="chofer" OnValidSubmit="GuardarChofer">
@@ -24,90 +22,71 @@
 
                 @if (!string.IsNullOrEmpty(mensajeError))
                 {
-                    <div class="alert alert-danger">
-                        @mensajeError
-                    </div>
+                    <div class="alert alert-danger">@mensajeError</div>
                 }
 
                 @if (guardado)
                 {
-                    <div class="alert alert-success">
-                        Chofer registrado correctamente.
-                    </div>
+                    <div class="alert alert-success">Chofer registrado correctamente.</div>
                 }
 
                 <div class="row">
-
-                    <!-- Nombre -->
                     <div class="col-12 col-md-6 mb-3">
-                        <label class="col-form-label">
-                            <strong>Nombre</strong>
-                        </label>
-                        <InputText class="form-control" @bind-Value="chofer.Nombre" />
+                        <label class="col-form-label text-heading"><strong>Nombre</strong></label>
+                        <InputText class="form-control theme-input" @bind-Value="chofer.Nombre" />
                         <ValidationMessage For="() => chofer.Nombre" />
                     </div>
 
-                    <!-- Apellido -->
                     <div class="col-12 col-md-6 mb-3">
-                        <label class="col-form-label">
-                            <strong>Apellido</strong>
-                        </label>
-                        <InputText class="form-control" @bind-Value="chofer.Apellido" />
+                        <label class="col-form-label text-heading"><strong>Apellido</strong></label>
+                        <InputText class="form-control theme-input" @bind-Value="chofer.Apellido" />
                         <ValidationMessage For="() => chofer.Apellido" />
                     </div>
                 </div>
 
                 <div class="row">
-
-                    <!-- Cédula -->
                     <div class="col-12 col-md-6 mb-3">
-                        <label class="col-form-label">
-                            <strong>Cédula</strong>
-                        </label>
-                        <InputText class="form-control" @bind-Value="chofer.Cedula" />
+                        <label class="col-form-label text-heading"><strong>Cédula</strong></label>
+                        <InputText class="form-control theme-input" @bind-Value="chofer.Cedula" />
                         <ValidationMessage For="() => chofer.Cedula" />
                     </div>
 
-                    <!-- Teléfono -->
                     <div class="col-12 col-md-6 mb-3">
-                        <label class="col-form-label">
-                            <strong>Teléfono</strong>
-                        </label>
-                        <InputText class="form-control" @bind-Value="chofer.Telefono" />
+                        <label class="col-form-label text-heading"><strong>Teléfono</strong></label>
+                        <InputText class="form-control theme-input" @bind-Value="chofer.Telefono" />
                         <ValidationMessage For="() => chofer.Telefono" />
                     </div>
                 </div>
 
                 <div class="row">
-
-                    <!-- Licencia -->
                     <div class="col-12 col-md-6 mb-3">
-                        <label class="col-form-label">
-                            <strong>Licencia</strong>
-                        </label>
-                        <InputText class="form-control" @bind-Value="chofer.Licencia" />
+                        <label class="col-form-label text-heading"><strong>Licencia</strong></label>
+                        <InputText class="form-control theme-input" @bind-Value="chofer.Licencia" />
                         <ValidationMessage For="() => chofer.Licencia" />
                     </div>
                 </div>
+
             </div>
 
             <!-- Footer -->
             <div class="card-footer bg-white d-flex justify-content-center gap-2">
 
                 <button type="submit"
-                        class="btn btn-primary bi bi-save"
+                        class="btn btn-accent bi bi-save"
                         disabled="@cargando">
                     @(cargando ? " Guardando..." : " Guardar")
                 </button>
 
-                <a class="btn btn-secondary bi bi-arrow-left-circle"
+                <a class="btn btn-outline-accent bi bi-arrow-left-circle"
                    href="/Choferes/Index">
                     Regresar
                 </a>
             </div>
+
         </EditForm>
     </div>
 </div>
+
 
 @code {
     public Choferes chofer { get; set; } = new();
