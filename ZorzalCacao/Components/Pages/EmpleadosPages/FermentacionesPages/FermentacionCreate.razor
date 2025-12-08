@@ -11,8 +11,8 @@
 <PageTitle> Crear fermentacion </PageTitle>
 
 <div class="container mt-3">
-    <div class="card shadow-lg">
-        <div class="card-header">
+    <div class="card theme-card">
+        <div class="card-header bg-accent text-contrast">
             <h5 class="card-title text-center"> <strong> Crear fermentacion </strong> </h5>
         </div>
 
@@ -21,13 +21,13 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-6 col-md-6 mb-3">
-                        <label class="col-form-label"> <strong> Fecha inicio </strong> </label>
+                        <label class="col-form-label text-heading"> <strong> Fecha inicio </strong> </label>
                         <InputDate Type="InputDateType.DateTimeLocal" class="form-control" @bind-Value="Fermentacion.Fecha" disabled="@temporizadorActivo" />
                         <ValidationMessage For="() => Fermentacion.Fecha" />
                     </div>
 
                     <div class="col-6 col-md-6 mb-3">
-                        <label class="col-form-label"> <strong> Temperatura inicio </strong> </label>
+                        <label class="col-form-label text-heading"> <strong> Temperatura inicio </strong> </label>
                         <InputNumber class="form-control" @bind-Value="Fermentacion.Temperatura" disabled="@temporizadorActivo" />
                         <ValidationMessage For="() => Fermentacion.Temperatura" />
                     </div>
@@ -35,12 +35,12 @@
 
                 <div class="row">
                     <div class="col-6 col-md-6 mb-3">
-                        <label class="col-form-label"> <strong> Observaciones </strong></label>
+                        <label class="col-form-label text-heading"> <strong> Observaciones </strong></label>
                         <InputTextArea class="form-control" rows="5" @bind-Value="Fermentacion.Observaciones" disabled="@temporizadorActivo" />
                     </div>
 
                     <div class="col-6 col-md-6 mb-3">
-                        <label class="col-form-label"> <strong> Responsable </strong></label>
+                        <label class="col-form-label text-heading"> <strong> Responsable </strong></label>
                         <InputSelect class="form-select" @bind-Value="Fermentacion.EmpleadoId" disabled="@temporizadorActivo">
                             <option value="" disabled selected>Seleccione un empleado</option>
 
@@ -53,7 +53,7 @@
 
                         <div class="row">
                             <div class="col-12 col-md-12 mt-3">
-                                <label class="col-form-label"> <strong> Recogida </strong> </label>
+                                <label class="col-form-label text-heading"> <strong> Recogida </strong> </label>
                                 <InputSelect class="form-select" @bind-Value="Fermentacion.RecogidaId" disabled="@temporizadorActivo">
                                     <option value="0" disabled selected>Seleccione una recogida</option>
                                     @foreach (var recogida in ListaRecogidas)
@@ -146,17 +146,17 @@
                         </div>
 
                         <div class="mt-3">
-                            <label class="col-12 form-label"> <strong> Conteo de Registros: </strong> @Fermentacion.FermentacionesDetalle.Count</label>
-                            <label class="col-12 form-label"> <strong> Cantidad Total: </strong> @Fermentacion.FermentacionesDetalle.Sum(d => d.Cantidad).ToString("F2")</label>
-                            <label class="col-12 form-label"> <strong> Promedio de Temperatura: </strong> @(Fermentacion.FermentacionesDetalle.Any() ? Fermentacion.FermentacionesDetalle.Average(d => d.Temperatura).ToString("F2") : "0.00")°F</label>
+                            <label class="col-12 form-label text-heading"> <strong> Conteo de Registros: </strong> @Fermentacion.FermentacionesDetalle.Count</label>
+                            <label class="col-12 form-label text-heading"> <strong> Cantidad Total: </strong> @Fermentacion.FermentacionesDetalle.Sum(d => d.Cantidad).ToString("F2")</label>
+                            <label class="col-12 form-label text-heading"> <strong> Promedio de Temperatura: </strong> @(Fermentacion.FermentacionesDetalle.Any() ? Fermentacion.FermentacionesDetalle.Average(d => d.Temperatura).ToString("F2") : "0.00")°F</label>
                         </div>
                     </div>
                 }
             </div>
 
             <div class="card-footer d-flex justify-content-center gap-2">
-                <button type="submit" class="btn btn-primary bi bi-save"> Guardar </button>
-                <a class="btn btn-secondary bi bi-arrow-left-circle" href="/Fermentacion/Index"> Regresar </a>
+                <button type="submit" class="btn btn-accent bi bi-save"> Guardar </button>
+                <a class="btn btn-outline-accent bi bi-arrow-left-circle" href="/Fermentacion/Index"> Regresar </a>
             </div>
         </EditForm>
     </div>

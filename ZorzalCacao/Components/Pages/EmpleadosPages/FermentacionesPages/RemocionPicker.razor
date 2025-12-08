@@ -2,7 +2,7 @@
 
 <div class="row align-items-center">
     <div class="col-12 col-md-3 mb-3">
-        <label class="col-form-label"> <strong> Remocion </strong></label>
+        <label class="col-form-label  text-heading"> <strong> Remocion </strong></label>
         <InputSelect class="form-select" @bind-Value="RemocionId" disabled="@TemporizadorPadreActivo">
             <option value="0" disabled selected> Seleccionar remocion </option>
             @foreach (var remo in ListaRemociones)
@@ -15,7 +15,7 @@
     </div>
 
     <div class="col-12 col-md-2 mb-3">
-        <label class="col-form-label"> <strong> Responsable </strong></label>
+        <label class="col-form-label  text-heading"> <strong> Responsable </strong></label>
         <InputSelect class="form-select" @bind-Value="EmpleadoId" disabled="@TemporizadorPadreActivo">
             <option value="" selected> Seleccione responsable </option>
             @foreach (var empleado in ListaEmpleados)
@@ -26,17 +26,17 @@
     </div>
 
     <div class="col-12 col-md-3 mb-3">
-        <label class="col-form-label"> <strong> Fecha </strong></label>
+        <label class="col-form-label text-heading"> <strong> Fecha </strong></label>
         <InputDate Type="InputDateType.DateTimeLocal" class="form-control" @bind-Value="Fecha" disabled="@TemporizadorPadreActivo" />
     </div>
 
     <div class="col-12 col-md-2 mb-3">
-        <label class="col-form-label"> <strong> Cantidad </strong></label>
+        <label class="col-form-label text-heading"> <strong> Cantidad </strong></label>
         <InputNumber class="form-control" @bind-Value="Cantidad" disabled="@TemporizadorPadreActivo" />
     </div>
 
     <div class="col-12 col-md-2 mb-3">
-        <label class="col-form-label"> <strong> Temperatura </strong></label>
+        <label class="col-form-label text-heading"> <strong> Temperatura </strong></label>
         <div class="input-group">
             <InputNumber class="form-control" @bind-Value="Temperatura" disabled="@TemporizadorPadreActivo" />
             <button type="button" class="btn btn-success bi bi-plus-square" @onclick="TriggerSelection" disabled="@TemporizadorPadreActivo"></button>

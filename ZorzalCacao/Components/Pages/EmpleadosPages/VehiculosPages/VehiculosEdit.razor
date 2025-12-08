@@ -9,10 +9,10 @@
 <PageTitle> Editar Vehículo </PageTitle>
 
 <div class="container mt-3">
-    <div class="card shadow-lg">
-        <div class="card-header">
+    <div class="card theme-card">
+        <div class="card-header text-contrast">
             <h5 class="card-title text-center">
-                <strong> Editar vehículo </strong>
+                <strong> Crear vehículo </strong>
             </h5>
         </div>
 
@@ -20,17 +20,18 @@
             <DataAnnotationsValidator />
 
             <div class="card-body">
+
                 <div class="row">
                     <!-- Marca -->
                     <div class="col-12 col-md-6 mb-3">
-                        <label class="col-form-label"><strong>Marca</strong></label>
+                        <label class="col-form-label text-heading"><strong>Marca</strong></label>
                         <InputText class="form-control" @bind-Value="vehiculo.Marca" />
                         <ValidationMessage For="() => vehiculo.Marca" />
                     </div>
 
                     <!-- Modelo -->
                     <div class="col-12 col-md-6 mb-3">
-                        <label class="col-form-label"><strong>Modelo</strong></label>
+                        <label class="col-form-label text-heading"><strong>Modelo</strong></label>
                         <InputText class="form-control" @bind-Value="vehiculo.Modelo" />
                         <ValidationMessage For="() => vehiculo.Modelo" />
                     </div>
@@ -39,14 +40,14 @@
                 <div class="row">
                     <!-- Placa -->
                     <div class="col-12 col-md-6 mb-3">
-                        <label class="col-form-label"><strong>Placa</strong></label>
+                        <label class="col-form-label text-heading"><strong>Placa</strong></label>
                         <InputText class="form-control" @bind-Value="vehiculo.Placa" />
                         <ValidationMessage For="() => vehiculo.Placa" />
                     </div>
 
                     <!-- Año -->
                     <div class="col-12 col-md-6 mb-3">
-                        <label class="col-form-label"><strong>Año</strong></label>
+                        <label class="col-form-label text-heading"><strong>Año</strong></label>
                         <InputNumber class="form-control" @bind-Value="vehiculo.Anio" />
                         <ValidationMessage For="() => vehiculo.Anio" />
                     </div>
@@ -55,14 +56,14 @@
                 <div class="row">
                     <!-- Color -->
                     <div class="col-12 col-md-6 mb-3">
-                        <label class="col-form-label"><strong>Color</strong></label>
+                        <label class="col-form-label text-heading"><strong>Color</strong></label>
                         <InputText class="form-control" @bind-Value="vehiculo.Color" />
                         <ValidationMessage For="() => vehiculo.Color" />
                     </div>
 
-                    <!-- Tipo -->
+                    <!-- Tipo de Vehículo -->
                     <div class="col-12 col-md-6 mb-3">
-                        <label class="col-form-label"><strong>Tipo de vehículo</strong></label>
+                        <label class="col-form-label text-heading"><strong>Tipo de vehículo</strong></label>
                         <InputSelect class="form-select" @bind-Value="vehiculo.TipoVehiculo">
                             <option value="" disabled selected>Seleccione un tipo</option>
                             <option value="Camión">Camión</option>
@@ -75,9 +76,9 @@
                 </div>
 
                 <div class="row">
-                        
+
                     <div class="col-12 col-md-6 mb-3">
-                        <label class="col-form-label"><strong>Chofer (opcional)</strong></label>
+                        <label class="col-form-label text-heading"><strong>Chofer</strong></label>
 
                         <InputSelect class="form-select" @bind-Value="vehiculo.ChoferId">
                             <option value="">Sin asignar</option>
@@ -91,20 +92,13 @@
                         </InputSelect>
                     </div>
                 </div>
+
             </div>
 
-            <div class="card-footer gap-2 bg-white d-flex justify-content-center">
-                <button type="submit" class="btn btn-primary bi bi-save"> Guardar </button>
-
-                <button type="button" class="btn btn-danger bi bi-trash"
-                        @onclick="() => MostrarModal = true">
-                    Eliminar
-                </button>
-
-                <a class="btn btn-secondary bi bi-arrow-left-circle"
-                    href="/Vehiculos/Index">
-                    Regresar
-                </a>
+            <div class="card-footer bg-white d-flex justify-content-center gap-2">
+                <button type="submit" class="btn btn-accent bi bi-save"> Guardar </button>
+                <button type="button" class="btn btn-danger bi bi-trash"@onclick="() => MostrarModal = true">Eliminar </button>
+                <a class="btn btn-outline-accent bi bi-arrow-left-circle"href="/Vehiculos/Index">Regresar</a>
             </div>
         </EditForm>
     </div>

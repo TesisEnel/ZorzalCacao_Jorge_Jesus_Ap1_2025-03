@@ -10,27 +10,29 @@
 <PageTitle> Editar Control de Calidad </PageTitle>
 
 <div class="container mt-3">
-    <div class="card shadow-lg">
-        <div class="card-header">
-            <h5 class="card-title text-center"> <strong> Editar control de calidad </strong></h5>
+    <div class="card theme-card">
+        <div class="card-header bg-accent text-contrast">
+            <h5 class="card-title text-center">
+                <strong> Crear control de calidad </strong>
+            </h5>
         </div>
 
         <EditForm Model="control" OnValidSubmit="GuardarControl">
             <DataAnnotationsValidator />
 
             <div class="card-body">
+
                 <div class="row">
                     <!-- Grados Brix -->
                     <div class="col-12 col-md-6 mb-3">
-                        <label class="col-form-label"><strong>Grados Brix</strong></label>
+                        <label class="col-form-label text-heading"> <strong> Grados Brix </strong></label>
                         <InputNumber class="form-control" @bind-Value="control.GradosBrix" />
                         <ValidationMessage For="() => control.GradosBrix" />
                     </div>
 
-
                     <!--Recogida-->
                     <div class="col-12 col-md-6 mb-3">
-                        <label class="col-form-label"><strong>Recogida</strong></label>
+                        <label class="col-form-label text-heading"><strong>Recogida</strong></label>
                         <InputSelect class="form-select" @bind-Value="control.RecogidaId">
                             <option value="0" disabled selected>Seleccione una recogida</option>
                             @foreach (var r in ListaRecogidas)
@@ -40,21 +42,18 @@
                         </InputSelect>
                         <ValidationMessage For="() => control.RecogidaId" />
                     </div>
-                </div>
 
-                <div class="row">
-                    <!-- Observaciones -->
                     <div class="col-12 col-md-6 mb-3">
-                        <label class="col-form-label"><strong>Observaciones</strong></label>
+                        <label class="col-form-label text-heading"> <strong> Observaciones </strong></label>
                         <InputTextArea class="form-control" @bind-Value="control.Observaciones" />
                     </div>
                 </div>
             </div>
 
             <div class="card-footer gap-2 bg-white d-flex justify-content-center">
-                <button type="submit" class="btn btn-primary bi bi-save"> Guardar </button>
+                <button type="submit" class="btn btn-accent bi bi-save"> Guardar </button>
                 <button type="button" class="btn btn-danger bi bi-trash" @onclick="() => MostrarModal = true"> Eliminar </button>
-                <a class="btn btn-secondary bi bi-arrow-left-circle" href="/ControlesCalidad/Index"> Regresar </a>
+                <a class="btn btn-outline-accent bi bi-arrow-left-circle" href="/ControlesCalidad/Index"> Regresar </a>
             </div>
         </EditForm>
     </div>
@@ -64,10 +63,10 @@
 {
     <div class="modal d-block" role="dialog" tabindex="-1" style="background:rgba(0,0,0,0.5)">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content modal-theme">
 
-                <div class="modal-header">
-                    <h5 class="modal-title mx-auto"> <strong> Eliminar control de calidad </strong></h5>
+                <div class="modal-header modal-header-accent">
+                    <h5 class="modal-title mx-auto text-contrast"> <strong> Eliminar control de calidad </strong></h5>
                 </div>
 
                 <div class="modal-body">
@@ -82,7 +81,7 @@
 
                 <div class="modal-footer d-flex justify-content-center gap-2">
                     <button type="button" class="btn btn-danger bi bi-trash" @onclick="EliminarControl"> Sí, eliminar </button>
-                    <button type="button" class="btn btn-secondary bi bi-arrow-left" @onclick="() => MostrarModal = false"> Regresar </button>
+                    <button type="button" class="btn btn-outline-accent bi bi-arrow-left" @onclick="() => MostrarModal = false"> Regresar </button>
                 </div>
 
             </div>

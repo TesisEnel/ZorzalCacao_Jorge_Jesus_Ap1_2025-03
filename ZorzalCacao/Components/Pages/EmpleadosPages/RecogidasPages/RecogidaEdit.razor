@@ -10,9 +10,9 @@
 <PageTitle> Editar Recogida</PageTitle>
 
 <div class="container mt-3">
-    <div class="card shadow-lg">
-        <div class="card-header">
-            <h5 class="card-title text-center"> <strong> Editar recogida </strong></h5>
+    <div class="card theme-card">
+        <div class="card-header bg-accent text-contrast">
+            <h5 class="card-title text-center"> <strong> Solicitar recogida </strong></h5>
         </div>
 
         <EditForm Model="recogida" OnValidSubmit="GuardarRecogida">
@@ -20,19 +20,18 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12 col-md-6 mb-3">
-                        <label class="col-form-label"> <strong> Fecha </strong></label>
-                        <InputDate class="form-control" @bind-Value="recogida.Fecha" />
+                        <label class="col-form-label text-heading"> <strong> Fecha y Hora </strong></label>
+                        <InputDate Type="InputDateType.DateTimeLocal" class="form-control" @bind-Value="recogida.Fecha" />
                         <ValidationMessage For="() => recogida.Fecha" />
                     </div>
 
                     <div class="col-12 col-md-6 mb-3">
-                        <label class="col-form-label"> <strong> Productor </strong></label>
+                        <label class="col-form-label text-heading"><strong>Productor</strong></label>
                         <InputSelect class="form-select" @bind-Value="recogida.ProductorId">
-                            <option value="" selected disabled> Seleccione un productor </option>
-
+                            <option value="" disabled selected>Seleccione un productor</option>
                             @foreach (var productor in ListaProductores)
                             {
-                                <option value="@productor.Id"> @productor.UserName </option>
+                                <option value="@productor.Id">@productor.UserName</option>
                             }
                         </InputSelect>
                         <ValidationMessage For="() => recogida.ProductorId" />
@@ -41,13 +40,13 @@
 
                 <div class="row">
                     <div class="col-12 col-md-6 mb-3">
-                        <label class="col-form-label"> <strong> Punto de encuentro </strong></label>
+                        <label class="col-form-label text-heading"> <strong> Punto de encuentro </strong></label>
                         <InputTextArea class="form-control" @bind-Value="recogida.PuntoEncuentro" />
                         <ValidationMessage For="() => recogida.PuntoEncuentro" />
                     </div>
 
                     <div class="col-12 col-md-6 mb-3">
-                        <label class="col-form-label"> <strong> Cantidad de sacos </strong></label>
+                        <label class="col-form-label text-heading"> <strong> Cantidad de sacos </strong></label>
                         <InputNumber class="form-control" @bind-Value="recogida.CantidadSacos" />
                         <ValidationMessage For="() => recogida.CantidadSacos" />
                     </div>
@@ -55,7 +54,7 @@
 
                 <div class="row">
                     <div class="col-12 col-md-6 mb-3">
-                        <label class="col-form-label"> <strong> Chofer </strong></label>
+                        <label class="col-form-label text-heading"> <strong> Chofer </strong></label>
                         <InputSelect class="form-select" @bind-Value="recogida.ChoferId">
                             <option value="" disabled selected>Seleccione un chofer</option>
 
@@ -68,7 +67,7 @@
                     </div>
 
                     <div class="col-12 col-md-6 mb-3">
-                        <label class="col-form-label"><strong>Certificaciones del producto</strong></label>
+                        <label class="col-form-label text-heading"><strong>Certificaciones del producto</strong></label>
 
                         <!-- Primera fila de checkboxes -->
                         <div class="row">
@@ -118,9 +117,9 @@
             </div>
 
             <div class="card-footer gap-2 bg-white d-flex justify-content-center">
-                <button type="submit" class="btn btn-primary bi bi-save"> Guardar </button>
+                <button type="submit" class="btn btn-accent bi bi-save"> Guardar </button>
                 <button type="button" class="btn btn-danger bi bi-trash" @onclick="() => MostrarModal = true">  Eliminar </button>
-                <a class="btn btn-secondary bi bi-arrow-left-circle" href="/Recogida/Index"> Regresar </a>
+                <a class="btn btn-outline-accent bi bi-arrow-left-circle" href="/Recogida/Index"> Regresar </a>
             </div>
         </EditForm>
     </div>
@@ -130,9 +129,9 @@
 {
     <div class="modal d-block" role="dialog" tabindex="-1" style="background:rgba(0,0,0,0.5)">
         <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title mx-auto"> <strong> Eliminar recogida </strong></h5>
+            <div class="modal-content modal-theme">
+                <div class="modal-header modal-header-accent">
+                    <h5 class="modal-title text-contrast mx-auto"> <strong> Eliminar recogida </strong></h5>
                 </div>
 
                 <div class="modal-body">
@@ -149,13 +148,12 @@
 
                 <div class="modal-footer d-flex justify-content-center gap-2">
                     <button type="button" class="btn btn-danger bi bi-trash" @onclick="EliminarRecogida"> Si, eliminar  </button>
-                    <button type="button" class="btn btn-secondary bi bi-arrow-left" @onclick="() => MostrarModal = false"> Regresar </button>
+                    <button type="button" class="btn btn-outline-light bi bi-arrow-left" @onclick="() => MostrarModal = false"> Regresar </button>
                 </div>
             </div>
         </div>
     </div>
 }
-
 
 @code {
     [Parameter]
