@@ -90,7 +90,6 @@
             throw new Exception("Debe seleccionar una recogida válida.");
         }
 
-
         control.Decision = control.GradosBrix >= 14 ? "Aprobado" : "Rechazado";
 
         if (await controlesService.Guardar(control))
