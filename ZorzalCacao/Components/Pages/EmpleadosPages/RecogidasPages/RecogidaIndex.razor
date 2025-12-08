@@ -6,108 +6,144 @@
 
 <PageTitle> Consulta recogidas </PageTitle>
 
-<div class="container">
-    <div class="card shadow-lg">
-        <div class="card-header">
-            <h5 class="text-center"> <strong> Consulte recogidas </strong></h5>
+<div class="container-fluid px-4 mt-4 cacao-background">
 
-            <div class="d-flex justify-content-end">
-                <a class="btn btn-info bi bi-plus-square" href="/Recogida/Create"> Solicitar recogida </a>
-            </div>
+    <!-- 🟫 ENCABEZADO CACAO -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold text-brown mb-0">
+                <i class="bi bi-truck me-1"></i> Recogidas
+            </h3>
+            <small class="text-muted">Historial de solicitudes de recogida</small>
         </div>
 
-        <div class="card-body">
-            <div class="row align-items-center">
-                <div class="col-12 col-md-6 mb-3">
-                    <label class="col-form-label"> <strong> Desde </strong></label>
+        <a class="btn btn-cacao shadow-sm bi bi-plus-circle"
+           href="/Recogida/Create">
+            Nueva recogida
+        </a>
+    </div>
+
+    <!-- 🟫 TARJETA PRINCIPAL -->
+    <div class="card shadow border-0 rounded-4 bg-cacao-light">
+
+        <!-- 🟫 FILTROS -->
+        <div class="card-body border-bottom bg-cacao rounded-top-4">
+            <div class="row align-items-end g-3">
+
+                <div class="col-12 col-md-3">
+                    <label class="form-label fw-semibold text-white">Desde</label>
                     <InputDate class="form-control" @bind-Value="Desde" />
                 </div>
 
-                <div class="col-12 col-md-6 mb-3">
-                    <label class="col-form-label"> <strong> Hasta </strong></label>
+                <div class="col-12 col-md-3">
+                    <label class="form-label fw-semibold text-white">Hasta</label>
                     <InputDate class="form-control" @bind-Value="Hasta" />
                 </div>
-            </div>
 
-            <div class="row align-items-center">
-                <div class="col-12 col-md-6 mb-3">
-                    <label class="col-form-label"> <strong> Filtrar por </strong></label>
+                <div class="col-12 col-md-3">
+                    <label class="form-label fw-semibold text-white">Filtrar por</label>
                     <InputSelect class="form-select" @bind-Value="Filtro">
-                        <option value="" selected disabled> Seleccione una opcion </option>
-                        <option value="RecogidaId"> Recogida Id </option>
-                        <option value="Productor"> Productor </option>
-                        <option value="PuntoEncuentro"> Punto de encuentro </option>
-                        <option value="CertificacionesProducto"> Certificaciones </option>
-                        <option value="EstadoEntrega"> Estado entrega </option>
-                        <option value="CantidadSacos"> Cantidad de sacos  </option>
-                        <option value="Chofer"> Chofer </option>
+                        <option value="">Seleccione una opción</option>
+                        <option value="RecogidaId">Recogida Id</option>
+                        <option value="Productor">Productor</option>
+                        <option value="PuntoEncuentro">Punto de encuentro</option>
+                        <option value="CertificacionesProducto">Certificaciones</option>
+                        <option value="EstadoEntrega">Estado entrega</option>
+                        <option value="CantidadSacos">Cantidad de sacos</option>
+                        <option value="Chofer">Chofer</option>
                     </InputSelect>
                 </div>
 
-                <div class="col-12 col-md-6 mb-3">
-                    <label class="col-form-label"> <strong> Busqueda </strong></label>
+                <div class="col-12 col-md-3">
+                    <label class="form-label fw-semibold text-white">Búsqueda</label>
                     <div class="input-group">
-                        <input class="form-control" @bind="ValorFiltro" placeholder="Buscar" />
-                        <button class="btn btn-outline-info bi bi-search" @onclick="Buscar" />
+                        <input class="form-control" @bind="ValorFiltro" placeholder="Buscar..." />
+                        <button class="btn btn-outline-light bi bi-search" @onclick="Buscar"></button>
                     </div>
                 </div>
-            </div>
 
-            <div class="table-responsive">
-                <table class="table table-dark table-striped table-hover text-center">
-                    <thead class="table-light">
+            </div>
+        </div>
+
+        <!-- 🟫 TABLA CACAO -->
+        <div class="table-responsive">
+            <table class="table align-middle mb-0 text-center">
+
+                <thead style="background:#5a3a1b; color:white;">
+                    <tr>
+                        <th>Recogida Id</th>
+                        <th>Fecha</th>
+                        <th>Productor</th>
+                        <th>Punto de encuentro</th>
+                        <th>Certificaciones</th>
+                        <th>Estado entrega</th>
+                        <th>Cantidad de sacos</th>
+                        <th>Chofer</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody class="bg-white">
+
+                    @if (ListaRecogidas == null || ListaRecogidas.Count == 0)
+                    {
                         <tr>
-                            <th> Recogida Id </th>
-                            <th> Fecha </th>
-                            <th> Productor </th>
-                            <th> Punto de encuentro </th>
-                            <th> Certificaciones </th>
-                            <th> Estado de entrega </th>
-                            <th> Cantidad de sacos </th>
-                            <th> Chofer </th>
-                            <th> Opciones </th>
+                            <td colspan="9" class="py-4 text-muted">
+                                <i class="bi bi-info-circle"></i> No se han encontrado recogidas.
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @if (ListaRecogidas == null || ListaRecogidas.Count == 0)
+                    }
+                    else
+                    {
+                        @foreach (var r in ListaRecogidas)
                         {
-                            <tr>
-                                <td colspan="9" class="text-center text-muted py-4">
-                                    No se han encontrado recogidas
+                            <tr style="border-bottom:1px solid #e7d8c9;">
+                                <td>@r.RecogidaId</td>
+                                <td>@r.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>@r.Productor?.UserName</td>
+                                <td>@r.PuntoEncuentro</td>
+
+                                <td>
+                                    @(r.CertificacionProducto != null && r.CertificacionProducto.Any()
+                                                                ? string.Join(", ", r.CertificacionProducto)
+                                                                : "N/A")
+                                </td>
+
+                                <td>@r.EstadoEntrega</td>
+                                <td>@r.CantidadSacos.ToString("F2")</td>
+                                <td>@r.Chofer?.Nombre</td>
+
+                                <td class="d-flex justify-content-center">
+                                    <a class="btn btn-sm btn-outline-cacao bi bi-eye"
+                                       href="/Recogida/View/@r.RecogidaId"
+                                       title="Ver"></a>
+
+                                    <a class="btn btn-sm btn-outline-warning bi bi-pencil-square ms-1"
+                                       href="/Recogida/Edit/@r.RecogidaId"
+                                       title="Editar"></a>
                                 </td>
                             </tr>
                         }
-                        else
-                        {
-                            @foreach (var recogida in ListaRecogidas)
-                            {
-                                <tr>
-                                    <td> @recogida.RecogidaId</td>
-                                    <td> @recogida.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
-                                    <td> @recogida.Productor?.UserName</td>
-                                    <td> @recogida.PuntoEncuentro</td>
-                                    <td> @(recogida.CertificacionProducto != null && recogida.CertificacionProducto.Any() ? string.Join(", ", recogida.CertificacionProducto) : "N/A")</td>
-                                    <td> @recogida.EstadoEntrega</td>
-                                    <td> @recogida.CantidadSacos.ToString("F2")</td>
-                                    <td> @recogida.Chofer?.Nombre</td>
-                                    <td>
-                                        <a class="btn btn-sm btn-outline-primary bi bi-eye" href="/Recogida/View/@recogida.RecogidaId"/>
-                                        <a class="btn btn-sm btn-outline-info bi bi-pencil-square" href="/Recogida/Edit/@recogida.RecogidaId" />
-                                    </td>
-                                </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
-            </div>
+                    }
+
+                </tbody>
+            </table>
         </div>
 
+        <!-- 🟫 FOOTER CON CONTADORES -->
         <div class="card-footer">
-            <label class="col-12"> <strong> Conteo recogidas: </strong> @(ListaRecogidas?.Count ?? 0) </label>
-            <label class="col-12"> <strong> Total sacos: </strong> @(ListaRecogidas?.Sum(r => r.CantidadSacos).ToString("F2") ?? "0.00") </label>
+            <span class="badge bg-dark fs-6 m-0">
+                Total de recogidas: @(ListaRecogidas?.Count ?? 0)
+            </span>
+
+            <span class="badge bg-dark fs-6 m-0">
+                Total sacos: @(ListaRecogidas?.Sum(r => r.CantidadSacos).ToString("F2") ?? "0.00")
+            </span>
         </div>
+
     </div>
 </div>
+
 
 @code {
     public string Filtro { get; set; } = string.Empty;
