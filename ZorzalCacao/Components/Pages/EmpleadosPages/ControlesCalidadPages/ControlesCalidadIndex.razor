@@ -133,8 +133,8 @@
             else if (Filtro == "Decision")
                 lista = lista.Where(c => c.Decision.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
 
-            else if (Filtro == "EmpleadoId")
-                lista = lista.Where(c => c.EmpleadoId.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+            else if (Filtro == "Empleado")
+                lista = lista.Where(c => c.Empleado.UserName.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
 
             else if (Filtro == "RecogidaId" && int.TryParse(ValorFiltro, out int rid))
                 lista = lista.Where(c => c.RecogidaId == rid).ToList();
