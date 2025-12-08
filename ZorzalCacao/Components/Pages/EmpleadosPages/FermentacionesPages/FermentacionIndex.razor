@@ -6,106 +6,137 @@
 
 <PageTitle> Consulta Fermentacion </PageTitle>
 
-<div class="container mt-3">
-    <div class="card shadow-lg">
-        <div class="card-header">
-            <h5 class="card-title text-center"> <strong> Consulte sus fermentaciones </strong> </h5>
+<div class="container-fluid px-4 mt-4 cacao-background">
 
-            <div class="d-flex justify-content-end">
-                <a class="btn btn-info bi bi-plus-square" href="/Fermentacion/Create"> Crear fermentacion </a>
-            </div>
+    <!-- 🟫 ENCABEZADO CACAO -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold text-brown mb-0">
+                <i class="bi bi-fire me-1"></i> Fermentaciones
+            </h3>
+            <small class="text-muted">Historial de fermentación del cacao</small>
         </div>
 
-        <div class="card-body">
-            <div class="row align-items-center">
-                <div class="col-12 col-md-6 mb-3">
-                    <label class="col-form-label"> <strong> Desde </strong></label>
+        <a class="btn btn-cacao shadow-sm bi bi-plus-circle"
+           href="/Fermentacion/Create">
+            Nueva Fermentación
+        </a>
+    </div>
+
+    <!-- 🟫 TARJETA PRINCIPAL -->
+    <div class="card shadow border-0 rounded-4 bg-cacao-light">
+
+        <!-- 🟫 FILTROS -->
+        <div class="card-body border-bottom bg-cacao rounded-top-4">
+            <div class="row align-items-end g-3">
+
+                <div class="col-12 col-md-3">
+                    <label class="form-label fw-semibold text-white">Desde</label>
                     <InputDate class="form-control" @bind-Value="Desde" />
                 </div>
 
-                <div class="col-12 col-md-6 mb-3">
-                    <label class="col-form-label"> <strong> Hasta </strong></label>
+                <!-- Hasta -->
+                <div class="col-12 col-md-3">
+                    <label class="form-label fw-semibold text-white">Hasta</label>
                     <InputDate class="form-control" @bind-Value="Hasta" />
                 </div>
-            </div>
 
-            <div class="row align-items-center">
-                <div class="col-12 col-md-6 mb-3">
-                    <label class="col-form-label"> <strong> Filtrar por </strong></label>
+                <!-- Filtrar por -->
+                <div class="col-12 col-md-3">
+                    <label class="form-label fw-semibold text-white">Filtrar por</label>
                     <InputSelect class="form-select" @bind-Value="Filtro">
-                        <option value="" disabled selected> Seleccione una opcion</option>
-                        <option value="FermentacionId"> Fermentacion Id </option>
-                        <option value="Temperatura"> Temperatura  </option>
-                        <option value="Observaciones"> Observaciones </option>
+                        <option value="">Seleccione una opción</option>
+                        <option value="FermentacionId">Fermentación Id</option>
+                        <option value="Temperatura">Temperatura</option>
+                        <option value="Observaciones">Observaciones</option>
                     </InputSelect>
                 </div>
 
-                <div class="col-12 col-md-6 mb-3">
-                    <label class="col-form-label"> <strong> Busqueda </strong></label>
+                <!-- Búsqueda -->
+                <div class="col-12 col-md-3">
+                    <label class="form-label fw-semibold text-white">Búsqueda</label>
                     <div class="input-group">
-                        <input class="form-control" @bind="ValorFiltro" placeholder="Buscar" />
-                        <button class="btn btn-outline-info bi bi-search" @onclick="Buscar" />
+                        <input class="form-control" @bind="ValorFiltro" placeholder="Buscar..." />
+                        <button class="btn btn-outline-light bi bi-search" @onclick="Buscar"></button>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="table-responsive">
-                <table class="table table-dark table-striped table-hover text-center">
-                    <thead class="table-light">
+        <!-- 🟫 TABLA CACAO -->
+        <div class="table-responsive">
+            <table class="table align-middle mb-0 text-center">
+
+                <thead style="background:#5a3a1b; color:white;">
+                    <tr>
+                        <th>Fermentación Id</th>
+                        <th>Fecha</th>
+                        <th>Temperatura °F</th>
+                        <th>Observaciones</th>
+                        <th>Última Remoción</th>
+                        <th>Cantidad Total</th>
+                        <th>Prom. Temperatura °F</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody class="bg-white">
+
+                    @if (ListaFermentaciones == null || ListaFermentaciones.Count == 0)
+                    {
                         <tr>
-                            <th> Fermentación Id </th>
-                            <th> Fecha </th>
-                            <th> Temperatura °F </th>
-                            <th> Observaciones </th>
-                            <th> Ultima remocion </th>
-                            <th> Cantidad Removida Total </th>
-                            <th> Promedio de Temperatura en Remociones °F</th>
-                            <th> Opciones </th>
+                            <td colspan="8" class="py-4 text-muted">
+                                <i class="bi bi-info-circle"></i> No se han encontrado fermentaciones.
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @if (ListaFermentaciones == null || ListaFermentaciones.Count == 0)
+                    }
+                    else
+                    {
+                        @foreach (var f in ListaFermentaciones)
                         {
-                            <tr>
-                                <td colspan="8" class="text-center text-muted py-4">
-                                    No se han encontrado registros de fermentación
+                            <tr style="border-bottom:1px solid #e7d8c9;">
+                                <td>@f.FermentacionId</td>
+                                <td>@f.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>@f.Temperatura</td>
+                                <td>@f.Observaciones</td>
+                                <td>@f.FermentacionesDetalle.Count</td>
+                                <td>@f.FermentacionesDetalle.Sum(t => t.Cantidad).ToString("F2")</td>
+                                <td>
+                                    @(f.FermentacionesDetalle.Any()
+                                                                ? f.FermentacionesDetalle.Average(d => d.Temperatura).ToString("F2")
+                                                                : "0")
+                                </td>
+
+                                <td>
+                                    <a class="btn btn-sm btn-outline-cacao bi bi-eye"
+                                       href="/Fermentacion/View/@f.FermentacionId"
+                                       title="Ver"></a>
+
+                                    <a class="btn btn-sm btn-outline-warning bi bi-pencil-square ms-1"
+                                       href="/Fermentacion/Edit/@f.FermentacionId"
+                                       title="Editar"></a>
                                 </td>
                             </tr>
                         }
-                        else
-                        {
-                            @foreach (var fermentacion in ListaFermentaciones)
-                            {
-                                <tr>
-                                    <td> @fermentacion.FermentacionId</td>
-                                    <td> @fermentacion.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
-                                    <td> @fermentacion.Temperatura </td>
-                                    <td> @fermentacion.Observaciones</td>
-                                    <td> @fermentacion.FermentacionesDetalle.Count</td>
-                                    <td> @fermentacion.FermentacionesDetalle.Sum(f=> f.Cantidad).ToString("F2")</td>
-                                    <td>
-                                        @(fermentacion.FermentacionesDetalle.Any()
-                                                                        ? fermentacion.FermentacionesDetalle.Average(d => d.Temperatura).ToString("F2")
-                                                                        : "0")
-                                    </td>
-                                    <td>
-                                        <a class="btn btn-sm btn-outline-primary bi bi-eye" href="/Fermentacion/View/@fermentacion.FermentacionId" />
-                                        <a class="btn btn-sm btn-outline-info bi bi-pencil-square" href="/Fermentacion/Edit/@fermentacion.FermentacionId" />
-                                    </td>
-                                </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
-            </div>
+                    }
+                </tbody>
+            </table>
         </div>
 
+        <!-- 🟫 FOOTER CON CONTADORES -->
         <div class="card-footer">
-            <label class="col-12"> <strong> Conteo fermentaciones: </strong> @ListaFermentaciones.Count </label>
-            <label class="col-12"> <strong> Cantidad total: </strong> @ListaFermentaciones.Sum(f => f.FermentacionesDetalle.Sum(t => t.Cantidad)).ToString("F2")</label>
+
+            <span class="badge bg-dark fs-6 m-0">
+                Total: @ListaFermentaciones.Count
+            </span>
+
+            <span class="badge bg-dark fs-6 m-0">
+                Cantidad total: @ListaFermentaciones.Sum(f => f.FermentacionesDetalle.Sum(t => t.Cantidad)).ToString("F2")
+            </span>
         </div>
     </div>
 </div>
+
 
 @code {
     public string Filtro { get; set; } = null!;
