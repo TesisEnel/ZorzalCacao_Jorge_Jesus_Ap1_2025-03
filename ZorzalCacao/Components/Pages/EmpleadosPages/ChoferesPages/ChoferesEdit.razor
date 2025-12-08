@@ -6,12 +6,13 @@
 @attribute [Authorize(Roles = "Empleado")]
 
 <PageTitle>Editar Chofer</PageTitle>
+
 <div class="container mt-3">
     <div class="card theme-card">
 
         <!-- Encabezado -->
         <div class="card-header bg-accent text-white text-center">
-            <h5 class="mb-0"><strong>Crear Chofer</strong></h5>
+            <h5 class="mb-0"><strong>Editar Chofer</strong></h5>
         </div>
 
         <EditForm Model="chofer" OnValidSubmit="GuardarChofer">
