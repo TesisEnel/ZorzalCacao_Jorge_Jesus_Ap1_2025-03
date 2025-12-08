@@ -6,58 +6,42 @@
 
 <PageTitle>Editar Empleado</PageTitle>
 
-@if (user != null)
-{
-    <div class="container mt-3">
-        <div class="card shadow-lg">
-            <div class="card-header">
-                <h5 class="card-title text-center"><strong>Editar Empleado</strong></h5>
+<div class="container mt-3">
+    <div class="card shadow-lg">
+        <div class="card-header">
+            <h5 class="card-title text-center"><strong>Editar Empleado</strong></h5>
+        </div>
+
+        <EditForm Model="userEdit" OnValidSubmit="GuardarCambios">
+            <DataAnnotationsValidator />
+
+            <div class="card-body">
+                <div class="row">
+                    <!-- Usuario -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label><strong>Usuario</strong></label>
+                        <InputText class="form-control" @bind-Value="userEdit.UserName" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Email -->
+                    <div class="col-12 col-md-6 mb-3">
+                        <label><strong>Email</strong></label>
+                        <InputText class="form-control" @bind-Value="userEdit.Email" />
+                    </div>
+                </div>
             </div>
 
-            <EditForm Model="userEdit" OnValidSubmit="GuardarCambios">
-                <DataAnnotationsValidator />
+            <div class="card-footer d-flex justify-content-center gap-2 bg-white">
+                <button class="btn btn-primary bi bi-save" type="submit"> Guardar </button>
+                <button class="btn btn-danger bi bi-trash" type="button" @onclick="() => MostrarModal = true"> Eliminar </button>
+                <a class="btn btn-secondary bi bi-arrow-left-circle" href="/ListaEmpleados/Index"> Cancelar </a>
+            </div>
 
-                <div class="card-body">
-                    <div class="row">
-                        <!-- ID -->
-                        <div class="col-12 col-md-6 mb-3">
-                            <label><strong>ID</strong></label>
-                            <input class="form-control" value="@user.Id" disabled />
-                        </div>
-
-                        <!-- Usuario -->
-                        <div class="col-12 col-md-6 mb-3">
-                            <label><strong>Usuario</strong></label>
-                            <InputText class="form-control" @bind-Value="userEdit.UserName" />
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <!-- Email -->
-                        <div class="col-12 col-md-6 mb-3">
-                            <label><strong>Email</strong></label>
-                            <InputText class="form-control" @bind-Value="userEdit.Email" />
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-footer d-flex justify-content-center gap-2 bg-white">
-                    <button class="btn btn-primary bi bi-save" type="submit"> Guardar </button>
-                    <button class="btn btn-danger bi bi-trash" type="button" @onclick="() => MostrarModal = true"> Eliminar </button>
-                    <a class="btn btn-secondary bi bi-arrow-left-circle" href="/ListaEmpleados/Index"> Cancelar </a>
-                </div>
-
-            </EditForm>
-        </div>
+        </EditForm>
     </div>
-}
-else
-{
-    <div class="text-center py-5">
-        <div class="spinner-border text-primary"></div>
-        <p>Cargando información...</p>
-    </div>
-}
+</div>
 
 @if (MostrarModal)
 {
@@ -88,10 +72,10 @@ else
 }
 
 @code {
+    [Parameter] 
+    public string? UserId { get; set; }
 
-    [Parameter] public string? UserId { get; set; }
-
-    public ApplicationUser? user { get; set; }
+    public ApplicationUser? user { get; set; } = new();
 
     // Modelo editable
     public ApplicationUser userEdit { get; set; } = new();
