@@ -71,11 +71,48 @@
     [SupplyParameterFromQuery]
     private string? ReturnUrl { get; set; }
 
+    [CascadingParameter]
+    private Task<AuthenticationState>? AuthenticationState { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         Input ??= new();
-
         editContext = new EditContext(Input);
+
+        // Verificar si el usuario ya está autenticado
+        if (AuthenticationState is not null)
+        {
+            var authState = await AuthenticationState;
+            var user = authState.User;
+
+            if (user.Identity?.IsAuthenticated == true)
+            {
+                // Obtener el usuario completo para verificar sus roles
+                var applicationUser = await UserManager.GetUserAsync(user);
+
+                if (applicationUser != null)
+                {
+                    var roles = await UserManager.GetRolesAsync(applicationUser);
+
+                    // Redirigir según el rol
+                    if (roles.Contains("Administrador"))
+                    {
+                        NavigationManager.NavigateTo("/Administrador/Index", true);
+                        return;
+                    }
+                    else if (roles.Contains("Empleado"))
+                    {
+                        NavigationManager.NavigateTo("/Empleado/Index", true);
+                        return;
+                    }
+                    else if (roles.Contains("Productor"))
+                    {
+                        NavigationManager.NavigateTo("/Productor/Index", true);
+                        return;
+                    }
+                }
+            }
+        }
 
         if (HttpMethods.IsGet(HttpContext.Request.Method))
         {
