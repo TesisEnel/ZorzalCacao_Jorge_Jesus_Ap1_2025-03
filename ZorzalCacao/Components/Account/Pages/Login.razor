@@ -93,24 +93,24 @@
         }
 
         SignInResult result;
+        ApplicationUser? user = null;
+
         if (!string.IsNullOrEmpty(Input.Passkey?.CredentialJson))
         {
-            // When performing passkey sign-in, don't perform form validation.
             result = await SignInManager.PasskeySignInAsync(Input.Passkey.CredentialJson);
+            if (result.Succeeded)
+            {
+                user = await UserManager.FindByEmailAsync(Input.Email);
+            }
         }
         else
         {
-            // If doing a password sign-in, validate the form.
             if (!editContext.Validate())
             {
                 return;
             }
 
-            // This doesn't count login failures towards account lockout
-            // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-            // Buscar usuario por email primero
-
-            var user = await UserManager.FindByEmailAsync(Input.Email);
+            user = await UserManager.FindByEmailAsync(Input.Email);
             if (user != null)
             {
                 result = await SignInManager.PasswordSignInAsync(user.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
@@ -124,7 +124,34 @@
         if (result.Succeeded)
         {
             Logger.LogInformation("User logged in.");
-            RedirectManager.RedirectTo(ReturnUrl);
+
+            // Redirigir según el rol del usuario
+            if (user != null)
+            {
+                var roles = await UserManager.GetRolesAsync(user);
+
+                if (roles.Contains("Administrador"))
+                {
+                    RedirectManager.RedirectTo("/Administrador/Index");
+                }
+                else if (roles.Contains("Empleado"))
+                {
+                    RedirectManager.RedirectTo("/Empleado/Index");
+                }
+                else if (roles.Contains("Productor"))
+                {
+                    RedirectManager.RedirectTo("/Productor/Index");
+                }
+                else
+                {
+                    // Si no tiene ningún rol específico, usar ReturnUrl o página por defecto
+                    RedirectManager.RedirectTo(ReturnUrl ?? "/");
+                }
+            }
+            else
+            {
+                RedirectManager.RedirectTo(ReturnUrl);
+            }
         }
         else if (result.RequiresTwoFactor)
         {
