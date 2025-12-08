@@ -96,7 +96,7 @@
 
                                 <!-- Badge según decisión -->
                                 <td>
-                                    @if (c.Decision?.ToLower() == "Aprobado")
+                                    @if (c.Decision != null && c.Decision.Equals("Aprobado", StringComparison.OrdinalIgnoreCase))
                                     {
                                         <span class="badge bg-success">Aprobado</span>
                                     }
