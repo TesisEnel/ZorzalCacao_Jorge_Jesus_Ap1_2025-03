@@ -112,8 +112,8 @@
 
                     <div class="mt-3">
                         <label class="col-12 form-label"> <strong> Conteo de Registros: </strong> @Fermentacion.FermentacionesDetalle.Count</label>
-                        <label class="col-12 form-label"> <strong> Cantidad Total: </strong> @Fermentacion.FermentacionesDetalle.Sum(d => d.Cantidad)</label>
-                        <label class="col-12 form-label"> <strong> Promedio de Temperatura: </strong> @(Fermentacion.FermentacionesDetalle.Any() ? Fermentacion.FermentacionesDetalle.Average(d => d.Temperatura).ToString("F2") : "0.00")°C</label>
+                        <label class="col-12 form-label"> <strong> Cantidad Total: </strong> @Fermentacion.FermentacionesDetalle.Sum(d => d.Cantidad).ToString("F2")</label>
+                        <label class="col-12 form-label"> <strong> Promedio de Temperatura: </strong> @(Fermentacion.FermentacionesDetalle.Any() ? Fermentacion.FermentacionesDetalle.Average(d => d.Temperatura).ToString("F2") : "0.00")°F</label>
                     </div>
                 </div>
             </div>
