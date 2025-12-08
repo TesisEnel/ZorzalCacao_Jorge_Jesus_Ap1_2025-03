@@ -34,7 +34,7 @@
             <div class="card-footer d-flex justify-content-center gap-2 bg-white">
                 <button class="btn btn-accent bi bi-save" type="submit"> Guardar </button>
                 <button class="btn btn-danger bi bi-trash" type="button" @onclick="() => MostrarModal = true"> Eliminar </button>
-                <a class="btn btn-outline-accent bi bi-arrow-left-circle" href="/ListaProductores/Index"> Cancelar </a>
+                <a class="btn btn-outline-accent bi bi-arrow-left-circle" href="/ListaProductores/Index"> Regresar </a>
             </div>
 
         </EditForm>
@@ -52,7 +52,6 @@
                 </div>
 
                 <div class="modal-body">
-                    <label><strong>ID:</strong> @user?.Id</label><br />
                     <label><strong>Usuario:</strong> @user?.UserName</label><br />
                     <label><strong>Email:</strong> @user?.Email</label>
 
@@ -61,7 +60,7 @@
 
                 <div class="modal-footer d-flex justify-content-center gap-2">
                     <button class="btn btn-danger bi bi-trash" @onclick="EliminarProductor"> Sí, eliminar </button>
-                    <button class="btn btn-outline-accent bi bi-arrow-left-circle" @onclick="() => MostrarModal = false"> Cancelar </button>
+                    <button class="btn btn-outline-accent bi bi-arrow-left-circle" @onclick="() => MostrarModal = false"> Regresar </button>
                 </div>
 
             </div>
