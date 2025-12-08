@@ -6,105 +6,130 @@
 @attribute [Authorize(Roles = "Productor")]
 
 <PageTitle> Consulta Zonas </PageTitle>
+<div class="container-fluid px-4 mt-4 cacao-background">
 
-<div class="container">
-    <div class="card shadow-lg">
-        <div class="card-header">
-            <h5 class="text-center"> <strong> Consulte zonas de producción </strong></h5>
-
-            <div class="d-flex justify-content-end">
-                <a class="btn btn-info bi bi-plus-square" href="/Zonas/Create"> Crear zona </a>
-            </div>
+    <!-- 🟫 ENCABEZADO CACAO -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold text-brown mb-0">
+                <i class="bi bi-geo-alt me-1"></i> Zonas de producción
+            </h3>
+            <small class="text-muted">Historial de zonas registradas</small>
         </div>
 
-        <div class="card-body">
-            <div class="row align-items-center">
-                <div class="col-12 col-md-6 mb-3">
-                    <label class="col-form-label"> <strong> Desde </strong></label>
+        <a class="btn btn-cacao shadow-sm bi bi-plus-circle"
+           href="/Zonas/Create">
+            Nueva zona
+        </a>
+    </div>
+
+    <!-- 🟫 TARJETA PRINCIPAL -->
+    <div class="card shadow border-0 rounded-4 bg-cacao-light">
+
+        <!-- 🟫 FILTROS -->
+        <div class="card-body border-bottom bg-cacao rounded-top-4">
+            <div class="row align-items-end g-3">
+
+                <!-- Desde -->
+                <div class="col-12 col-md-3">
+                    <label class="form-label fw-semibold text-white">Desde</label>
                     <InputDate class="form-control" @bind-Value="Desde" />
                 </div>
 
-                <div class="col-12 col-md-6 mb-3">
-                    <label class="col-form-label"> <strong> Hasta </strong></label>
+                <!-- Hasta -->
+                <div class="col-12 col-md-3">
+                    <label class="form-label fw-semibold text-white">Hasta</label>
                     <InputDate class="form-control" @bind-Value="Hasta" />
                 </div>
-            </div>
 
-            <div class="row align-items-center">
-                <div class="col-12 col-md-6 mb-3">
-                    <label class="col-form-label"> <strong> Filtrar por </strong></label>
+                <!-- Filtrar por -->
+                <div class="col-12 col-md-3">
+                    <label class="form-label fw-semibold text-white">Filtrar por</label>
                     <InputSelect class="form-select" @bind-Value="Filtro">
-                        <option value ="" selected disabled> Seleccione una opcion </option>
-                        <option value="ZonaId"> Zona Id </option>
-                        <option value="Nombre"> Nombre </option>
-                        <option value="Provincia"> Provincia </option>
-                        <option value="Distancia"> Distancia </option>
-                        <option value="Referencia"> Referencia </option>
+                        <option value="">Seleccione una opción</option>
+                        <option value="ZonaId">Zona Id</option>
+                        <option value="Nombre">Nombre</option>
+                        <option value="Provincia">Provincia</option>
+                        <option value="Distancia">Distancia</option>
+                        <option value="Referencia">Referencia</option>
                     </InputSelect>
                 </div>
 
-                <div class="col-12 col-md-6 mb-3">
-                    <label class="col-form-label"> <strong> Busqueda </strong></label>
+                <!-- Búsqueda -->
+                <div class="col-12 col-md-3">
+                    <label class="form-label fw-semibold text-white">Búsqueda</label>
                     <div class="input-group">
-                        <input class="form-control" @bind="ValorFiltro" placeholder="Buscar" />
-                        <button class="btn btn-outline-info bi bi-search" @onclick="Buscar" />
+                        <input class="form-control" @bind="ValorFiltro" placeholder="Buscar..." />
+                        <button class="btn btn-outline-light bi bi-search" @onclick="Buscar"></button>
                     </div>
                 </div>
-            </div>
 
-            <div class="table-responsive">
-                <table class="table table-dark table-striped table-hover text-center">
-                    <thead class="table-light">
+            </div>
+        </div>
+
+        <!-- 🟫 TABLA CACAO -->
+        <div class="table-responsive">
+            <table class="table align-middle mb-0 text-center">
+
+                <thead style="background:#5a3a1b; color:white;">
+                    <tr>
+                        <th>Zona Id</th>
+                        <th>Nombre</th>
+                        <th>Provincia</th>
+                        <th>Distancia (Km)</th>
+                        <th>Referencia</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody class="bg-white">
+
+                    @if (ListaZonas == null || ListaZonas.Count == 0)
+                    {
                         <tr>
-                            <th> Zona Id </th>
-                            <th> Nombre </th>
-                            <th> Provincia </th>
-                            <th> Distancia (Km) </th>
-                            <th> Referencia </th>
-                            <th> Opciones </th>
+                            <td colspan="6" class="py-4 text-muted">
+                                <i class="bi bi-info-circle"></i> No se han encontrado zonas de producción.
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @if (ListaZonas == null || ListaZonas.Count == 0)
+                    }
+                    else
+                    {
+                        @foreach (var z in ListaZonas)
                         {
-                            <tr>
-                                <td colspan="6" class="text-center text-muted py-4">
-                                    No se han encontrado zonas de producción
+                            <tr style="border-bottom:1px solid #e7d8c9;">
+                                <td>@z.ZonaId</td>
+                                <td>@z.Nombre</td>
+                                <td>@z.Provincia</td>
+                                <td>@z.Distancia</td>
+                                <td>@z.Referencia</td>
+
+                                <td class="d-flex justify-content-center">
+                                    <a class="btn btn-sm btn-outline-cacao bi bi-eye"
+                                       href="/Zonas/View/@z.ZonaId"
+                                       title="Ver"></a>
+
+                                    <a class="btn btn-sm btn-outline-warning bi bi-pencil-square ms-1"
+                                       href="/Zonas/Edit/@z.ZonaId"
+                                       title="Editar"></a>
                                 </td>
                             </tr>
                         }
-                        else
-                        {
-                            @foreach (var zona in ListaZonas)
-                            {
-                                <tr>
-                                    <td>@zona.ZonaId</td>
-                                    <td>@zona.Nombre</td>
-                                    <td>@zona.Provincia</td>
-                                    <td>@zona.Distancia</td>
-                                    <td>@zona.Referencia</td>
+                    }
 
-                                    <td>
-                                        <a class="btn btn-sm btn-outline-primary bi bi-eye"
-                                           href="/Zonas/View/@zona.ZonaId"></a>
-
-                                        <a class="btn btn-sm btn-outline-info bi bi-pencil-square ms-2"
-                                           href="/Zonas/Edit/@zona.ZonaId"></a>
-                                    </td>
-                                </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
-            </div>
+                </tbody>
+            </table>
         </div>
+
+        <!-- 🟫 FOOTER CON CONTADOR -->
         <div class="card-footer">
-            <label class="col-12">
-                <strong>Conteo zonas de producción:</strong> @(ListaZonas?.Count ?? 0)
-            </label>
+            <span class="badge bg-dark fs-6 m-0">
+                Total zonas registradas: @(ListaZonas?.Count ?? 0)
+            </span>
         </div>
+
     </div>
 </div>
+
 
 @code {
     public string Filtro { get; set; } = string.Empty;
