@@ -73,6 +73,11 @@
                             <i class="bi bi-play-circle"></i> Iniciar Proceso de Fermentación
                         </button>
                     </div>
+
+                    @if (mensajeError != string.Empty)
+                    {
+                        <div class="alert alert-danger text-center"> @mensajeError </div>
+                    }
                 }
 
                 @if (temporizadorActivo)
@@ -220,6 +225,8 @@
     private int segundosRestantes = 0;
     private System.Threading.Timer? timer;
 
+    private string mensajeError { get; set; } = string.Empty;
+
     protected override async Task OnInitializedAsync()
     {
         Fermentacion = await fermentacionesServices.Buscar(FermentacionId);
@@ -239,17 +246,21 @@
 
     private void IniciarProceso()
     {
-        // Validar campos obligatorios
-        if (Fermentacion.Temperatura <= 0)
+        if (!(Fermentacion.Temperatura >= 50 && Fermentacion.Temperatura <= 100))
         {
+            mensajeError = "Temperatura no válida. Debe estar entre 50°F y 100°F";
             return;
         }
+
         if (string.IsNullOrEmpty(Fermentacion.EmpleadoId))
         {
+            mensajeError = "Debe seleccionar un empleado responsable.";
             return;
         }
+
         if (Fermentacion.RecogidaId == 0)
         {
+            mensajeError = "Debe seleccionar una recogida asociada.";
             return;
         }
 
