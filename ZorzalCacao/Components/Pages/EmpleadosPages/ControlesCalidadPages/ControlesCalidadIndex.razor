@@ -96,17 +96,13 @@
 
                                 <!-- Badge según decisión -->
                                 <td>
-                                    @if (c.Decision?.ToLower() == "aceptado")
+                                    @if (c.Decision?.ToLower() == "Aprobado")
                                     {
-                                        <span class="badge bg-success">Aceptado</span>
-                                    }
-                                    else if (c.Decision?.ToLower() == "rechazado")
-                                    {
-                                        <span class="badge bg-danger">Rechazado</span>
+                                        <span class="badge bg-success">Aprobado</span>
                                     }
                                     else
                                     {
-                                        <span class="badge bg-secondary">@c.Decision</span>
+                                        <span class="badge bg-danger">Rechazado</span>
                                     }
                                 </td>
 
