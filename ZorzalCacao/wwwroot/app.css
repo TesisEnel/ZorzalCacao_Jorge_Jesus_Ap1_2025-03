@@ -171,18 +171,6 @@ body {
         color: var(--contrast-color);
     }
 
-/* Inputs alineados al estilo de la plantilla */
-.theme-input {
-    border-radius: 10px;
-    border: 1px solid color-mix(in srgb, var(--default-color), transparent 60%);
-    background-color: var(--surface-color);
-}
-
-    .theme-input:focus {
-        border-color: var(--accent-color);
-        box-shadow: 0 0 6px color-mix(in srgb, var(--accent-color), transparent 40%);
-    }
-
 /* Labels coherentes con headings del template */
 .text-heading {
     color: var(--heading-color);
