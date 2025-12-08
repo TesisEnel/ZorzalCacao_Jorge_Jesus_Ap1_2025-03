@@ -82,49 +82,55 @@ body {
 /*Cacao css*/
 
 .text-brown {
-    color: #5a3a1b;
+    color: var(--heading-color);
 }
 
+/* Fondo degradado similar al estilo de la plantilla */
 .bg-cacao {
-    background: linear-gradient(135deg, #5a3a1b, #7b4b23);
+    background: linear-gradient(135deg, var(--accent-color), color-mix(in srgb, var(--accent-color), white 25%));
 }
 
+/* Fondo claro consistente con plantilla */
 .bg-cacao-light {
-    background-color: #f6efe9;
+    background-color: var(--surface-color);
 }
 
+/* Botón sólido estilo plantilla */
 .btn-cacao {
-    background-color: #5a3a1b;
-    color: white;
-    border: none;
+    background-color: var(--accent-color);
+    color: var(--contrast-color);
+    border: 1px solid var(--accent-color);
 }
 
     .btn-cacao:hover {
-        background-color: #7b4b23;
-        color: white;
+        background-color: var(--surface-color);
+        color: var(--accent-color);
     }
 
+/* Fondo para tarjetas relacionadas a vehículos (adaptado a color suave del template) */
 .bg-cacao-vehiculo {
-    background-color: #c49a6c;
-    color: #3b220f;
+    background-color: color-mix(in srgb, var(--accent-color), white 70%);
+    color: var(--heading-color);
 }
 
+/* Botón outline estilo plantilla */
 .btn-outline-cacao {
-    border: 1px solid #5a3a1b;
-    color: #5a3a1b;
+    border: 1px solid var(--accent-color);
+    color: var(--accent-color);
 }
 
     .btn-outline-cacao:hover {
-        background-color: #5a3a1b;
-        color: white;
+        background-color: var(--accent-color);
+        color: var(--contrast-color);
     }
 
+/* Fondo decorativo tipo card del index */
 .cacao-background {
-    background: linear-gradient(180deg, #f3e7da, #e2c9a8);
+    background: linear-gradient(180deg, var(--surface-color), color-mix(in srgb, var(--surface-color), black 5%));
     min-height: 90vh;
     border-radius: 18px;
     padding: 25px;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.45);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.25);
 }
 
 .stats-box {
