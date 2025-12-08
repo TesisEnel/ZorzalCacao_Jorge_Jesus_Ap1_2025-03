@@ -82,7 +82,6 @@
                     </tbody>
                 </table>
             </div>
-
         </div>
 
         <!-- Footer -->
@@ -91,13 +90,12 @@
                 <strong>Total empleados:</strong> @(ListaEmpleados?.Count ?? 0)
             </label>
         </div>
-
     </div>
 </div>
 
 @code {
-
     public string Filtro { get; set; } = string.Empty;
+
     public string ValorFiltro { get; set; } = string.Empty;
 
     public List<ApplicationUser> ListaEmpleados { get; set; } = new();
@@ -115,18 +113,24 @@
         {
             // Filtrar por ID
             if (Filtro == "Id")
+            {
                 lista = lista.Where(u =>
                     u.Id.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
 
             // Filtrar por UserName
             else if (Filtro == "UserName")
+            {
                 lista = lista.Where(u =>
                     u.UserName.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
 
             // Filtrar por Email
             else if (Filtro == "Email")
+            {
                 lista = lista.Where(u =>
                     (u.Email ?? "").Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
         }
 
         ListaEmpleados = lista;
