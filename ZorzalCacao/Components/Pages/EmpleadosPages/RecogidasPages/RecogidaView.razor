@@ -6,7 +6,6 @@
 @attribute [Authorize(Roles = "Empleado")]
 
 <PageTitle>Detalles de Recogida</PageTitle>
-
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-12 col-lg-10 col-xl-8">
@@ -54,7 +53,7 @@
                                     <div class="icon-circle bg-primary text-white me-3">
                                         <i class="bi bi-person-circle fs-3"></i>
                                     </div>
-                                    <div>
+                                    <div class="flex-grow-1">
                                         <small class="text-muted d-block mb-1">Productor</small>
                                         <h5 class="mb-0">@recogida.Productor?.UserName</h5>
                                     </div>
@@ -112,7 +111,7 @@
 
                     <div class="row">
                         <div class="col-12">
-                            <div class="detail-card p-4 rounded border-start border-success border-4">
+                            <div class="detail-card p-4 rounded border-success">
                                 <div class="d-flex align-items-start">
                                     <div class="icon-circle bg-success text-white me-3">
                                         <i class="bi bi-patch-check-fill fs-3"></i>
@@ -139,7 +138,7 @@
                             </div>
                         </div>
                     </div>
-                </div> 
+                </div>
 
                 <div class="card-footer bg-white d-flex justify-content-center gap-2">
                     <a href="/Recogida/Index" class="btn btn-outline-accent bi bi-arrow-left-circle"> Regresar </a>
