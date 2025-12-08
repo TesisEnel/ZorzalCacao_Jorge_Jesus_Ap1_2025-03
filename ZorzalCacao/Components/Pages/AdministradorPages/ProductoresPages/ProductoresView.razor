@@ -1,5 +1,109 @@
-﻿<h3>ProductoresView</h3>
+﻿@page "/ListaProductores/View/{UserId}"
+@inject IUserRoleService userRoleService
+@inject NavigationManager navigation
+@rendermode InteractiveServer
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10 col-xl-8">
+
+            <div class="card shadow-lg border-0">
+
+                <!-- ENCABEZADO -->
+                <div class="card-header bg-primary text-white py-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="mb-1">
+                                <i class="bi bi-person-badge"></i> Detalles del Empleado
+                            </h4>
+                        </div>
+
+                        <a href="/ListaEmpleados/Index"
+                           class="btn btn-light btn-sm bi bi-arrow-left">
+                            Regresar
+                        </a>
+                    </div>
+                </div>
+
+                <!-- CUERPO -->
+                <div class="card-body p-4">
+
+                    <!-- NOMBRE DE USUARIO -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="detail-card p-4 rounded border-start border-primary border-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-circle bg-primary text-white me-3">
+                                        <i class="bi bi-person-circle fs-3"></i>
+                                    </div>
+                                    <div>
+                                        <small class="text-muted">Nombre de Usuario</small>
+                                        <h4 class="mb-0 text-primary">@Productor.UserName</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- EMAIL -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="detail-card p-4 rounded border-start border-success border-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-circle bg-success text-white me-3">
+                                        <i class="bi bi-envelope-at fs-3"></i>
+                                    </div>
+                                    <div>
+                                        <small class="text-muted">Correo Electrónico</small>
+                                        <h4 class="mb-0 text-success">@Productor.Email</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ROL -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="detail-card p-4 rounded border-start border-warning border-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-circle bg-warning text-dark me-3">
+                                        <i class="bi bi-person-vcard fs-3"></i>
+                                    </div>
+                                    <div>
+                                        <small class="text-muted">Rol</small>
+                                        <h4 class="mb-0 text-dark">Productor</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- FOOTER -->
+                <div class="card-footer bg-white d-flex justify-content-center gap-2">
+                    <a class="btn btn-secondary bi bi-arrow-left-circle"
+                       href="/ListaProductores/Index">
+                        Regresar
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
 
 @code {
+    [Parameter]
+    public string UserId { get; set; } = string.Empty;
 
+    private ApplicationUser? Productor { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Productor = await userRoleService.GetUserByIdAsync(UserId);
+    }
 }
