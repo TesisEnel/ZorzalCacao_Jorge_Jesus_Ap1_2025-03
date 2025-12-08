@@ -24,6 +24,17 @@
         </div>
 
         <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-12 col-md-6 mb-3">
+                    <label class="col-form-label"> <strong> Desde </strong></label>
+                    <InputDate class="form-control" @bind-Value="Desde" />
+                </div>
+
+                <div class="col-12 col-md-6 mb-3">
+                    <label class="col-form-label"> <strong> Hasta </strong></label>
+                    <InputDate class="form-control" @bind-Value="Hasta" />
+                </div>
+            </div>
 
             <!-- Filtros -->
             <div class="row align-items-center">
@@ -112,7 +123,12 @@
 </div>
 
 @code {
+    public DateTime? Desde { get; set; }
+
+    public DateTime? Hasta { get; set; }
+
     public string Filtro { get; set; } = string.Empty;
+
     public string ValorFiltro { get; set; } = string.Empty;
 
     public List<EventosClimaticos> ListaEventos { get; set; } = new();
@@ -125,6 +141,11 @@
     public async Task Buscar()
     {
         var lista = await eventosService.Listar(e => true);
+
+        if (Desde.HasValue && Hasta.HasValue)
+        {
+            lista = lista.Where(f => f.Fecha >= Desde && f.Fecha <= Hasta).ToList();
+        }
 
         if (!string.IsNullOrWhiteSpace(ValorFiltro))
         {
