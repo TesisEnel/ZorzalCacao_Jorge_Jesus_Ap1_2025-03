@@ -16,7 +16,6 @@ public class Recogidas
     public string CertificacionProducto { get; set; } = string.Empty;
     public string EstadoEntrega { get; set; } = "Pendiente";
 
-    [Required(ErrorMessage = "Cantidad de sacos requerida")]
     [Range(0.01, double.MaxValue, ErrorMessage = "Cantidad de sacos no valida")]
     public double CantidadSacos { get; set; }
 
