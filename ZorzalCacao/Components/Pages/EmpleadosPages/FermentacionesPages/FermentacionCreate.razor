@@ -100,7 +100,10 @@
                                         <td> @detalle.Temperatura.ToString("F2")</td>
                                         <td> @detalle.Cantidad</td>
                                         <td>
-                                            <button type="button" class="btn btn-outline-dark bi bi-trash" @onclick="() => RemoverDetalle(detalle)">
+                                            <button type="button"
+                                                    class="btn btn-outline-dark bi bi-trash"
+                                                    @onclick="() => RemoverDetalle(detalle)"
+                                                    disabled="@NoEsUltimaRemocion(detalle)">
                                                 Remover
                                             </button>
                                         </td>
@@ -172,5 +175,17 @@
     {
         Fermentacion.FermentacionesDetalle.Remove(detalle);
         detalleSeleccionado = detalle;
+    }
+
+    private bool NoEsUltimaRemocion(FermentacionesDetalles detalle)
+    {
+        if (!Fermentacion.FermentacionesDetalle.Any())
+        {
+            return true;
+        }
+
+        var ultimaRemocion = Fermentacion.FermentacionesDetalle.LastOrDefault();
+
+        return ultimaRemocion != detalle;
     }
 }
