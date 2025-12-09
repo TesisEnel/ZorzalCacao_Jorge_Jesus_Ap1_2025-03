@@ -8,7 +8,7 @@ Password:Empleado123!
 
 *Usuario Productor*
 Correo: productor@example.com
-Password: Empleado123!
+Password:Productor123!
 
 Mini Manual: 
 El proyecto tiene el objetivo de gestionar las actividades realizadas en el area de recepcion y fermentacion de la empresa zorzal cacao
