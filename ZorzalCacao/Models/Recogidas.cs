@@ -12,7 +12,7 @@ public class Recogidas
     public DateTime Fecha { get; set; } = DateTime.Now;
 
     [Required(ErrorMessage = "El punto de encuentro es obligatorio")]
-    [StringLength(100, MinimumLength = 5, ErrorMessage = "El Punto de Encuentro debe tener entre 5 y 100 caracteres.")]
+    [StringLength(250, MinimumLength = 5, ErrorMessage = "El Punto de Encuentro debe tener entre 5 y 250 caracteres.")]
     [RegularExpression(@"^(?=.*[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]).*$",
         ErrorMessage = "El Punto de Encuentro debe contener al menos una letra (no puede ser solo números o solo espacios).")]
     public string PuntoEncuentro { get; set; } = null!;
