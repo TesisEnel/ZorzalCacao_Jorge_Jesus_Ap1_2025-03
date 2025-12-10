@@ -21,6 +21,8 @@ public class EventosClimaticos
     public string TipoEvento { get; set; } = null!;
     [Required(ErrorMessage = "La intensidad es obligatoria")]
     public string Intensidad { get; set; } = null!;
+
+    [StringLength(500,ErrorMessage = "Las Observaciones no pueden exceder los 500 caracteres.")]
     public string Observaciones { get; set; } = string.Empty;
     public string EmpleadoId { get; set; }
     public ApplicationUser Empleado { get; set; }
