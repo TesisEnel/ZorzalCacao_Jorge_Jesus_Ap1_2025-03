@@ -20,8 +20,7 @@ public class ZonasProduccion
     ErrorMessage = "La Provincia solo permite letras (A-Z, incluyendo acentos/ñ), espacios, puntos (.) y guiones (-). No se permiten números ni otros símbolos.")]
     public string Provincia { get; set; } = null!;
 
-    [Range(0.01, 450,
-    ErrorMessage = "Distancia no válida. El valor debe estar entre 0.01 km y 450 km.")]
+    [Range(0.01, 450,ErrorMessage = "Distancia no válida. El valor debe estar entre 0.01 km y 450 km.")]
     public double Distancia { get; set; }
 
     [StringLength(250,ErrorMessage = "La Referencia no puede exceder los 250 caracteres.")]
