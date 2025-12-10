@@ -12,7 +12,7 @@ public class Fermentaciones
     public double Temperatura { get; set; }
     public string Observaciones { get; set; } = string.Empty;
 
-    [Required(ErrorMessage = "Fecha requerida")]
+    [Required(ErrorMessage = "La Fecha es obligatoria")]
     public DateTime Fecha { get; set; } = DateTime.Now;
 
     [Range(1, int.MaxValue, ErrorMessage = "Por favor, seleccione una recogida")]
