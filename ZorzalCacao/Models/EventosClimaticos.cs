@@ -12,6 +12,9 @@ public class EventosClimaticos
     public DateTime Fecha { get; set; } = DateTime.Now;
 
     [Required(ErrorMessage = "La zona es obligatoria")]
+    [StringLength(50, MinimumLength = 2,ErrorMessage = "La zona debe tener entre 2 y 50 caracteres.")]
+    [RegularExpression(@"^(?=.*[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]).*$",
+        ErrorMessage = "La zona debe contener al menos una letra o espacio (no puede ser solo números).")]
     public string Zona { get; set; } = null!;
 
     [Required(ErrorMessage = "El tipo de evento es obligatorio")]
