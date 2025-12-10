@@ -107,22 +107,25 @@ else if (mensajeExito != null)
             mensajeError = "Por favor, seleccione una remoción";
             return;
         }
-        if (!(Temperatura >= 50 && Temperatura <= 100))
-        {
-            mensajeError = "Temperatura no válida. Debe estar entre 50°F y 100°F";
-            return;
-        }
-        if (Cantidad <= 0)
-        {
-            mensajeError = "Cantidad no válida";
-            return;
-        }
+
         if (string.IsNullOrEmpty(EmpleadoId))
         {
             mensajeError = "Por favor, seleccione un empleado";
             return;
         }
 
+        if (!(Temperatura >= 50 && Temperatura <= 100))
+        {
+            mensajeError = "Temperatura no válida. Debe estar entre 50°F y 100°F";
+            return;
+        }
+
+        if (Cantidad <= 0)
+        {
+            mensajeError = "Cantidad no válida";
+            return;
+        }
+        
         var empleadoSeleccionado = ListaEmpleados.FirstOrDefault(e => e.Id == EmpleadoId);
         if (empleadoSeleccionado == null)
         {
@@ -139,10 +142,5 @@ else if (mensajeExito != null)
         }
 
         await OnRemocionSeleccionada.InvokeAsync((remocionSeleccionada, Temperatura, Cantidad, empleadoSeleccionado, Fecha));
-    }
-
-    public void Dispose()
-    {
-        // Ya no hay timer interno que limpiar
     }
 }
