@@ -50,15 +50,15 @@
     {
         mensajeError = null;
 
-        if (Cantidad <= 0)
+        if (!(Cantidad >= 1 && Cantidad <= 1000))
         {
-            mensajeError = "La cantidad debe ser mayor a 0";
+            mensajeError = "La cantidad debe estar entre 1 y 1000";
             return;
         }
 
-        if (Peso <= 0)
+        if (!(Peso >= 0.01 && Peso <= 65))
         {
-            mensajeError = "El peso debe ser mayor a 0";
+            mensajeError = "El peso debe estar entre 0.01 y 65 Kg";
             return;
         }
 
