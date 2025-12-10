@@ -26,10 +26,5 @@ public class Choferes
     [StringLength(10, MinimumLength = 10, ErrorMessage = "El teléfono debe tener 10 dígitos.")]
     [RegularExpression(@"^\d{10}$", ErrorMessage = "El teléfono debe contener solo 10 dígitos numéricos.")]
     public string Telefono { get; set; } = string.Empty;
-
-    [Required(ErrorMessage = "La licencia es obligatoria")]
-    [StringLength(15, MinimumLength = 8, ErrorMessage = "La licencia debe tener entre 8 y 15 caracteres.")]
-    [RegularExpression(@"^[a-zA-Z0-9\s-]*$", ErrorMessage = "La licencia contiene caracteres no válidos.")]
-    public string Licencia { get; set; } = string.Empty;
     public ICollection<Vehiculo> Vehiculos { get; set; } = new List<Vehiculo>();
 }
