@@ -9,12 +9,12 @@ public class Choferes
 
     [Required(ErrorMessage = "El nombre es obligatorio")]
     [StringLength(50, MinimumLength = 2, ErrorMessage = "El nombre debe tener entre 2 y 50 caracteres.")]
-    [RegularExpression(@"^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]*$", ErrorMessage = "El nombre contiene caracteres no válidos.")]
+    [RegularExpression(@"^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]*$", ErrorMessage = "Solo se permiten letras (A-Z, incluyendo acentos/ñ/ü) y espacios.")]
     public string Nombre { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "El apellido es obligatorio")]
     [StringLength(50, MinimumLength = 2, ErrorMessage = "El apellido debe tener entre 2 y 50 caracteres.")]
-    [RegularExpression(@"^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]*$", ErrorMessage = "El apellido contiene caracteres no válidos.")]
+    [RegularExpression(@"^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]*$", ErrorMessage = "Solo se permiten letras (A-Z, incluyendo acentos/ñ/ü) y espacios.")]
     public string Apellido { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "La cédula es obligatoria")]
