@@ -23,6 +23,8 @@ public class ZonasProduccion
     [Range(0.01, 450,
     ErrorMessage = "Distancia no válida. El valor debe estar entre 0.01 km y 450 km.")]
     public double Distancia { get; set; }
+
+    [StringLength(250,ErrorMessage = "La Referencia no puede exceder los 250 caracteres.")]
     public string Referencia { get; set; } = string.Empty;
     public string ProductorId { get; set; }
     public ApplicationUser Productor { get; set; }
