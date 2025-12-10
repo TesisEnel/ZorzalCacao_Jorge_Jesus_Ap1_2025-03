@@ -120,9 +120,9 @@ else if (mensajeExito != null)
             return;
         }
 
-        if (Cantidad <= 0)
+        if (!(Cantidad >= 0.01 && Cantidad <= 300))
         {
-            mensajeError = "Cantidad no válida";
+            mensajeError = "Cantidad no válida. Debe estar entre 0.01 y 300 Kg";
             return;
         }
         
