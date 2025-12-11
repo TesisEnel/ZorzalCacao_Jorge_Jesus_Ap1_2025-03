@@ -100,7 +100,7 @@
 
                                 <td>@((p.PesajesDetalle.Sum(a => a.Cantidad * a.Peso) / 125.0).ToString("F2"))</td>
 
-                                <td>
+                                <td class="d-flex justify-content-center">
                                     <a class="btn btn-sm btn-outline-cacao bi bi-eye"
                                        href="/Pesaje/View/@p.PesajeId"
                                        title="Ver"></a>
