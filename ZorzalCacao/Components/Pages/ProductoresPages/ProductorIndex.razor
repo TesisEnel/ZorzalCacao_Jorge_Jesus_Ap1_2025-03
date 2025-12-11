@@ -24,7 +24,7 @@
             <div class="col-auto">
                 <div class="stats-item stats-box">
                     <i class="bi bi-hourglass-split"></i>
-                    <span class="purecounter"> @ListaPendientes.Count </span>
+                    <span class="purecounter"> @ListaRecogidas.Count(r => r.EstadoEntrega == "Pendiente") </span>
                     <p><strong>Recogidas Pendientes</strong></p>
                     <span class="description">Aún no completadas</span>
                 </div>
@@ -33,7 +33,7 @@
             <div class="col-auto">
                 <div class="stats-item stats-box">
                     <i class="bi bi-check2-circle"></i>
-                    <span class="purecounter"> @ListaEntregadas.Count</span>
+                    <span class="purecounter"> @ListaRecogidas.Count(r => r.EstadoEntrega == "Entregada")</span>
                     <p><strong>Recogidas Entregadas</strong></p>
                     <span class="description">Completadas exitosamente</span>
                 </div>
@@ -51,6 +51,7 @@
         </div>
     </div>
 </section><!-- /Stats Section -->
+
 <!-- Services Section -->
 <section id="servicesE" class="services section">
 
@@ -92,9 +93,7 @@
 </section><!-- /Services Section -->
 
 @code {
-    public List<Recogidas> ListaPendientes = new List<Recogidas>();
-
-    public List<Recogidas> ListaEntregadas = new List<Recogidas>();
+    public List<Recogidas> ListaRecogidas = new List<Recogidas>();
 
     public List<ZonasProduccion> ListaZonas = new List<ZonasProduccion>();
 
@@ -102,9 +101,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        ListaPendientes = await recogidaService.Listar(r => r.EstadoEntrega == "Pendiente");
-        ListaEntregadas = await recogidaService.Listar(r => r.EstadoEntrega == "Entregada");
-
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
 
@@ -115,16 +111,18 @@
             if (!string.IsNullOrEmpty(userId))
             {
                 ListaZonas = await zonaService.Listar(z => z.ProductorId == userId);
+                ListaRecogidas = await recogidaService.Listar(r => r.ProductorId == userId);
             }
             else
             {
                 ListaZonas = new List<ZonasProduccion>();
+                ListaRecogidas = new List<Recogidas>();
             }
         }
         else
         {
             ListaZonas = new List<ZonasProduccion>();
+            ListaRecogidas = new List<Recogidas>();
         }
     }
-
 }
