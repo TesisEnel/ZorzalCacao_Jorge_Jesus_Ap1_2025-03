@@ -126,7 +126,11 @@
         <!-- 🟫 FOOTER CON CONTADORES -->
         <div class="card-footer">
             <span class="badge bg-dark fs-6 m-0">
-                Total de recogidas: @(ListaRecogidas?.Count ?? 0)
+                Pendientes: @(ListaRecogidas?.Count(r => r.EstadoEntrega == "Pendiente") ?? 0)
+            </span>
+
+            <span class="badge bg-dark fs-6 m-0">
+                Entregadas: @(ListaRecogidas?.Count(r => r.EstadoEntrega == "Entregada") ?? 0)
             </span>
 
             <span class="badge bg-dark fs-6 m-0">
