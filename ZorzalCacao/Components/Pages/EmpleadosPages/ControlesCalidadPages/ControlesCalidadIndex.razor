@@ -129,7 +129,9 @@
             </table>
         </div>
         <div class="card-footer">
-            <label class="badge bg-dark fs-6 m-0">Total: @ListaControles.Count</label>
+            <label class="badge bg-dark fs-6 m-0 ms-2">Aprobados: @ListaControles.Count(c => c.Decision == "Aprobado")</label>
+            <label class="badge bg-dark fs-6 m-0 ms-2">Rechazados: @ListaControles.Count(c => c.Decision == "Rechazado")</label>
+            <label class="badge bg-dark fs-6 m-0 ms-2">Promedio °Bx: @((ListaControles.Any() ? ListaControles.Average(c => c.GradosBrix) : 0).ToString("F2"))</label>
         </div>
     </div>
 </div>
