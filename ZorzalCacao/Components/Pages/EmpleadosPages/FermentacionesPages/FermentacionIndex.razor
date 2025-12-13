@@ -127,11 +127,14 @@
         <div class="card-footer">
 
             <span class="badge bg-dark fs-6 m-0">
-                Total: @ListaFermentaciones.Count
+                Cantidad fermentada total: @ListaFermentaciones.Sum(f => f.FermentacionesDetalle.Sum(t => t.Cantidad)).ToString("F2")
             </span>
 
-            <span class="badge bg-dark fs-6 m-0">
-                Cantidad total: @ListaFermentaciones.Sum(f => f.FermentacionesDetalle.Sum(t => t.Cantidad)).ToString("F2")
+            <span class="badge bg-dark fs-6 m-0 ms-2">
+                Promedio Temperatura: @((ListaFermentaciones.Any() ?
+                                (ListaFermentaciones.Sum(f => f.Temperatura) + ListaFermentaciones.Sum(f => f.FermentacionesDetalle.Sum(d => d.Temperatura))) /
+                                (ListaFermentaciones.Count + ListaFermentaciones.Sum(f => f.FermentacionesDetalle.Count))
+                                : 0).ToString("F2"))°F
             </span>
         </div>
     </div>
