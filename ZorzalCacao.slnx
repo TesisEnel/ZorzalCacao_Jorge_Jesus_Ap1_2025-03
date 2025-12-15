@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="ZorzalCacao.Tests/ZorzalCacao.Tests.csproj" Id="876e5255-cce2-4835-9876-ca33481e06cd" />
   <Project Path="ZorzalCacao/ZorzalCacao.csproj" />
 </Solution>
