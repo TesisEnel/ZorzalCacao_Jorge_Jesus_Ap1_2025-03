@@ -10,9 +10,11 @@ public class Fermentaciones
 
     [Range(50, 100, ErrorMessage = "Temperatura no válida. Debe estar entre 50°F y 100°F")]
     public double Temperatura { get; set; }
+
+    [StringLength(500, ErrorMessage = "Las Observaciones no pueden exceder los 500 caracteres.")]
     public string Observaciones { get; set; } = string.Empty;
 
-    [Required(ErrorMessage = "Fecha requerida")]
+    [Required(ErrorMessage = "La Fecha es obligatoria")]
     public DateTime Fecha { get; set; } = DateTime.Now;
 
     [Range(1, int.MaxValue, ErrorMessage = "Por favor, seleccione una recogida")]

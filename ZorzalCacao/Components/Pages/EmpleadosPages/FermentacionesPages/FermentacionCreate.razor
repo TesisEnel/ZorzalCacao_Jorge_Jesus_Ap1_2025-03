@@ -277,9 +277,4 @@
         var ultimaRemocion = Fermentacion.FermentacionesDetalle.LastOrDefault();
         return ultimaRemocion != detalle;
     }
-
-    public void Dispose()
-    {
-        timer?.Dispose();
-    }
 }

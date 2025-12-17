@@ -9,6 +9,8 @@ public class ControlesCalidad
     public int ControlId { get; set; }
     [Range(10, 20, ErrorMessage = "Rango no valido. Debe estar entre 10°Bx y 20°Bx")]
     public double GradosBrix { get; set; }
+
+    [StringLength(500,ErrorMessage = "Las Observaciones no pueden exceder los 500 caracteres.")]
     public string Observaciones { get; set; } = string.Empty;
     public string Decision { get; set; } = null!;
 

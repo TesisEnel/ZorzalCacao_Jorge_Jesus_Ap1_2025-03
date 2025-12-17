@@ -1,10 +1,20 @@
 ﻿<div class="row align-items-center">
-    <div class="col-12 col-md-6 mb-3">
+    <div class="col-12 col-md-4 mb-3">
+        <label class="col-form-label text-heading"> <strong> Tipo de saco </strong></label>
+        <InputSelect class="form-select" @bind-Value="SacoId" disabled> 
+            @foreach(var saco in ListaSacos)
+            {
+                <option value="@SacoId"> @saco.Descripcion (cantidad pesada: @saco.CantidadPesada) </option>
+            }
+        </InputSelect>
+    </div>
+
+    <div class="col-12 col-md-4 mb-3">
         <label class="col-form-label text-heading"> <strong> Cantidad </strong></label>
         <InputNumber class="form-control" @bind-Value="Cantidad" />
     </div>
 
-    <div class="col-12 col-md-6 mb-3">
+    <div class="col-12 col-md-4 mb-3">
         <label class="col-form-label  text-heading"> <strong> Peso (KG) </strong></label>
         <div class="input-group">
             <InputNumber class="form-control" @bind-Value="Peso" />
@@ -40,15 +50,15 @@
     {
         mensajeError = null;
 
-        if (Cantidad <= 0)
+        if (!(Cantidad >= 1 && Cantidad <= 1000))
         {
-            mensajeError = "La cantidad debe ser mayor a 0";
+            mensajeError = "La cantidad debe estar entre 1 y 1000";
             return;
         }
 
-        if (Peso <= 0)
+        if (!(Peso >= 0.01 && Peso <= 65))
         {
-            mensajeError = "El peso debe ser mayor a 0";
+            mensajeError = "El peso debe estar entre 0.01 y 65 Kg";
             return;
         }
 

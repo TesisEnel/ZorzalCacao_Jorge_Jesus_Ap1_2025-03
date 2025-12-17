@@ -7,7 +7,7 @@ public class Pesajes
 {
     [Key]
     public int PesajeId { get; set; }
-    [Required(ErrorMessage = "La fecha es requerida")]
+    [Required(ErrorMessage = "La fecha es obligatoria")]
     public DateTime Fecha { get; set; } = DateTime.Now;
     public string EmpleadoId { get; set; }
     public ApplicationUser Empleado { get; set; }

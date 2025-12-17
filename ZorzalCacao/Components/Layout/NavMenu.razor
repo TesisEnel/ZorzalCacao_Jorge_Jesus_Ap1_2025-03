@@ -2,27 +2,25 @@
 @inject NavigationManager NavigationManager
 
 <body class="index-page">
-    <header id="header" class="header dark-background d-flex flex-column">
-        <i class="header-toggle d-xl-none bi bi-list"></i>
+    <input type="checkbox" id="mobile-menu-toggle" style="display: none;">
 
+    <header id="header" class="header dark-background d-flex flex-column">
+        <label for="mobile-menu-toggle" class="header-toggle d-xl-none bi bi-list"></label>
         <div class="profile-img">
             <img src="assets/img/ZorzalPic.png" alt="" class="img-fluid rounded-circle">
         </div>
-
         <AuthorizeView>
             <Authorized>
                 <a href="" class="logo d-flex align-items-center justify-content-center">
                     <h1 class="sitename">@context.User.Identity?.Name</h1>
                 </a>
             </Authorized>
-
             <NotAuthorized>
                 <a href="" class="logo d-flex align-items-center justify-content-center">
                     <h1 class="sitename">Zorzal Cacao</h1>
                 </a>
             </NotAuthorized>
         </AuthorizeView>
-
         <nav id="navmenu" class="navmenu">
             <ul>
                 <AuthorizeView Roles="Empleado">
@@ -32,7 +30,6 @@
                         </NavLink>
                     </li>
                 </AuthorizeView>
-
                 <AuthorizeView Roles="Productor">
                     <li>
                         <NavLink href="/Productor/Index" Match="NavLinkMatch.All">
@@ -40,21 +37,18 @@
                         </NavLink>
                     </li>
                 </AuthorizeView>
-
                 <AuthorizeView Roles="Administrador">
                     <li>
-                        <NavLink href ="/Administrador/Index" Match="NavLinkMatch.All">
+                        <NavLink href="/Administrador/Index" Match="NavLinkMatch.All">
                             <i class="bi bi-house navicon"></i> Usuarios
                         </NavLink>
                     </li>
                 </AuthorizeView>
-
                 <li>
                     <NavLink href="/About">
                         <i class="bi bi-person navicon"></i> Sobre nosotros
                     </NavLink>
                 </li>
-
                 <AuthorizeView>
                     <Authorized>
                         <li>
@@ -62,7 +56,7 @@
                                 <AntiforgeryToken />
                                 <input type="hidden" name="ReturnUrl" value="" />
                                 <button type="submit" class="nav-link-button" style="background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0;">
-                                    <i class="bi bi-arrow-bar-left navicon mt-2 ms-2"></i> Logout
+                                    <i class="bi bi-arrow-bar-left navicon mt-2 ms-2"></i> Cerrar sesion
                                 </button>
                             </form>
                         </li>
@@ -70,12 +64,12 @@
                     <NotAuthorized>
                         <li>
                             <NavLink href="Account/Register">
-                                <i class="bi bi-person-plus navicon"></i> Register
+                                <i class="bi bi-person-plus navicon"></i> Registrarse
                             </NavLink>
                         </li>
                         <li>
                             <NavLink href="Account/Login">
-                                <i class="bi bi-person-badge navicon"></i> Login
+                                <i class="bi bi-person-badge navicon"></i> Iniciar sesion
                             </NavLink>
                         </li>
                     </NotAuthorized>

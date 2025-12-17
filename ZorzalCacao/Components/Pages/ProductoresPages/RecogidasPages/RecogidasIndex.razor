@@ -110,7 +110,7 @@
                                 <td>@r.CantidadSacos.ToString("F2")</td>
                                 <td>@r.Chofer?.Nombre</td>
 
-                                <td class="d-flex justify-content-center">
+                                <td>
                                     <a class="btn btn-sm btn-outline-cacao bi bi-eye"
                                        href="/RecogidaP/View/@r.RecogidaId"
                                        title="Ver"></a>
@@ -126,7 +126,11 @@
         <!-- 🟫 FOOTER CON CONTADORES -->
         <div class="card-footer">
             <span class="badge bg-dark fs-6 m-0">
-                Total de recogidas: @(ListaRecogidas?.Count ?? 0)
+                Pendientes: @(ListaRecogidas?.Count(r => r.EstadoEntrega == "Pendiente") ?? 0)
+            </span>
+
+            <span class="badge bg-dark fs-6 m-0">
+                Entregadas: @(ListaRecogidas?.Count(r => r.EstadoEntrega == "Entregada") ?? 0)
             </span>
 
             <span class="badge bg-dark fs-6 m-0">

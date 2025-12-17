@@ -13,7 +13,7 @@ a, .btn-link {
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 .content {
@@ -64,16 +64,15 @@ h1:focus {
 }
 
     #header.header {
-        width: 250px !important; 
+        width: 250px !important;
     }
 
 
 body {
-
     padding-left: 0 !important;
 }
 
- Quitar scrollbar del menú lateral 
+Quitar scrollbar del men? lateral
 #header,
 #navmenu {
     overflow: hidden !important;
@@ -95,7 +94,7 @@ body {
     background-color: var(--surface-color);
 }
 
-/* Botón sólido estilo plantilla */
+/* Bot?n s?lido estilo plantilla */
 .btn-cacao {
     background-color: var(--accent-color);
     color: var(--contrast-color);
@@ -107,13 +106,13 @@ body {
         color: var(--accent-color);
     }
 
-/* Fondo para tarjetas relacionadas a vehículos (adaptado a color suave del template) */
+/* Fondo para tarjetas relacionadas a veh?culos (adaptado a color suave del template) */
 .bg-cacao-vehiculo {
     background-color: color-mix(in srgb, var(--accent-color), white 70%);
     color: var(--heading-color);
 }
 
-/* Botón outline estilo plantilla */
+/* Bot?n outline estilo plantilla */
 .btn-outline-cacao {
     border: 1px solid var(--accent-color);
     color: var(--accent-color);
@@ -148,7 +147,7 @@ body {
     color: var(--contrast-color) !important;
 }
 
-/* Botón sólido */
+/* Bot?n s?lido */
 .btn-accent {
     background-color: var(--accent-color);
     color: var(--contrast-color);
@@ -160,7 +159,7 @@ body {
         color: var(--accent-color);
     }
 
-/* Botón outline */
+/* Bot?n outline */
 .btn-outline-accent {
     border: 2px solid var(--accent-color);
     color: var(--accent-color);
@@ -201,7 +200,7 @@ body {
     color: var(--contrast-color);
 }
 
-/* Botón sólido */
+/* Bot?n s?lido */
 .btn-accent {
     background-color: var(--accent-color);
     color: var(--contrast-color);
@@ -213,7 +212,7 @@ body {
         color: var(--accent-color);
     }
 
-/* Botón outline */
+/* Bot?n outline */
 .btn-outline-accent {
     border: 1px solid var(--accent-color);
     color: var(--accent-color);
@@ -281,7 +280,7 @@ body {
         margin-top: 8px;
     }
 
-/* Responsive para dispositivos móviles */
+/* Responsive para dispositivos m?viles */
 @@media (max-width: 768px) {
     .stats-box {
         width: 160px;
@@ -463,3 +462,106 @@ body {
         .login-links a:hover {
             text-decoration: underline;
         }
+
+.menu-overlay {
+    display: none;
+}
+
+/* Estilos responsive para el header */
+@media (max-width: 1199px) {
+    .header {
+        position: fixed;
+        top: 0;
+        left: -300px;
+        width: 300px;
+        height: 100vh;
+        transition: left 0.3s ease-in-out;
+        z-index: 997;
+        overflow-y: auto;
+    }
+
+    /* Mostrar el men? cuando el checkbox est? marcado */
+    #mobile-menu-toggle:checked ~ .header {
+        left: 0;
+    }
+
+    /* Mostrar overlay cuando el men? est? abierto */
+    #mobile-menu-toggle:checked ~ .menu-overlay {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 996;
+        cursor: pointer;
+    }
+
+    .header-toggle {
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        font-size: 28px;
+        cursor: pointer;
+        z-index: 9998;
+        color: #fff;
+        background: rgba(0, 0, 0, 0.5);
+        padding: 8px 12px;
+        border-radius: 5px;
+        transition: all 0.3s;
+    }
+
+        .header-toggle:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+    /* Cambiar icono cuando est? abierto */
+    #mobile-menu-toggle:checked ~ .header .header-toggle::before {
+        content: "\f659"; /* bi-x */
+    }
+}
+
+/* ===============================
+   Estilos para el men? en m?vil
+   =============================== */
+@media (max-width: 768px) {
+
+    /* Coloca el header fuera de pantalla */
+    #header {
+        transform: translateX(-250px);
+        transition: transform 0.3s ease-in-out;
+        width: 250px !important;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        z-index: 9999;
+    }
+
+    /* Cuando el checkbox est? activado ? mostrar men? */
+    #mobile-menu-toggle:checked ~ #header {
+        transform: translateX(0);
+    }
+
+    /* Icono hamburguesa */
+    .header-toggle {
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        font-size: 30px;
+        z-index: 10000;
+        cursor: pointer;
+    }
+
+    /* Evita que el men? tape el contenido al hacer scroll */
+    body.index-page {
+        overflow-x: hidden;
+    }
+}
+
+/* ===============================
+   Ajustes generales del header
+   =============================== */
+#header {
+    width: 250px;
+}
